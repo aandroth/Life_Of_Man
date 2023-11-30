@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject m_theWorld;
+    public I_SpriteController m_spriteController;
     public GameObject m_sprite;
     public GameObject m_spriteHandler;
     public GameObject m_childSprite;
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
         m_rb = GetComponent<Rigidbody2D>();
         m_mainCamera = Camera.main;
         m_sprite = m_childSprite;
+        m_spriteController = m_sprite.GetComponent<SpriteController_Son>();
     }
 
     // Update is called once per frame
@@ -69,24 +71,15 @@ public class PlayerController : MonoBehaviour
                 case PLAYER_STATE.CHILD:
                     if (Input.GetKey(KeyCode.D))
                     {
-                        m_theWorld.transform.Rotate(new Vector3(0, 0, 1), m_speed);
-                        if (m_sprite.transform.localEulerAngles.y != 0)
-                            m_sprite.transform.localEulerAngles = new Vector3(0, 0, 0);
+                        m_spriteController.PushForward();
                     }
                     else if (Input.GetKey(KeyCode.A))
                     {
-                        m_theWorld.transform.Rotate(new Vector3(0, 0, -1), m_speed);
-                        if (m_sprite.transform.localEulerAngles.y != 180)
-                            m_sprite.transform.localEulerAngles = new Vector3(0, 180, 0);
+                        m_spriteController.PushBackward();
                     }
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        if (m_canJump)
-                        {
-                            Debug.Log("jump");
-                            m_rb.AddForce(new Vector2(0, m_jumpForce));
-                            m_canJump = false;
-                        }
+                        m_spriteController.Action();
                     }
                     if (Input.GetKeyUp(KeyCode.E) && m_growthCount < 4)
                     {
@@ -95,12 +88,10 @@ public class PlayerController : MonoBehaviour
 
                     if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
                     {
-                        m_sprite.GetComponent<Animator>().Play("Idle");
+                        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+                            m_spriteController.Idle();
                     }
-                    else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
-                    {
-                        m_sprite.GetComponent<Animator>().Play("Walk");
-                    }
+
                     break;
                 case PLAYER_STATE.FATHER:
                     m_theWorld.transform.Rotate(new Vector3(0, 0, 1), m_fatherSpeedRate * Time.deltaTime);
@@ -196,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground" && m_growthCount < 5)
+        if (collision.gameObject.tag == "Ground" && m_growthCount < 4)
         {
             m_canJump = true;
         }
