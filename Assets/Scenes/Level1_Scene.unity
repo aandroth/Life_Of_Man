@@ -18823,6 +18823,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1233961109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233961110}
+  m_Layer: 0
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1233961110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233961109}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.3, y: 83, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1407455633}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236965693
 GameObject:
   m_ObjectHideFlags: 0
@@ -25315,7 +25346,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1343565071
 Transform:
   m_ObjectHideFlags: 0
@@ -25348,6 +25379,7 @@ MonoBehaviour:
   m_timeMax: 3
   m_timePassed: 0
   m_forward: 1
+  m_target: {fileID: 1233961109}
 --- !u!1 &1344335401
 GameObject:
   m_ObjectHideFlags: 0
@@ -25398,9 +25430,9 @@ MonoBehaviour:
   m_state: 1
   m_sprite: {fileID: 1344335401}
   m_spriteHandler: {fileID: 1343565070}
-  m_speed: 0.3
+  m_speed: 15
   m_jumpForce: 450
-  m_innerHandler: {fileID: 0}
+  m_innerHandler: {fileID: 987693099}
 --- !u!61 &1344335404
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -26599,6 +26631,7 @@ Transform:
   - {fileID: 911313290}
   - {fileID: 929863656}
   - {fileID: 1343565071}
+  - {fileID: 1233961110}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27022,7 +27055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1453267238
 Transform:
   m_ObjectHideFlags: 0

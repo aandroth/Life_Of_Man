@@ -8,6 +8,7 @@ public class SpriteDriver_Son : SpriteDriver_Abstract
     public float m_timeMax = 3;
     public float m_timePassed = 0;
     public bool m_forward;
+    public GameObject m_target;
 
     // Start is called before the first frame update
     void Start()
@@ -18,13 +19,9 @@ public class SpriteDriver_Son : SpriteDriver_Abstract
     // Update is called once per frame
     void Update()
     {
-        m_timePassed += Time.deltaTime;
-        if (m_timePassed > m_timeMax) {
-            m_timePassed = 0;
-            m_forward = !m_forward;
-        }
-
-        if (m_forward)
+        float crossProductResult = transform.up.x * m_target.transform.localPosition.y - transform.up.y * m_target.transform.localPosition.x;
+        Debug.Log($"Getting {crossProductResult} from ({transform.up.x}, {transform.up.y} X ({m_target.transform.localPosition.y}, {m_target.transform.localPosition.x})");
+        if (crossProductResult < 0)
         {
             m_spriteController.PushForward();
         }
