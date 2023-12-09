@@ -20,7 +20,7 @@ public class SpriteDriver_Son : SpriteDriver_Abstract
     void Update()
     {
         float crossProductResult = transform.up.x * m_target.transform.localPosition.y - transform.up.y * m_target.transform.localPosition.x;
-        Debug.Log($"Getting {crossProductResult} from ({transform.up.x}, {transform.up.y} X ({m_target.transform.localPosition.y}, {m_target.transform.localPosition.x})");
+        //Debug.Log($"Getting {crossProductResult} from ({transform.up.x}, {transform.up.y} X ({m_target.transform.localPosition.y}, {m_target.transform.localPosition.x})");
         if (crossProductResult < 0)
         {
             m_spriteController.PushForward();

@@ -6105,7 +6105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &469396201
 Transform:
   m_ObjectHideFlags: 0
@@ -13569,9 +13569,10 @@ GameObject:
   m_Component:
   - component: {fileID: 929863656}
   - component: {fileID: 929863657}
-  m_Layer: 0
+  - component: {fileID: 929863658}
+  m_Layer: 7
   m_Name: FatherVisionCollider
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13607,6 +13608,27 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 80.94
+--- !u!50 &929863658
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929863655}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &937068018
 GameObject:
   m_ObjectHideFlags: 0
@@ -15536,7 +15558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1058750955
 Transform:
   m_ObjectHideFlags: 0
@@ -24096,7 +24118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_theWorld: {fileID: 1407455631}
-  m_sprite: {fileID: 469396200}
+  m_sprite: {fileID: 2047412983}
   m_spriteHandler: {fileID: 1453267237}
   m_childSprite: {fileID: 165152663}
   m_childSpriteHandler: {fileID: 1453267237}
@@ -25379,7 +25401,7 @@ MonoBehaviour:
   m_timeMax: 3
   m_timePassed: 0
   m_forward: 1
-  m_target: {fileID: 1233961109}
+  m_target: {fileID: 1713252005}
 --- !u!1 &1344335401
 GameObject:
   m_ObjectHideFlags: 0
@@ -30544,6 +30566,37 @@ Transform:
   m_Father: {fileID: 1106248214}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -42.765}
+--- !u!1 &1713252005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1713252006}
+  m_Layer: 0
+  m_Name: HitPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1713252006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713252005}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1922653121}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1715424007
 GameObject:
   m_ObjectHideFlags: 0
@@ -33420,6 +33473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1922653121}
   - component: {fileID: 1922653122}
+  - component: {fileID: 1922653123}
   m_Layer: 0
   m_Name: Father_Head
   m_TagString: Untagged
@@ -33440,6 +33494,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1750120347}
+  - {fileID: 1713252006}
   m_Father: {fileID: 2047412984}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
@@ -33495,6 +33550,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1922653123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922653120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a78fbdcea947c43935e2b2c8c0bc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_eyeRayLength: 100
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  m_worldHitPos: {fileID: 0}
 --- !u!1 &1925359860
 GameObject:
   m_ObjectHideFlags: 0
