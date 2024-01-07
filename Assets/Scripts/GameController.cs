@@ -35,9 +35,9 @@ public class GameController : MonoBehaviour
     public bool m_playerBecomesGrandfather = false;
     public bool m_playerDies = false;
 
-    public bool m_playerIsYoungAdult = false;
-    public bool m_playerIsFullAdult = false;
-    public bool m_playerAtPyramid = false;
+    public bool m_sonIsYoungAdult = false;
+    public bool m_sonIsFullAdult = false;
+    public bool m_sonAtPyramid = false;
     public bool m_sonAtStartArea = false;
     public bool m_sonAtFatherArea = false;
     public bool m_fatherAtPyramid = false;
@@ -101,7 +101,6 @@ public class GameController : MonoBehaviour
         {
             m_fatherSprite.GetComponent<SpriteDriver_Father>().enabled = false;
             m_fatherSprite.GetComponent<PlayerController>().enabled = true;
-            //m_fatherController = m_fatherSprite.GetComponent<PlayerController>().m_spriteController as SpriteController_Father;
         }
         else
             m_fatherController = m_fatherSprite.GetComponent<SpriteDriver_Father>().m_spriteController as SpriteController_Father;
@@ -126,15 +125,15 @@ public class GameController : MonoBehaviour
         switch (i_spriteController)
         {
             case SpriteController_Child child:
-                Debug.Log($"It's a child!");
                 InitTeen(((SpriteController_Child)i_spriteController).m_spriteHandler.gameObject.GetComponent<PlayerController>().enabled, (SpriteController_Child)i_spriteController);
                 i_spriteController.DestroySelf();
                 break;
             case SpriteController_Teenager teenager:
-                Debug.Log($"It's a teenager!");
+                // Set bool to check for next steps
+                // Set 
                 break;
             case SpriteController_Father adult:
-                Debug.Log($"It's an adult!");
+
                 break;
         }
     }
@@ -163,16 +162,16 @@ public class GameController : MonoBehaviour
     {
         m_fatherAtPyramid = true;
         Debug.Log("Father at pyramid");
-        if (m_playerAtPyramid)
+        if (m_sonAtPyramid)
             PlayFatherBuriesGrandfatherAnim();
     }
     public void SonIsAtPyramid(bool b)
     {
         Debug.Log("Son at pyramid: "+b);
-        m_playerAtPyramid = b;
-        if (m_playerIsYoungAdult && m_playerAtPyramid && m_fatherAtPyramid)
+        m_sonAtPyramid = b;
+        if (m_sonIsYoungAdult && m_sonAtPyramid && m_fatherAtPyramid)
             PlayFatherBuriesGrandfatherAnim();
-        else if(m_playerIsFullAdult && m_playerAtPyramid)
+        else if(m_sonIsFullAdult && m_sonAtPyramid)
             PlayPlayerBuriesFatherAnim();
     }
 
@@ -232,8 +231,8 @@ public class GameController : MonoBehaviour
         //m_player.BecomeFather();
         //m_grandfatherAtStartArea = true;
         //m_player.GetOlder();
-        m_playerIsFullAdult = true;
-        m_playerIsYoungAdult = false;
+        m_sonIsFullAdult = true;
+        m_sonIsYoungAdult = false;
 
         //if (m_playerAtStartArea)
         //{
@@ -273,7 +272,7 @@ public class GameController : MonoBehaviour
         m_treasuresA.SetActive(false);
         m_fatherHead.transform.Rotate(Vector3.forward, 22);
         m_grandfatherEye.GetComponent<Animator>().Play("CloseEye");
-        m_playerIsYoungAdult = true;
+        m_sonIsYoungAdult = true;
     }
 
     public void PlayerReachesFullAdult()

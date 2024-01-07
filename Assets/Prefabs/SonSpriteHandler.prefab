@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 7048478167409383285}
   m_Layer: 0
   m_Name: SonSpriteHandler
-  m_TagString: Untagged
+  m_TagString: Son
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -359,7 +359,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_sprite: {fileID: 3455952931664485557}
-  m_spriteController: {fileID: 1876219317062161588}
   m_mainCamera: {fileID: 0}
   m_rb: {fileID: 0}
   m_inputControlsAreOn: 1

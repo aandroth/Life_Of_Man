@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 1755723308247797036}
   m_Layer: 0
   m_Name: Teenager_Handler
-  m_TagString: Father
+  m_TagString: Son
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
