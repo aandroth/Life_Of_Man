@@ -8,4 +8,8 @@ public interface I_SpriteController
     public void PushBackward();
     public void Action();
     public void Idle();
+    public virtual Transform ReturnSpecialTransform() { return null; }
+
+    public void DestroySelf();
+    public void GetOlder();
 }

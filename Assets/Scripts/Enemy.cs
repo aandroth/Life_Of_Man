@@ -9,7 +9,9 @@ public class Enemy : MonoBehaviour
     public bool m_isChasing = true;
     public GameObject m_handler;
     public GameObject m_twinkle;
+    public GameObject m_twinkleHandler;
     public bool m_isActive = true;
+    public float m_stunnedTime = 3;
 
     // Update is called once per frame
     void Start()
@@ -29,10 +31,11 @@ public class Enemy : MonoBehaviour
         Debug.Log("Trigger detected: "+collision.tag);
         if(collision.tag == "Father")
         {
-            if (!m_isChasing)
+            if (!m_isChasing && m_twinkle != null)
             {
                 GetComponent<SpriteRenderer>().enabled = false;
-                m_twinkle.SetActive(false);
+                m_twinkle.GetComponent<Animator>().enabled = false;
+                m_twinkleHandler.SetActive(false);
                 m_isActive = false;
             }
             else
@@ -44,15 +47,24 @@ public class Enemy : MonoBehaviour
     {
         if(collision.tag == "Father")
         {
-            if (!m_isChasing)
+            if (!m_isChasing && m_twinkle != null)
             {
-                GetComponent<SpriteRenderer>().enabled = true;
-                m_twinkle.SetActive(true);
-                m_isActive = true;
+                StartCoroutine(StunRecovery(m_stunnedTime));
             }
             else
                Die();
         }
+    }
+
+    public IEnumerator StunRecovery(float duration)
+    {
+        yield return new WaitForSeconds(duration - 1);
+        m_twinkleHandler?.SetActive(true);
+
+        yield return new WaitForSeconds(1);
+        m_isActive = true;
+        GetComponent<SpriteRenderer>().enabled = true;
+        m_twinkle.GetComponent<Animator>().enabled = true;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

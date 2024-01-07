@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TexturesSpriteAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 265fefbd2f3619244847797140639569, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: ca2328009c00f4943b10428ca5cfc679, type: 3}
+  - {fileID: 21300000, guid: 8cbcd430eac575f49be0b0ea466e2305, type: 3}
+  - {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
+  - {fileID: 21300000, guid: 971c8661cd3ed8c46956811bf539d177, type: 3}
+  - {fileID: 21300000, guid: 8930da81a64e43046ac69a2a9dc85b62, type: 3}
+  - {fileID: 21300000, guid: 06fc3004241eb81428b605048f5f0336, type: 3}
+  - {fileID: 21300000, guid: 6b6dea64442b638418e31594b108f654, type: 3}
+  - {fileID: 21300000, guid: 069a1215abfc7d7478febd81158293aa, type: 3}
+  - {fileID: 21300000, guid: c1926cf5e93279f4e9217fe78c2fa392, type: 3}
+  - {fileID: 21300000, guid: 4b04b7a6d9e5d2b4fb0166d65655a824, type: 3}
+  - {fileID: 21300000, guid: 1465883735d685340ab031e395ab2631, type: 3}
+  - {fileID: 21300000, guid: eb5d4477811f2854b8af2a1441727dae, type: 3}
+  - {fileID: 21300000, guid: 6a1e1c283b227cf4fbba5c3259876276, type: 3}
+  - {fileID: 21300000, guid: 49133ad8d4485ff499bca2426e14b863, type: 3}
+  - {fileID: 21300000, guid: a5697c190a500a84d9b072ca34077ba8, type: 3}
+  - {fileID: 21300000, guid: e1d574493fc8f294fba689658c1e2608, type: 3}
+  - {fileID: 21300000, guid: 6c3dbd4995a28e243ae4f12a3e3b2018, type: 3}
+  - {fileID: 21300000, guid: d7140fd9ea47163499933431db39011c, type: 3}
+  - {fileID: 21300000, guid: 0d14162a278bd4e43ab526f8469c10d3, type: 3}
+  - {fileID: 21300000, guid: 7c0be97b57a9f854f99f3f9ca541323e, type: 3}
+  - {fileID: 21300000, guid: e53df68b7d37dbe4bbf72932a82a8731, type: 3}
+  - {fileID: 21300000, guid: 7b29971ca431ba94ab5c8c469ef7a354, type: 3}
+  - {fileID: 21300000, guid: f854412de9a91474fa51df2da6514162, type: 3}
+  - {fileID: 21300000, guid: 30b07c9db8a09884a96f96a8c216898b, type: 3}
+  - {fileID: 21300000, guid: 833205ad3de4eb9438a5ddd5f02693c0, type: 3}
+  - {fileID: 21300000, guid: 4a81d70ea8714a8449bed53d4058a732, type: 3}
+  - {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Bush
+  - Cloud
+  - Father_ArmR
+  - Son_0_1
+  - Tree
+  - Son_Idle
+  - Spotlight
+  - Treasure
+  - Father_LegR
+  - Grandfather
+  - Twinkle
+  - Heart
+  - Mushroom1
+  - Eye
+  - Enemy
+  - Father_Body
+  - Log
+  - TheWorld
+  - Father_ArmL
+  - Tear
+  - Grass
+  - PanelSprite
+  - Son_0_0
+  - Mushroom0
+  - Father_LegL
+  - Dead_Grandfather
+  - Father_Head
+  m_RenderDataMap: {}
+  m_Tag: TexturesSpriteAtlas
+  m_IsVariant: 0

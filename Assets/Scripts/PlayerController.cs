@@ -4,29 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject m_theWorld;
-    public I_SpriteController m_spriteController;
     public GameObject m_sprite;
-    public GameObject m_spriteHandler;
-    public GameObject m_childSprite;
-    public GameObject m_childSpriteHandler;
-    public GameObject m_fatherSprite;
-    public GameObject m_fatherSpriteHandler;
-    public GameObject m_fatherHead;
-    public GameObject m_fatherVision;
-    public GameObject m_grandfatherSprite;
-    public GameObject m_grandfatherSpriteHandler;
+    [SerializeField]
+    public I_SpriteController m_spriteController;
     public Camera m_mainCamera;
     public Rigidbody2D m_rb;
-    public float m_speed = 10;
-    public float m_jumpForce = 10;
-    public bool m_canJump;
     public bool m_inputControlsAreOn = true;
 
-    public float m_growthRate = 0.1f;
-    public float m_speedRate = 0.9f;
-    public float m_fatherSpeedRate = 0.5f;
-    public float m_jumpRate = 0.1f;
     public float m_cameraZoomOutRate = 0.1f;
     public float m_cameraPanDownRate = 0.5f;
 
@@ -57,8 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         m_rb = GetComponent<Rigidbody2D>();
         m_mainCamera = Camera.main;
-        m_sprite = m_childSprite;
-        m_spriteController = m_sprite.GetComponent<SpriteController_Son>();
+        m_spriteController = m_sprite.GetComponent<I_SpriteController>();
     }
 
     // Update is called once per frame
@@ -66,95 +49,37 @@ public class PlayerController : MonoBehaviour
     {
         if (m_inputControlsAreOn)
         {
-            switch (m_state)
+            if (Input.GetKey(KeyCode.D))
             {
-                case PLAYER_STATE.CHILD:
-                    if (Input.GetKey(KeyCode.D))
-                    {
-                        m_spriteController.PushForward();
-                    }
-                    else if (Input.GetKey(KeyCode.A))
-                    {
-                        m_spriteController.PushBackward();
-                    }
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        m_spriteController.Action();
-                    }
-                    if (Input.GetKeyUp(KeyCode.E) && m_growthCount < 4)
-                    {
-                        GetOlder();
-                    }
-
-                    if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-                    {
-                        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-                            m_spriteController.Idle();
-                    }
-
-                    break;
-                case PLAYER_STATE.FATHER:
-                    m_theWorld.transform.Rotate(new Vector3(0, 0, 1), m_fatherSpeedRate * Time.deltaTime);
-                    if (Input.GetKey(KeyCode.D))
-                    {
-                        m_fatherHead.transform.Rotate(transform.forward, -m_fatherHeadRotateSpeed);
-                    }
-                    else if (Input.GetKey(KeyCode.A))
-                    {
-                        m_fatherHead.transform.Rotate(transform.forward, m_fatherHeadRotateSpeed);
-                    }
-                    break;
-                case PLAYER_STATE.GRANDFATHER:
-                    break;
+                m_spriteController.PushForward();
             }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                m_spriteController.PushBackward();
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                m_spriteController.Action();
+            }
+            if (Input.GetKeyUp(KeyCode.E) && m_growthCount < 4)
+            {
+                m_spriteController.GetOlder();
+            }
+
+            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            {
+                if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+                    m_spriteController.Idle();
+            }
+
+
         }
 
     }
 
     public void GetOlder()
     {
-        float newScale = m_spriteHandler.transform.localScale.x + m_growthRate;
-        m_spriteHandler.transform.localScale = new Vector3(newScale, newScale, newScale);
 
-        m_speed *= m_speedRate;
-        m_jumpForce += m_jumpRate;
-
-        ++m_growthCount;
-
-        if (m_growthCount == 6)
-        {
-            m_fatherSprite.SetActive(false);
-            m_grandfatherSprite.SetActive(true);
-            m_spriteHandler = m_grandfatherSpriteHandler;
-            m_sprite = m_grandfatherSprite;
-            gameObject.tag = "Grandfather";
-            m_canJump = false;
-        }
-        else if (m_growthCount == 5)
-        {
-
-            m_gameControllerReportFullAdult.Invoke();
-            gameObject.tag = "Father";
-            m_jumpForce = 0;
-            m_mainCamera.orthographicSize = m_cameraSizeValueAdult;
-            m_mainCamera.transform.localPosition = new Vector3(m_cameraPanValueAdult.x, m_cameraPanValueAdult.y, m_mainCamera.transform.localPosition.z);
-        }
-        else // if (m_growthCount < 4)
-        {
-            m_mainCamera.transform.localPosition = new Vector3(0, m_cameraPanValues[m_cameraPanValuesIndex], m_mainCamera.transform.localPosition.z);
-            if (m_cameraPanValuesIndex < m_cameraPanValues.Length) { ++m_cameraPanValuesIndex; }
-            m_mainCamera.orthographicSize = m_mainCamera.orthographicSize + m_cameraZoomOutRate; 
-            
-            if (m_growthCount == 2)
-            {
-                m_childSprite.SetActive(false);
-                m_fatherSprite.SetActive(true);
-                m_sprite = m_fatherSprite;
-                m_spriteHandler = m_fatherSpriteHandler;
-                GetComponent<I_Hurtable>().enabled = false;
-                m_gameControllerReportYoungAdult.Invoke();
-            }
-        }
         
     }
 
@@ -171,26 +96,7 @@ public class PlayerController : MonoBehaviour
     public void BecomeFather()
     {
         transform.localScale = new Vector3(50, 50, 1);
-        m_fatherVision.SetActive(true);
         m_state = PLAYER_STATE.FATHER;
-        m_fatherSprite.tag = "Father";
-    }
-
-    public void BuryFather()
-    {
-        Debug.Log("Called BuryFather");
-        m_sprite.GetComponent<Animator>().Play("FatherPlacesDeadGrandfather");
-    }
-    public void BuryFatherDone()
-    {
-    }
-
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Ground" && m_growthCount < 4)
-        {
-            m_canJump = true;
-        }
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
