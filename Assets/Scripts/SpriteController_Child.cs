@@ -24,8 +24,8 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public ReportAtPyramid m_reportAtPyramid;
     public delegate void ReportAtStart(bool b);
     public ReportAtStart m_reportAtStart;
-    public delegate void ReportDamage();
-    public ReportDamage m_reportDamage;    
+    public delegate void ReportTookDamage(int i);
+    public ReportTookDamage m_reportTookDamage;    
     public delegate void ReportAgedOut(SpriteController_Child c);
     public ReportAgedOut m_reportAgedOut;
     public int m_health = 3;
@@ -116,29 +116,28 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if(collision.gameObject.tag == "Treasure")
         {
-            //GetOlder();
+            GetOlder();
         }
     }
 
 
     public void GetOlder()
     {
-        float newScale = transform.localScale.x + m_growthRate;
-        transform.localPosition = new Vector3(newScale, newScale, newScale);
-        m_innerHandler.transform.localPosition += m_innerHandler.transform.up * newScale;
-
-        m_speed *= m_speedRate;
-        m_jumpForce += m_jumpRate;
-
-        ++m_growthCount;
-
-        //m_mainCamera.transform.localPosition = new Vector3(0, m_cameraPanValues[m_cameraPanValuesIndex], m_mainCamera.transform.localPosition.z);
-        //if (m_cameraPanValuesIndex < m_cameraPanValues.Length) { ++m_cameraPanValuesIndex; }
-        //m_mainCamera.orthographicSize = m_mainCamera.orthographicSize + m_cameraZoomOutRate; 
-            
-        if (m_growthCount == 3)
+        if(m_growthCount < 3)
         {
-            m_reportAgedOut.Invoke(GetComponent<SpriteController_Child>());
+            float newScale = transform.localScale.x + m_growthRate;
+            transform.localPosition = new Vector3(newScale, newScale, newScale);
+            m_innerHandler.transform.localPosition += m_innerHandler.transform.up * newScale;
+
+            m_speed *= m_speedRate;
+            m_jumpForce += m_jumpRate;
+
+            ++m_growthCount;
+
+            if (m_growthCount == 3)
+            {
+                m_reportAgedOut.Invoke(GetComponent<SpriteController_Child>());
+            }
         }
     }
 

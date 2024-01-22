@@ -61,10 +61,15 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
         }
         else if(collision.gameObject.tag == "Enemy")
         {
-            //Debug.Log($"Enemy detected");
-            m_state = FATHER_STATE.LOOKING_DOWN;
-            m_currTarget = m_downTarget;
+            EnterLookDownState();
         }
+    }
+
+    public void EnterLookDownState()
+    {
+        //Debug.Log($"Enemy detected");
+        m_state = FATHER_STATE.LOOKING_DOWN;
+        m_currTarget = m_downTarget;
     }
 
     public void CreateHiddenObjectDetector()

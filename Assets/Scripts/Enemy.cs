@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger detected: "+collision.tag);
+        //Debug.Log("Trigger detected: "+collision.tag);
         if(collision.tag == "Father")
         {
             if (!m_isChasing && m_twinkle != null)

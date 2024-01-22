@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 5647903627246038685}
   - component: {fileID: 60377980734998425}
   m_Layer: 0
-  m_Name: GrandfatherSpriteHandler
+  m_Name: Grandfather_Handler
   m_TagString: Grandfather
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

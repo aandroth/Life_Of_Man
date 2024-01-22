@@ -9,7 +9,7 @@ public class SpriteDriver_Teenager : SpriteDriver_Abstract
     public new SpriteController_Teenager m_spriteController;
 
     public CollisionReporter m_collisionReporter = null;
-    public bool m_forward;
+    public bool m_forward, m_controlsEnabled = true;
     public GameObject m_target;
     public float m_targetDistanceMin = 0.5f;
 
@@ -23,20 +23,23 @@ public class SpriteDriver_Teenager : SpriteDriver_Abstract
     // Update is called once per frame
     void Update()
     {
-        if (m_target != null)
+        if (m_controlsEnabled)
         {
-            float crossProductResult = transform.up.x * m_target.transform.position.y - transform.up.y * m_target.transform.position.x;
-            //Debug.Log($"Teen crossProductResult: {crossProductResult}");
-
-            if (Mathf.Abs(crossProductResult) > m_targetDistanceMin)
+            if (m_target != null)
             {
-                if (crossProductResult < 0)
+                float crossProductResult = transform.up.x * m_target.transform.position.y - transform.up.y * m_target.transform.position.x;
+                //Debug.Log($"Teen crossProductResult: {crossProductResult}");
+
+                if (Mathf.Abs(crossProductResult) > m_targetDistanceMin)
                 {
-                    m_spriteController.PushForward();
-                }
-                else
-                {
-                    m_spriteController.PushBackward();
+                    if (crossProductResult < 0)
+                    {
+                        m_spriteController.PushForward();
+                    }
+                    else
+                    {
+                        m_spriteController.PushBackward();
+                    }
                 }
             }
         }
@@ -46,8 +49,19 @@ public class SpriteDriver_Teenager : SpriteDriver_Abstract
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            Debug.Log($"Teen encountered enemy");
+            //Debug.Log($"Teen encountered enemy");
             m_spriteController.Action();
         }
+    }
+
+    public void DisableControls()
+    {
+        m_controlsEnabled = false;
+        m_spriteController.Idle();
+    }
+
+    public void EnableControls()
+    {
+        m_controlsEnabled = true;
     }
 }

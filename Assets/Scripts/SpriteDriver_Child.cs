@@ -9,7 +9,7 @@ public class SpriteDriver_Child : SpriteDriver_Abstract
     public new SpriteController_Child m_spriteController;
     public float m_timeMax = 3;
     public float m_timePassed = 0;
-    public bool m_forward;
+    public bool m_forward, m_controlsEnabled = true;
     public GameObject m_target;
     public float m_jumpThreshold = 0.01f;
 
@@ -21,23 +21,36 @@ public class SpriteDriver_Child : SpriteDriver_Abstract
     // Update is called once per frame
     void Update()
     {
-        if (m_target != null)
+        if (m_controlsEnabled)
         {
-            float crossProductResult = transform.up.x * m_target.transform.position.y - transform.up.y * m_target.transform.position.x;
-
-            if (Mathf.Abs(crossProductResult) < m_jumpThreshold)
-                m_spriteController.Action();
-            else
+            if (m_target != null)
             {
-                if (crossProductResult < 0)
-                {
-                    m_spriteController.PushForward();
-                }
+                float crossProductResult = transform.up.x * m_target.transform.position.y - transform.up.y * m_target.transform.position.x;
+
+                if (Mathf.Abs(crossProductResult) < m_jumpThreshold)
+                    m_spriteController.Action();
                 else
                 {
-                    m_spriteController.PushBackward();
+                    if (crossProductResult < 0)
+                    {
+                        m_spriteController.PushForward();
+                    }
+                    else
+                    {
+                        m_spriteController.PushBackward();
+                    }
                 }
             }
         }
+    }
+
+    public void DisableControls()
+    {
+        m_controlsEnabled = false;
+    }
+
+    public void EnableControls()
+    {
+        m_controlsEnabled = true;
     }
 }

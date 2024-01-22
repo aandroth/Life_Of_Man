@@ -23,8 +23,6 @@ public class Grandfather : MonoBehaviour
 
     public IEnumerator MoveToTarget()
     {
-        // Get the position of the 
-
         Vector3 vectorToTarget = ((m_offset*transform.parent.localScale.x) + transform.parent.position) - transform.position;
         while (true)
         {

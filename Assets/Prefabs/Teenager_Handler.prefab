@@ -130,7 +130,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 23
   m_Sprite: {fileID: 21300000, guid: c1926cf5e93279f4e9217fe78c2fa392, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -214,7 +214,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 23
   m_Sprite: {fileID: 21300000, guid: 833205ad3de4eb9438a5ddd5f02693c0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -274,9 +274,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_sprite: {fileID: 8544902838629052276}
-  m_spriteController: {fileID: 0}
+  m_spriteController: {fileID: 3744142704327419868}
   m_collisionReporter: {fileID: 8492683699710412310}
   m_forward: 0
+  m_controlsEnabled: 1
   m_target: {fileID: 0}
   m_targetDistanceMin: 0.5
 --- !u!114 &1755723308247797036
@@ -448,7 +449,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 25
   m_Sprite: {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -532,7 +533,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 23
   m_Sprite: {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -656,7 +657,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 21
   m_Sprite: {fileID: 21300000, guid: e1d574493fc8f294fba689658c1e2608, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -728,7 +729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_sprite: {fileID: 8544902838629052276}
   m_spriteHandler: {fileID: 8544902837826691666}
-  m_walkSpeed: 5
+  m_walkSpeed: 15
   m_innerHandler: {fileID: 8544902838843733676}
   m_animator: {fileID: 8544902838629052265}
   m_attackAnimName: FatherAttack
@@ -737,7 +738,7 @@ MonoBehaviour:
   m_jumpRate: 0.1
   m_growthRate: 0.1
   m_growthCount: 0
-  m_speed: 1
+  m_speed: 5
   m_attackRecoveryTime: 1.5
   m_upperEnemyDestroyerCollider: {fileID: 8770747010104505087}
   m_lowerEnemyDestroyerCollider: {fileID: 2640520360555670824}
@@ -847,7 +848,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 23
   m_Sprite: {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

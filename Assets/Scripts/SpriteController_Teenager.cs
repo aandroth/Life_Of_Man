@@ -23,12 +23,14 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public float m_attackRecoveryTime = 1.5f;
     public GameObject m_upperEnemyDestroyerCollider, m_lowerEnemyDestroyerCollider;
 
-    public delegate void ReportAtPyramid();
+    public delegate void ReportAtPyramid(bool b);
     public ReportAtPyramid m_reportAtPyramid;
-    public delegate void ReportAtStart();
+    public delegate void ReportAtStart(bool b);
     public ReportAtStart m_reportAtStart;
-    public delegate void ReportDamage();
-    public ReportDamage m_reportDamage;
+    public delegate void ReportTookDamage(int i);
+    public ReportTookDamage m_reportTookDamage;
+    public delegate void ReportAgedOut(SpriteController_Teenager t);
+    public ReportAgedOut m_reportAgedOut;
     public int m_health = 3;
 
     public GameObject m_nextForm;
@@ -38,6 +40,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
         m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
+        Physics2D.SyncTransforms();
     }
 
     // Update is called once per frame
@@ -55,7 +58,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
                                                                m_innerHandler.transform.localScale.y,
                                                                m_innerHandler.transform.localScale.z);
         }
-        Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
+        //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
         // play run animation
         if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             m_spriteAnimator.Play("Walk");
@@ -71,7 +74,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
                                                                m_innerHandler.transform.localScale.y,
                                                                m_innerHandler.transform.localScale.z);
         }
-        Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
+        //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
         // play run animation
         if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             m_spriteAnimator.Play("Walk");
@@ -92,18 +95,58 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     }
     public void Idle()
     {
-
+        m_state = TEENAGER_STATE.IDLE;
+        m_spriteAnimator.Play("Idle");
     }
     public virtual Transform ReturnSpecialTransform() { return null; }
 
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Treasure")
+        {
+            GetOlder();
+            GetOlder();
+            GetOlder();
+        }
+        else if (collision.tag == "Pyramid")
+        {
+            m_reportAtPyramid?.Invoke(true);
+        }
+        else if (collision.tag == "StartingArea")
+        {
+            m_reportAtStart?.Invoke(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        //Debug.Log("Trigger undetected: " + collision.tag);
+        if (collision.tag == "Pyramid")
+        {
+            m_reportAtPyramid?.Invoke(false);
+        }
+        else if (collision.tag == "StartingArea")
+        {
+            m_reportAtStart?.Invoke(false);
+        }
+    }
     public void GetOlder()
     {
-        float newScale = m_spriteHandler.transform.localScale.x + m_growthRate;
-        m_spriteHandler.transform.localScale = new Vector3(newScale, newScale, newScale);
+        if(m_growthCount < 3)
+        {
+            float newScale = m_spriteHandler.transform.localScale.x + m_growthRate;
+            //m_spriteHandler.transform.localScale = new Vector3(newScale, newScale, newScale);
 
-        m_speed *= m_speedRate;
+            m_speed *= m_speedRate;
 
-        ++m_growthCount;
+            ++m_growthCount;
+
+            if (m_growthCount == 3)
+            {
+                m_reportAgedOut.Invoke(GetComponent<SpriteController_Teenager>());
+            }
+        }
     }
 
     public IEnumerator Attacking()

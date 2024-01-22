@@ -4,25 +4,31 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public List<GameObject> m_hearts;
+
+    public Pyramid m_pyramid0;
+    public Pyramid m_pyramid1;
+    public Pyramid m_pyramid2;
     public GameObject m_treasuresA;
     public GameObject m_treasuresB;
 
-    public GameObject m_sonSpritePrefab;
+    public GameObject m_childSpritePrefab;
     public GameObject m_teenagerSpritePrefab;
     public GameObject m_fatherSpritePrefab;
     public GameObject m_grandfatherSpritePrefab;
 
-    public GameObject m_sonSprite;
-    public GameObject m_teenagerSprite;
-    public GameObject m_fatherSprite;
+    public GameObject m_childHandler;
+    public GameObject m_teenagerHandler;
+    public GameObject m_fatherHandler;
     public GameObject m_grandfatherSprite;
 
-    //public PlayerController m_player;
+    
     public SpriteController_Child m_childController;
+    public SpriteController_Teenager m_teenagerController;
     public SpriteController_Father m_fatherController;
+    public SpriteController_Grandfather m_grandfatherController;
     public GameObject m_fatherHead;
     public GameObject m_fatherHeart;
-    public GameObject m_grandfather;
     public GameObject m_grandfatherEye;
     public GameObject m_world;
     public GameObject m_childBornParticles;
@@ -35,7 +41,9 @@ public class GameController : MonoBehaviour
     public bool m_playerBecomesGrandfather = false;
     public bool m_playerDies = false;
 
-    public bool m_sonIsYoungAdult = false;
+    public bool m_sonIsReadyToBeTeenager = false;
+    public bool m_sonIsTeenager = false;
+    public bool m_sonIsReadyToBeAdult = false;
     public bool m_sonIsFullAdult = false;
     public bool m_sonAtPyramid = false;
     public bool m_sonAtStartArea = false;
@@ -43,79 +51,104 @@ public class GameController : MonoBehaviour
     public bool m_fatherAtPyramid = false;
     public bool m_fatherAtStartArea = false;
     public bool m_grandfatherAtStartArea = false;
+    public bool m_grandfatherAtFatherArea = false;
 
     public void Start()
     {
-        //m_player.m_gameControllerReportYoungAdult = PlayerReachesYoungAdult;
-        //m_player.m_gameControllerReportFullAdult = PlayerReachesFullAdult;
-        //m_player.m_gameControllerReportPlayerAtPyramid = SonIsAtPyramid;
-        //m_player.m_gameControllerReportPlayerAtStartingArea = SonIsAtStartArea;
-
-        if (m_grandfatherAtStartArea)
-            InitGrandfather(false);
-
         InitFather();
-        InitChild();
+        if (m_grandfatherAtStartArea)
+        {
+            InitGrandfather(false, m_fatherController);
+            m_grandfatherController.transform.SetParent(m_fatherController.gameObject.transform);
+            m_grandfatherController.transform.localPosition = m_grandfatherController.m_carriedByFatherOffset;
+        }
+        //InitChild();
+        //m_childController.GetOlder();
+        //m_childController.GetOlder();
+        //m_childController.GetOlder();
+
+        //InitTeenager();
+        //m_teenagerController.GetOlder();
+        //m_teenagerController.GetOlder();
+        //m_teenagerController.GetOlder();
     }
 
 
     public void InitChild(bool initAsPlayer = false)
     {
-        m_sonSprite = Instantiate(m_sonSpritePrefab, Vector3.zero, Quaternion.identity, m_world.transform);
+        m_childHandler = Instantiate(m_childSpritePrefab, Vector3.zero, Quaternion.identity, m_world.transform);
         m_childBornParticles.GetComponent<ParticleSystem>().Play();
+        m_childController = m_childHandler.GetComponent<SpriteDriver_Child>().m_spriteController;
+        m_sonAtFatherArea = true;
         if (initAsPlayer)
         {
-            m_sonSprite.GetComponent<SpriteDriver_Child>().enabled = false;
-            m_sonSprite.GetComponent<PlayerController>().enabled = true;
+            m_childHandler.GetComponent<SpriteDriver_Child>().enabled = false;
+            m_childHandler.GetComponent<PlayerController>().enabled = true;
         }
         else
         {
-            m_sonSprite.GetComponent<SpriteDriver_Child>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
-            m_childController = m_sonSprite.GetComponent<SpriteDriver_Child>().m_spriteController as SpriteController_Child;
+            m_childHandler.GetComponent<SpriteDriver_Child>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
 
-        m_childController.GetComponent<SpriteController_Child>().m_reportDamage = ChildTookDamage;
-        m_childController.GetComponent<SpriteController_Child>().m_reportAtStart = SonIsAtStartArea;
-        m_childController.GetComponent<SpriteController_Child>().m_reportAtPyramid = SonIsAtPyramid;
+        m_childController.GetComponent<SpriteController_Child>().m_reportTookDamage = SonTookDamageAndIsNow;
+        m_childController.GetComponent<SpriteController_Child>().m_reportAtStart = SonReportsReachesStartArea;
+        m_childController.GetComponent<SpriteController_Child>().m_reportAtPyramid = SonReportsReachesPyramid;
         m_childController.GetComponent<SpriteController_Child>().m_reportAgedOut = SpriteReportsAgedOut;
     }
-    public void InitTeen(bool initAsPlayer = false, SpriteController_Child spriteController = null)
+    public void InitTeenager(bool initAsPlayer = false, SpriteController_Child spriteController = null)
     {
         Quaternion rotation = spriteController == null ? Quaternion.identity : spriteController.m_spriteHandler.transform.rotation;
-        m_teenagerSprite = Instantiate(m_teenagerSpritePrefab, Vector3.zero, rotation, m_world.transform);
-        if (initAsPlayer)
+        m_teenagerHandler = Instantiate(m_teenagerSpritePrefab, Vector3.zero, rotation, m_world.transform);
+        m_teenagerController = m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().m_spriteController;
+        //if (initAsPlayer)
+        //{
+        //    m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled = false;
+        //    m_teenagerHandler.GetComponent<PlayerController>().enabled = true;
+        //}
+        //else
         {
-            m_teenagerSprite.GetComponent<SpriteDriver_Teenager>().enabled = false;
-            m_teenagerSprite.GetComponent<PlayerController>().enabled = true;
+            m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
-        else
-        {
-            m_teenagerSprite.GetComponent<SpriteDriver_Teenager>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
-        }
+
+        m_sonIsReadyToBeTeenager = false;
+        m_sonIsTeenager = true;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportTookDamage = SonTookDamageAndIsNow;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAtStart = SonReportsReachesStartArea;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAtPyramid = SonReportsReachesPyramid;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAgedOut = SpriteReportsAgedOut;
     }
 
-    public void InitFather(bool initAsPlayer = false)
+    public void InitFather(bool initAsPlayer = false, SpriteController_Teenager spriteController = null)
     {
-        m_fatherSprite = Instantiate(m_fatherSpritePrefab, Vector3.zero, Quaternion.identity, m_world.transform);
+        Quaternion rotation = spriteController == null ? Quaternion.identity : spriteController.m_spriteHandler.transform.rotation;
+        m_fatherHandler = Instantiate(m_fatherSpritePrefab, Vector3.zero, rotation, m_world.transform); 
+        m_fatherController = m_fatherHandler.GetComponent<SpriteDriver_Father>().m_spriteController;
         if (initAsPlayer)
         {
-            m_fatherSprite.GetComponent<SpriteDriver_Father>().enabled = false;
-            m_fatherSprite.GetComponent<PlayerController>().enabled = true;
+            m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled = false;
+            m_fatherHandler.GetComponent<PlayerController>().enabled = true;
         }
-        else
-            m_fatherController = m_fatherSprite.GetComponent<SpriteDriver_Father>().m_spriteController as SpriteController_Father;
 
-        m_fatherController.m_reportFatherHasPlayerInArea = FatherReportsPlayerEnteredArea;
-        m_fatherController.m_reportFatherReachedStartArea = FatherReportsReachesPyramid;
-        m_fatherController.m_reportFatherReachedStartArea = FatherReachesStartArea;
+        m_fatherController.m_reportFatherHasSonInArea = FatherReportsSonEnteredArea;
+        m_fatherController.m_reportFatherHasGrandfatherInArea = FatherReportsSonEnteredArea;
+        m_fatherController.m_reportFatherReachedPyramid = FatherReportsReachesPyramid;
+        m_fatherController.m_reportPlacedGrandfatherdAnimDone = FatherReportsPlacedGrandfatherAnimDone;
+        m_fatherController.m_reportFatherReachedStartArea = FatherReportsReachesStartArea;
+        m_fatherController.m_reportPyramidAnimDone = FatherBuriesGrandfatherAnimDone;
+        m_fatherController.m_reportGrowOldAnimDone = FatherGrowOldAnimDone;
     }
-    public void InitGrandfather(bool initAsPlayer = false)
+
+    public void InitGrandfather(bool initAsPlayer = false, SpriteController_Father spriteController = null)
     {
-        m_grandfatherSprite = Instantiate(m_fatherSpritePrefab, Vector3.zero, Quaternion.identity, m_world.transform);
-        m_grandfather.GetComponent<Grandfather>().m_reportGrowOldMoveToTargetDone = FatherAsGrandfatherMovesToPlayerDone;
+        Quaternion rotation = spriteController == null ? Quaternion.identity : spriteController.m_spriteHandler.transform.rotation;
+        m_grandfatherSprite = Instantiate(m_grandfatherSpritePrefab, Vector3.zero, rotation, m_world.transform);
+        m_grandfatherSprite.transform.localPosition = new Vector3(0, 83.8f, 0);
+        m_grandfatherController = m_grandfatherSprite.GetComponent<SpriteDriver_Grandfather>().m_spriteController;
+
+        m_grandfatherController.GetComponent<SpriteController_Grandfather>().m_reportGrowOldMoveToTargetDone = GrandfatherMovesToAdultSonDone;
         if (initAsPlayer)
         {
-            m_grandfatherSprite.GetComponent<SpriteDriver_Father>().enabled = false;
+            m_grandfatherSprite.GetComponent<SpriteDriver_Grandfather>().enabled = false;
             m_grandfatherSprite.GetComponent<PlayerController>().enabled = true;
         }
     }
@@ -125,12 +158,11 @@ public class GameController : MonoBehaviour
         switch (i_spriteController)
         {
             case SpriteController_Child child:
-                InitTeen(((SpriteController_Child)i_spriteController).m_spriteHandler.gameObject.GetComponent<PlayerController>().enabled, (SpriteController_Child)i_spriteController);
-                i_spriteController.DestroySelf();
+                Debug.Log("Child aged into teenager");
+                m_sonIsReadyToBeTeenager = true;
                 break;
             case SpriteController_Teenager teenager:
-                // Set bool to check for next steps
-                // Set 
+                m_sonIsReadyToBeAdult = true;
                 break;
             case SpriteController_Father adult:
 
@@ -138,160 +170,216 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void FatherReportsPlayerEnteredArea()
+    public void ChildBecomesTeenager()
     {
-        if(m_grandfather != null)
+        InitTeenager((m_childController).m_spriteHandler.gameObject.GetComponent<PlayerController>().enabled, m_childController);
+        m_childController.DestroySelf();
+    }
+
+    public void TeenagerBecomesAdult()
+    {
+        InitFather((m_teenagerController).m_spriteHandler.gameObject.GetComponent<PlayerController>().enabled, m_teenagerController);
+        m_teenagerController.DestroySelf();
+    }
+
+    public void AdultBecomesOld()
+    {
+        InitGrandfather((m_fatherController).m_spriteHandler.gameObject.GetComponent<PlayerController>().enabled, m_fatherController);
+        m_fatherController.DestroySelf();
+    }
+
+    public void FatherReportsSonEnteredArea(bool b)
+    {
+        m_sonAtFatherArea = b;
+
+        // Father at pyramid buries Grandfather and Child becomes Teenager
+        if (m_sonIsReadyToBeTeenager && m_sonAtPyramid && m_fatherAtPyramid && m_grandfatherSprite != null)
         {
-            m_grandfather.GetComponent<Grandfather>().EnactHealing();
-            StartCoroutine(HealAfterSeconds(3f));
+            PlayFatherBuriesGrandfatherSequence();
         }
     }
 
-    public IEnumerator HealAfterSeconds(float _seconds)
+    public void FatherReportsGrandfatherEnteredArea(bool b)
     {
-        _seconds -= Time.deltaTime;
-        if (_seconds <= 0)
+        m_grandfatherAtFatherArea = b;
+
+        // Father at Grandfather picks him up
+        if (m_grandfatherAtFatherArea && m_grandfatherSprite != null)
         {
-            //m_player.GetComponent<I_Hurtable>().Heal();
-            StopCoroutine("HealAfterSeconds");
+            m_grandfatherController.BeginMoveToTarget(m_fatherController.gameObject);
         }
-        yield return null;
     }
 
-    public void FatherReportsReachesPyramid()
+    public void FatherReportsReachesPyramid(bool b)
     {
-        m_fatherAtPyramid = true;
-        Debug.Log("Father at pyramid");
-        if (m_sonAtPyramid)
-            PlayFatherBuriesGrandfatherAnim();
+        m_fatherAtPyramid = b;
+
+        if(m_fatherAtPyramid)
+        {
+            PutFatherIntoCinematicMode();
+        }
+        if (m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_sonAtFatherArea && m_grandfatherSprite != null)
+            PlayFatherBuriesGrandfatherSequence();
     }
-    public void SonIsAtPyramid(bool b)
+
+    public void FatherReportsPlacedGrandfatherAnimDone()
     {
-        Debug.Log("Son at pyramid: "+b);
+        Debug.Log("Called FatherReportsPlacedGrandfatherAnimDone");
+        m_pyramid0.AddBlock();
+        m_pyramid1.AddBlock();
+        m_pyramid2.AddBlock();
+    }
+    public void SonReportsReachesPyramid(bool b)
+    {
         m_sonAtPyramid = b;
-        if (m_sonIsYoungAdult && m_sonAtPyramid && m_fatherAtPyramid)
-            PlayFatherBuriesGrandfatherAnim();
-        else if(m_sonIsFullAdult && m_sonAtPyramid)
-            PlayPlayerBuriesFatherAnim();
+        if (m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_sonAtPyramid && m_grandfatherSprite != null)
+            PlayFatherBuriesGrandfatherSequence();
     }
 
-    public void PlayFatherBuriesGrandfatherAnim()
+    public void PlayFatherBuriesGrandfatherSequence()
     {
         Debug.Log("Called PlayFatherBuriesGrandfatherAnim");
-        m_grandfather.SetActive(false);
+        m_grandfatherSprite.SetActive(false);
         m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfather");
+        if (m_childHandler.GetComponent<SpriteDriver_Child>().enabled)
+        {
+            m_childHandler.GetComponent<SpriteDriver_Child>().DisableControls();
+        }
+        else
+        {
+            m_childHandler.GetComponent<PlayerController>().DisablePlayerControls();
+        }
     }
 
-    public void FatherPyramidAnimDone()
+    public void FatherBuriesGrandfatherAnimDone()
     {
         m_fatherController.RestoreHandlerSpeed();
-        m_fatherController.GetComponent<Animator>().Play("Walk");
         m_treasuresB.SetActive(true);
         m_fatherHeart.SetActive(true);
-        m_fatherAtPyramid = false;
+        ChildBecomesTeenager();
     }
-    public void FatherReachesStartArea()
+    public void FatherReportsReachesStartArea(bool b)
     {
-        m_fatherAtStartArea = true;
-        Debug.Log("Father at StartArea");
-        if (m_sonAtStartArea)
-            PlayFatherGrowsOldAnim();
-    }
-    public void SonIsAtStartArea(bool b)
-    {
-        Debug.Log("Player at StartArea: "+b);
-        m_sonAtStartArea = b;
-        if(m_sonAtStartArea && m_fatherAtStartArea)
-            PlayFatherGrowsOldAnim();
-    }
-    public void SonIsAtFatherArea(bool b)
-    {
-        Debug.Log("Player at FatherArea: "+b);
-        m_sonAtStartArea = b;
-        if(m_sonAtStartArea && m_fatherAtStartArea)
-            PlayFatherGrowsOldAnim();
+        //m_fatherAtStartArea = b;
+        //if (m_fatherAtStartArea)
+        //{
+        //    m_fatherController.Idle();
+        //}
+        //Debug.Log("Father at StartArea");
+        //if (m_sonAtStartArea && m_fatherAtStartArea && m_sonIsReadyToBeAdult)
+        //    PlayFatherGrowsOldSequence();
+
+        AdultBecomesOld();
     }
 
-    public void PlayFatherGrowsOldAnim()
+    public void SonReportsReachesStartArea(bool b)
     {
-        m_grandfather.transform.SetParent(m_world.transform);
-        Debug.Log("Father and Player at StartArea");
-        m_fatherController.GetComponent<Animator>().Play("FatherGrowOld");
-        EnterCinematicMode();
+        Debug.Log("Son at StartArea: " + b);
+        m_sonAtStartArea = b;
+        if (m_sonAtStartArea && m_fatherAtStartArea && m_sonIsReadyToBeAdult)
+            PlayFatherGrowsOldSequence();
     }
+
+    public void PlayFatherGrowsOldSequence()
+    {
+        Debug.Log("Called PlayFatherGrowsOldSequence");
+        m_fatherController.GetComponent<Animator>().Play("FatherGrowOld");
+        if (m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled)
+        {
+            m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().DisableControls();
+        }
+        else
+        {
+            m_teenagerHandler.GetComponent<PlayerController>().DisablePlayerControls();
+        }
+    }
+    //public void PlayFatherGrowsOldAnim()
+    //{
+    //    m_grandfatherSprite.transform.SetParent(m_world.transform);
+    //    Debug.Log("Father and Player at StartArea");
+    //    m_fatherController.GetComponent<Animator>().Play("FatherGrowOld");
+    //    EnterCinematicMode();
+    //}
 
     public void FatherGrowOldAnimDone()
     {
-        m_grandfather.SetActive(true);
-        m_grandfatherEye.GetComponent<Animator>().Play("Idle");
-        m_grandfather.transform.position = m_fatherController.transform.position;
         m_fatherController.gameObject.SetActive(false);
+        AdultBecomesOld();
+        //InitFather(m_teenagerController);
         m_treasuresA.SetActive(true);
-        m_fatherAtStartArea = false;
-        //m_player.BecomeFather();
-        //m_grandfatherAtStartArea = true;
-        //m_player.GetOlder();
-        m_sonIsFullAdult = true;
-        m_sonIsYoungAdult = false;
+        m_sonIsTeenager = false;
 
-        //if (m_playerAtStartArea)
-        //{
-            FatherAsGrandfatherMovesToPlayer();
-        //}
+        if (m_sonAtFatherArea)
+        {
+            GrandfatherMovesToAdultSon();
+            m_sonAtFatherArea = false;
+        }
     }
 
-    public void PlayPlayerBuriesFatherAnim()
-    {
-        Debug.Log("Father as Grandfather, and Player at pyramid");
-        EnterCinematicMode();
-    }
-
-    public void PlayerBuriesFatherPyramidAnimDone()
-    {
-        //m_player.GetComponent<Animator>().Play("Walk");
-        m_treasuresB.SetActive(true);
-        m_fatherHeart.SetActive(true);
-        m_fatherAtPyramid = false;
-    }
-
-    public void FatherAsGrandfatherMovesToPlayer()
+    public void GrandfatherMovesToAdultSon()
     {
         Debug.Log("Grandfather and Player at StartArea");
-        //m_grandfather.GetComponent<Grandfather>().ActivateMoveToTarget(m_player.gameObject);
+        m_grandfatherController.BeginMoveToTarget(m_fatherController.gameObject);
     }
-    public void FatherAsGrandfatherMovesToPlayerDone()
+    public void GrandfatherMovesToAdultSonDone()
     {
         Debug.Log("GrandfatherMovesToPlayerDone");
         m_fatherBecomesGrandfather = true;
         ExitCinematicMode();
     }
 
-    public void PlayerReachesYoungAdult()
+    public void PutChildIntoCinematicMode()
     {
-        Debug.Log("Player becomes Young Adult");
-        m_treasuresA.SetActive(false);
-        m_fatherHead.transform.Rotate(Vector3.forward, 22);
-        m_grandfatherEye.GetComponent<Animator>().Play("CloseEye");
-        m_sonIsYoungAdult = true;
+        if (m_childHandler.GetComponent<SpriteDriver_Child>().enabled)
+        {
+            //m_fatherController.m_walkSpeed = 0;
+            //m_fatherController.gameObject.GetComponent<Animator>().StopPlayback();
+        }
     }
 
-    public void PlayerReachesFullAdult()
+    public void PutTeenagerIntoCinematicMode()
     {
-        m_treasuresB.SetActive(false);
-        m_playerBecomesFather = true;
+        if (m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled)
+        {
+            //m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
+            //m_fatherController.m_walkSpeed = 0;
+            //m_fatherController.gameObject.GetComponent<Animator>().StopPlayback();
+        }
+    }
+
+    public void PutFatherIntoCinematicMode()
+    {
+        Debug.Log("PutFatherIntoCinematicMode");
+        if(m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
+        {
+            Debug.Log("Driver detected");
+            m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
+            m_fatherController.Idle();
+        }
+    }
+
+    public void PutFatherOutOfCinematicMode()
+    {
+        if(m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
+        {
+            m_fatherController.ContinueWalking();
+        }
     }
 
     public void EnterCinematicMode()
     {
-        //m_player.GetComponent<PlayerController>().DisablePlayerControls();
+        if(m_fatherHandler != null)
+        {
+            PutFatherIntoCinematicMode();
+        }
     }
     public void ExitCinematicMode()
     {
         //m_player.GetComponent<PlayerController>().EnablePlayerControls();
     }
 
-    public void ChildTookDamage()
+    public void SonTookDamageAndIsNow(int health)
     {
-
+        m_hearts[health].gameObject.SetActive(false);
     }
 }
