@@ -4,29 +4,71 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public GameObject m_player, m_father, m_grandfather;
-    public Vector3 m_playerStartPosition, m_fatherStartPosition, m_grandfatherStartPosition;
-    public float m_worldStartRotation;
-    public ParticleSystem m_playerStartParticleBurst;
-    public GameObject m_target;
-    public float m_lookAhead = 0f;
-    //public 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject m_playerTarget, m_cinematicTarget;
+    public float m_lookAhead = 0.5f;
+    public enum CAMERA_STATE { FOLLOW_TARGET_RIGHT, FOLLOW_TARGET_LEFT, CINEMATIC }
+    public CAMERA_STATE m_state = CAMERA_STATE.FOLLOW_TARGET_RIGHT;
+    public float m_speed = 1f;
+    public bool m_playerIsAdult = false;
+    public float m_cinematicZoomDistance = 5;
+    public int m_zoomDistancesIndex;
+    public float[] m_zoomDistances;
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(m_target.transform.position.x, m_target.transform.position.y, transform.position.z);
-        transform.rotation = m_target.transform.rotation;
+        if(!m_playerIsAdult)
+        {
+            if (Input.GetKeyDown(KeyCode.A) && m_state == CAMERA_STATE.FOLLOW_TARGET_RIGHT) m_state = CAMERA_STATE.FOLLOW_TARGET_LEFT;
+            if (Input.GetKeyDown(KeyCode.D) && m_state == CAMERA_STATE.FOLLOW_TARGET_LEFT) m_state = CAMERA_STATE.FOLLOW_TARGET_RIGHT;
+        }
+
+        float interp = m_speed * Time.deltaTime;
+        Vector3 pos = this.transform.position;
+        if (m_state == CAMERA_STATE.CINEMATIC)
+        {
+            transform.rotation = m_cinematicTarget.transform.rotation;
+            pos.x = Mathf.Lerp(this.transform.position.x, m_cinematicTarget.transform.position.x, interp);
+            pos.y = Mathf.Lerp(this.transform.position.y, m_cinematicTarget.transform.position.y, interp);
+        }
+        else if(m_playerTarget != null)
+        {
+            transform.rotation = m_playerTarget.transform.rotation;
+            Vector3 lookAheadVector = (((m_state == CAMERA_STATE.FOLLOW_TARGET_RIGHT) ? transform.right : -transform.right) * m_lookAhead);
+            pos.x = Mathf.Lerp(this.transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
+            pos.y = Mathf.Lerp(this.transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);
+        }
+        this.transform.position = pos;
     }
 
-    public void BeginGame()
+    public void ZoomOut()
     {
+        if(m_zoomDistancesIndex < m_zoomDistances.Length-1)
+        {
+            ++m_zoomDistancesIndex;
+            this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y,  m_zoomDistances[m_zoomDistancesIndex]);
+        }
+    }
 
+    public void SetLookAhead_Right(bool lookRight)
+    {
+        m_lookAhead = (lookRight) ? Mathf.Abs(m_lookAhead) : -1 * Mathf.Abs(m_lookAhead);
+    }
+
+    public void EnterCinematicMode()
+    {
+        m_state = CAMERA_STATE.CINEMATIC;
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, m_cinematicZoomDistance);
+    }
+
+    public void ExitCinematicMode()
+    {
+        m_state = CAMERA_STATE.FOLLOW_TARGET_RIGHT;
+    }
+
+    public void PlayerBecomesAdult()
+    {
+        m_playerIsAdult = true;
+        m_state = CAMERA_STATE.FOLLOW_TARGET_RIGHT;
     }
 }

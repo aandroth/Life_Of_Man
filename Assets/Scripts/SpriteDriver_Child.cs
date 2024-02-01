@@ -16,6 +16,7 @@ public class SpriteDriver_Child : SpriteDriver_Abstract
     // Start is called before the first frame update
     void Start()
     {
+        m_controlsEnabled = true;
     }
 
     // Update is called once per frame

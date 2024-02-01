@@ -9,15 +9,15 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public GameObject m_visionToWorldHitPoint = null;
     public float m_headSpeed = 1f;
     public float m_walkSpeed = 1f;
+    private float m_currSpeed = 1f;
     public GameObject m_innerHandler;
     private Rigidbody2D m_innerHandler_rb;
     public GameObject m_fatherHead;
-    private Animator m_spriteHandlerAnimator;
     private Animator m_spriteAnimator;
-    public float m_currTime, m_timeMax;
     public float m_headUpLimit = 355, m_headDownLimit = 280;
     public bool m_hasHeart = false;
     public GameObject m_heart;
+    public float m_timePassed = 0, m_timeMax = 3;
 
     // Sprite Collisions
     public delegate void ReportFatherHasSonInArea(bool b);
@@ -38,11 +38,19 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public ReportGrowOldAnimDone m_reportGrowOldAnimDone;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        m_spriteHandlerAnimator = m_spriteHandler.GetComponent<Animator>();
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
         m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
+        m_currSpeed = m_walkSpeed;
+    }
+
+    public void Update()
+    {
+        if (m_currSpeed > 0)
+        {
+            m_spriteHandler.transform.Rotate(new Vector3(0, 0, -m_currSpeed*Time.deltaTime));
+        }
     }
 
     public void PushForward()
@@ -59,25 +67,40 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     }
     public void Action()
     {
-        m_spriteHandlerAnimator.speed = m_walkSpeed;
+        // Heal son
+        if (m_timePassed == 0)
+            Heal();
+    }
+
+
+    public IEnumerator Heal()
+    {
+        // Play healing animation
+        m_heart.GetComponent<HealingHeart>().HealAllHurtables();
+        while (m_timePassed < m_timeMax)
+        {
+            m_timePassed += Time.deltaTime;
+            yield return null;
+        }
+        m_timePassed = 0;
     }
 
     public void Idle()
     {
-        m_spriteHandlerAnimator.speed = 0;
+        m_currSpeed = 0;
         m_spriteAnimator.Play("Idle");
     }
 
     public void ContinueWalking()
     {
-        m_spriteHandlerAnimator.speed = m_walkSpeed;
-        m_spriteAnimator.Play("FatherWalk");
+        m_currSpeed = m_walkSpeed;
+        m_spriteAnimator.Play("Walk");
     }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger detected: " + collision.tag);
+        //Debug.Log("Trigger detected: " + collision.tag);
         if (collision.tag == "Pyramid")
         {
             m_reportFatherReachedPyramid?.Invoke(true);
@@ -92,13 +115,14 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
         }
         else if (collision.tag == "Grandfather")
         {
-            m_reportFatherHasSonInArea?.Invoke(true);
+                Debug.Log($"Grandfather detected");
+                m_reportFatherHasGrandfatherInArea?.Invoke(true);
         }
     }    
     
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Trigger undetected: " + collision.tag);
+        //Debug.Log("Trigger undetected: " + collision.tag);
         if (collision.tag == "Pyramid")
         {
             m_reportFatherReachedPyramid?.Invoke(false);
@@ -117,7 +141,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     {
         if(animName == "PlacedGrandfather")
         {
-            Debug.Log("ReportAnimationFinished: PlacedGrandfatherFinished");
+            //Debug.Log("ReportAnimationFinished: PlacedGrandfatherFinished");
             m_reportPlacedGrandfatherdAnimDone.Invoke();
         }
         if(animName == "Pyramid")
@@ -132,7 +156,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
 
     public Transform ReturnSpecialTransform()
     {
-        Debug.DrawLine(m_fatherHead.transform.position, m_fatherHead.transform.position + m_fatherHead.transform.right, new Color(256, 0, 0));
+        //Debug.DrawLine(m_fatherHead.transform.position, m_fatherHead.transform.position + m_fatherHead.transform.right, new Color(256, 0, 0));
         return m_fatherHead.transform;
     }
 
@@ -145,12 +169,6 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public void GetOlder()
     {
 
-    }
-
-    public void RestoreHandlerSpeed()
-    {
-        m_spriteHandlerAnimator.speed = m_walkSpeed;
-        m_spriteAnimator.Play("Walk");
     }
 
     public void DestroySelf()

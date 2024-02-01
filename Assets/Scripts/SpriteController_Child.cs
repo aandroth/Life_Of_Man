@@ -34,9 +34,10 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public GameObject m_groundDetector;
     public LayerMask m_groundLayer;
     public float m_jumpDelayCountdown = 1, m_jumpDelayCountdownMax = 1;
+    public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
         m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
@@ -46,19 +47,26 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     void Update()
     {
         if (m_state == STATE.RUNNING)
+        {
             m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_sprite.transform.localScale.x) * -m_speed * Time.deltaTime);
+            m_keepRunningTimer -= Time.deltaTime;
+            if (m_keepRunningTimer <= 0)
+                m_state = STATE.IDLE;
+        }
     }
 
     void FixedUpdate()
     {
+        Debug.DrawRay(transform.position, new Vector3(m_innerHandler.transform.up.x, m_innerHandler.transform.up.y, 0));
         if (m_jumpDelayCountdown < 0)
             m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, 0.03f, m_groundLayer);
         else
             m_jumpDelayCountdown -= Time.deltaTime;
     }
 
-    public void PushForward() 
+    public void PushForward()
     {
+        m_keepRunningTimer = m_keepRunningTimerMax;
         // set sprite to forward
         if (m_sprite.transform.localScale.x < 0) 
         { 
@@ -72,8 +80,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         if (m_state != STATE.RUNNING)
             m_state = STATE.RUNNING;
     }
-    public void PushBackward() 
+    public void PushBackward()
     {
+        m_keepRunningTimer = m_keepRunningTimerMax;
         // set sprite to backward
         if (m_sprite.transform.localScale.x > 0) 
         { 
@@ -92,7 +101,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_canJump)
         {
-            m_innerHandler_rb.AddForce(m_innerHandler.transform.up * m_jumpForce);
+            m_innerHandler_rb.AddForce(new Vector2(transform.up.x, transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
         }
@@ -117,6 +126,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         if(collision.gameObject.tag == "Treasure")
         {
             GetOlder();
+            GetOlder();
+            GetOlder();
+            collision.gameObject.GetComponent<Treasure>().DestroyHandler();
         }
     }
 

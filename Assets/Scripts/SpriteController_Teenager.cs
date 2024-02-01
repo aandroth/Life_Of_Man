@@ -32,11 +32,12 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public delegate void ReportAgedOut(SpriteController_Teenager t);
     public ReportAgedOut m_reportAgedOut;
     public int m_health = 3;
+    public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
 
     public GameObject m_nextForm;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
         m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
@@ -47,10 +48,17 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     void Update()
     {
         if (m_state == TEENAGER_STATE.RUNNING)
+        {
+            m_keepRunningTimer -= Time.deltaTime;
             m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_innerHandler.transform.localScale.x) * -m_speed * Time.deltaTime);
+
+            if (m_keepRunningTimer <= 0)
+                m_state = TEENAGER_STATE.IDLE;
+        }
     }
     public void PushForward()
     {
+        m_keepRunningTimer = m_keepRunningTimerMax;
         // set sprite to forward
         if (m_innerHandler.transform.localScale.x < 0) 
         {
@@ -67,6 +75,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     }
     public void PushBackward()
     {
+        m_keepRunningTimer = m_keepRunningTimerMax;
         // set sprite to backward
         if (m_innerHandler.transform.localScale.x > 0) 
         {
@@ -108,6 +117,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
             GetOlder();
             GetOlder();
             GetOlder();
+            collision.gameObject.GetComponent<Treasure>().DestroyHandler();
         }
         else if (collision.tag == "Pyramid")
         {

@@ -39,6 +39,7 @@ SpriteAtlas:
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: ca2328009c00f4943b10428ca5cfc679, type: 3}
+  - {fileID: 21300000, guid: 6fcbe710e4c17ea47bd95c32ad7f12f7, type: 3}
   - {fileID: 21300000, guid: 8cbcd430eac575f49be0b0ea466e2305, type: 3}
   - {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
   - {fileID: 21300000, guid: 971c8661cd3ed8c46956811bf539d177, type: 3}
@@ -57,8 +58,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6c3dbd4995a28e243ae4f12a3e3b2018, type: 3}
   - {fileID: 21300000, guid: d7140fd9ea47163499933431db39011c, type: 3}
   - {fileID: 21300000, guid: 0d14162a278bd4e43ab526f8469c10d3, type: 3}
+  - {fileID: 21300000, guid: 7a8aa5ba6a08c2142b7dbcac83ee5eb4, type: 3}
   - {fileID: 21300000, guid: 7c0be97b57a9f854f99f3f9ca541323e, type: 3}
   - {fileID: 21300000, guid: e53df68b7d37dbe4bbf72932a82a8731, type: 3}
+  - {fileID: 21300000, guid: 544c40bb054c0eb4fb949294b802f538, type: 3}
   - {fileID: 21300000, guid: 7b29971ca431ba94ab5c8c469ef7a354, type: 3}
   - {fileID: 21300000, guid: 469aa73cfd2c7d647ab6becbf32e0ce7, type: 3}
   - {fileID: 21300000, guid: f854412de9a91474fa51df2da6514162, type: 3}
@@ -66,9 +69,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 833205ad3de4eb9438a5ddd5f02693c0, type: 3}
   - {fileID: 21300000, guid: 4a81d70ea8714a8449bed53d4058a732, type: 3}
   - {fileID: 21300000, guid: fde01f1e4a127164582c57913944d3f8, type: 3}
+  - {fileID: 21300000, guid: 2f12a5afd0a07234981c4e74c0cac8e1, type: 3}
   - {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
   m_PackedSpriteNamesToIndex:
   - Bush
+  - PointerArrow
   - Cloud
   - Father_ArmR
   - Son_0_1
@@ -87,8 +92,10 @@ SpriteAtlas:
   - Log
   - TheWorld
   - Father_ArmL
+  - PointerBackground
   - Tear
   - Grass
+  - DiamondBlue
   - PanelSprite
   - Diamond
   - Son_0_0
@@ -96,6 +103,7 @@ SpriteAtlas:
   - Father_LegL
   - Dead_Grandfather
   - Heart_Empty
+  - Brain
   - Father_Head
   m_RenderDataMap: {}
   m_Tag: TexturesSpriteAtlas

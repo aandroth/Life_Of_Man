@@ -17,7 +17,9 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
     public bool m_hasHeart = false;
     public CollisionReporter m_collisionReporter = null;
     public GameObject m_hiddenObjectDetectorPrefab;
+    public GameObject m_treasurePointer;
     public float m_fatherLookAtThreshold = 0.25f;
+    public bool m_sonNeedsHealing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -45,9 +47,14 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
             m_spriteController.PushBackward();
         }
 
-        if (m_hasHeart)
+        if (m_hasHeart && m_sonNeedsHealing)
         {
+            m_spriteController.Action();
+        }
 
+        if (m_state == FATHER_STATE.LOOKING_AT_TREASURE && !m_currTarget.activeSelf)
+        {
+            EnterLookDownState();
         }
     }
 
@@ -58,6 +65,8 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
             //Debug.Log($"Treasure detected");
             m_state = FATHER_STATE.LOOKING_AT_TREASURE;
             m_currTarget = collision.gameObject;
+            m_treasurePointer.SetActive(true);
+            m_treasurePointer.GetComponent<TreasurePointer>().SetTarget(collision.gameObject);
         }
         else if(collision.gameObject.tag == "Enemy")
         {
@@ -70,6 +79,7 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
         //Debug.Log($"Enemy detected");
         m_state = FATHER_STATE.LOOKING_DOWN;
         m_currTarget = m_downTarget;
+        m_treasurePointer.SetActive(false);
     }
 
     public void CreateHiddenObjectDetector()
