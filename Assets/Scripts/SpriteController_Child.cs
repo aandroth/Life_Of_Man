@@ -27,7 +27,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public delegate void ReportTookDamage(int i);
     public ReportTookDamage m_reportTookDamage;    
     public delegate void ReportAgedOut(SpriteController_Child c);
-    public ReportAgedOut m_reportAgedOut;
+    public ReportAgedOut m_reportGotOlder;
     public int m_health = 3;
 
     public GameObject m_nextForm = null;
@@ -126,8 +126,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         if(collision.gameObject.tag == "Treasure")
         {
             GetOlder();
-            GetOlder();
-            GetOlder();
             collision.gameObject.GetComponent<Treasure>().DestroyHandler();
         }
     }
@@ -138,18 +136,17 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         if(m_growthCount < 3)
         {
             float newScale = transform.localScale.x + m_growthRate;
-            transform.localPosition = new Vector3(newScale, newScale, newScale);
-            m_innerHandler.transform.localPosition += m_innerHandler.transform.up * newScale;
+            Debug.Log($"newScale: {newScale}");
+            transform.localScale = new Vector3(newScale, newScale, newScale);
+            Debug.Log($"localScale: {transform.localScale}");
+            m_innerHandler.transform.localPosition += m_spriteHandler.transform.up * newScale * 2;
 
             m_speed *= m_speedRate;
             m_jumpForce += m_jumpRate;
 
             ++m_growthCount;
 
-            if (m_growthCount == 3)
-            {
-                m_reportAgedOut.Invoke(GetComponent<SpriteController_Child>());
-            }
+            m_reportGotOlder.Invoke(GetComponent<SpriteController_Child>());
         }
     }
 

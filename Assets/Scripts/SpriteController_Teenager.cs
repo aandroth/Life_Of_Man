@@ -29,8 +29,8 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportAtStart m_reportAtStart;
     public delegate void ReportTookDamage(int i);
     public ReportTookDamage m_reportTookDamage;
-    public delegate void ReportAgedOut(SpriteController_Teenager t);
-    public ReportAgedOut m_reportAgedOut;
+    public delegate void ReportGotOlder(SpriteController_Teenager t);
+    public ReportGotOlder m_reportGotOlder;
     public int m_health = 3;
     public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
 
@@ -115,8 +115,6 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         if (collision.gameObject.tag == "Treasure")
         {
             GetOlder();
-            GetOlder();
-            GetOlder();
             collision.gameObject.GetComponent<Treasure>().DestroyHandler();
         }
         else if (collision.tag == "Pyramid")
@@ -143,19 +141,19 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     }
     public void GetOlder()
     {
-        if(m_growthCount < 3)
+        if (m_growthCount < 3)
         {
-            float newScale = m_spriteHandler.transform.localScale.x + m_growthRate;
-            //m_spriteHandler.transform.localScale = new Vector3(newScale, newScale, newScale);
+            float newScale = transform.localScale.x + m_growthRate;
+            Debug.Log($"newScale: {newScale}");
+            transform.localScale = new Vector3(newScale, newScale, newScale);
+            Debug.Log($"localScale: {transform.localScale}");
+            //m_spriteHandler.transform.localPosition += m_spriteHandler.transform.up * newScale * 2;
 
             m_speed *= m_speedRate;
 
             ++m_growthCount;
 
-            if (m_growthCount == 3)
-            {
-                m_reportAgedOut.Invoke(GetComponent<SpriteController_Teenager>());
-            }
+            m_reportGotOlder.Invoke(GetComponent<SpriteController_Teenager>());
         }
     }
 

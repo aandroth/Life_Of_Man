@@ -49,7 +49,6 @@ public class SpriteDriver_Teenager : SpriteDriver_Abstract
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            //Debug.Log($"Teen encountered enemy");
             m_spriteController.Action();
         }
     }

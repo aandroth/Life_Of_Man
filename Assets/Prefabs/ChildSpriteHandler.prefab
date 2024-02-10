@@ -185,7 +185,7 @@ MonoBehaviour:
   m_canJump: 0
   m_speedRate: 0.9
   m_jumpRate: 0.1
-  m_growthRate: 0.1
+  m_growthRate: 0.02
   m_growthCount: 0
   m_health: 3
   m_nextForm: {fileID: 8544902837826691666, guid: fb5ad0c5eb1fccf4cb5bb857547c1929, type: 3}

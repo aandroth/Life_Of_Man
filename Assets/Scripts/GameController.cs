@@ -63,7 +63,8 @@ public class GameController : MonoBehaviour
             m_grandfatherController.transform.localPosition = m_grandfatherController.m_carriedByFatherOffset;
             m_fatherCarryingGrandfather = true;
         }
-        InitChild(true, m_fatherController);
+        //InitChild(true, m_fatherController);
+        InitTeenager(true);
     }
 
     public void InitChild(bool initAsPlayer = false, SpriteController_Father spriteController = null)
@@ -77,6 +78,7 @@ public class GameController : MonoBehaviour
             m_childHandler.GetComponent<SpriteDriver_Child>().enabled = false;
             m_childHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_childController.gameObject;
+            m_childHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
         }
         else
         {
@@ -86,12 +88,9 @@ public class GameController : MonoBehaviour
         m_childController.GetComponent<SpriteController_Child>().m_reportTookDamage = SonTookDamageAndIsNow;
         m_childController.GetComponent<SpriteController_Child>().m_reportAtStart = SonReportsReachesStartArea;
         m_childController.GetComponent<SpriteController_Child>().m_reportAtPyramid = SonReportsReachesPyramid;
-        m_childController.GetComponent<SpriteController_Child>().m_reportAgedOut = SpriteReportsAgedOut;
+        m_childController.GetComponent<SpriteController_Child>().m_reportGotOlder = SpriteReportsGotOlder;
         if (m_speedThroughAnims)
         {
-            m_childController.GetOlder();
-            m_childController.GetOlder();
-            m_childController.GetOlder();
             m_childController.m_speed = m_speedThroughModifier;
         }
     }
@@ -105,6 +104,8 @@ public class GameController : MonoBehaviour
             m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled = false;
             m_teenagerHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_teenagerController.gameObject;
+            m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
+            m_camera.ZoomOut();
         }
         else
         {
@@ -116,12 +117,9 @@ public class GameController : MonoBehaviour
         m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportTookDamage = SonTookDamageAndIsNow;
         m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAtStart = SonReportsReachesStartArea;
         m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAtPyramid = SonReportsReachesPyramid;
-        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAgedOut = SpriteReportsAgedOut;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportGotOlder = SpriteReportsGotOlder;
         if (m_speedThroughAnims)
         {
-            m_teenagerController.GetOlder();
-            m_teenagerController.GetOlder();
-            m_teenagerController.GetOlder();
             m_teenagerController.m_speed = m_speedThroughModifier;
         }
     }
@@ -137,6 +135,8 @@ public class GameController : MonoBehaviour
             m_fatherHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_fatherController.gameObject;
             m_camera.PlayerBecomesAdult();
+            m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
+            m_camera.ZoomOut();
         }
         else
         {
@@ -172,23 +172,28 @@ public class GameController : MonoBehaviour
             m_grandfatherSprite.GetComponent<SpriteDriver_Grandfather>().enabled = false;
             m_grandfatherSprite.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_grandfatherController.gameObject;
+            m_childHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
         }
         m_grandfatherController.GetComponent<SpriteController_Grandfather>().m_reportGrowOldMoveToTargetDone = GrandfatherMovesToAdultSonDone;
         m_grandfatherController.GetComponent<SpriteController_Grandfather>().m_reportRevealPyramid = GrandfatherReportsRevealPyramidAnim;
         m_grandfatherController.GetComponent<SpriteController_Grandfather>().m_reportRevealPyramidDone = GrandfatherReportsRevealPyramidAnimDone;
-        //Debug.Log($"InitGrandfather finished");
     }
 
-    public void SpriteReportsAgedOut(I_SpriteController i_spriteController)
+    public void SpriteReportsGotOlder(I_SpriteController i_spriteController)
     {
         switch (i_spriteController)
         {
             case SpriteController_Child child:
-                //Debug.Log("Child aged into teenager");
-                m_sonIsReadyToBeTeenager = true;
+                if (m_childHandler.GetComponent<PlayerController>().enabled)
+                    m_camera.ZoomOut();
+                if (m_childController.m_growthCount == 3)
+                    m_sonIsReadyToBeTeenager = true;
                 break;
             case SpriteController_Teenager teenager:
-                m_sonIsReadyToBeAdult = true;
+                if (m_teenagerHandler.GetComponent<PlayerController>().enabled)
+                    m_camera.ZoomOut();
+                if (m_teenagerController.m_growthCount == 3)
+                    m_sonIsReadyToBeAdult = true;
                 break;
         }
     }
@@ -224,9 +229,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void FatherReportsGrandfatherEnteredArea(bool b)
+    public void FatherReportsGrandfatherEnteredArea(bool grandfatherIsAtFather)
     {
-        m_grandfatherAtFatherArea = b;
+        m_grandfatherAtFatherArea = grandfatherIsAtFather;
 
         // Father at Grandfather picks him up
         if (m_grandfatherAtFatherArea && m_grandfatherSprite != null)
@@ -235,9 +240,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void FatherReportsReachesPyramid(bool b)
+    public void FatherReportsReachesPyramid(bool fatherAtPyramid)
     {
-        m_fatherAtPyramid = b;
+        m_fatherAtPyramid = fatherAtPyramid;
 
         if(m_fatherAtPyramid)
         {
@@ -279,10 +284,12 @@ public class GameController : MonoBehaviour
     public void PlayFatherBuriesGrandfatherSequence()
     {
         Debug.Log("Called PlayFatherBuriesGrandfatherAnim");
-        m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
+        if(m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
+            m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
+        m_grandfatherAtFatherArea = false;
         m_grandfatherSprite.SetActive(false);
         if(m_speedThroughAnims)
-            m_fatherController.GetComponent<Animator>().speed = 10;
+            m_fatherController.GetComponent<Animator>().speed = m_speedThroughModifier;
         if(m_fatherCarryingGrandfather)
         {
             m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfather");
@@ -318,7 +325,9 @@ public class GameController : MonoBehaviour
         if (m_fatherAtStartArea && m_sonIsReadyToBeAdult)
         {
             m_fatherController.Idle();
-            m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
+
+            if (m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
+                m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
         }
         if(!m_fatherAtStartArea && m_childController == null && !m_fatherBecomingGrandfather)
         {
@@ -328,7 +337,6 @@ public class GameController : MonoBehaviour
         //Debug.Log("Father at StartArea");
         if (m_sonAtStartArea && m_fatherAtStartArea && m_sonIsReadyToBeAdult)
             PlayFatherGrowsOldSequence();
-
     }
 
     public void SonReportsReachesStartArea(bool b)
@@ -364,7 +372,7 @@ public class GameController : MonoBehaviour
         TeenagerBecomesAdult();
         m_treasuresA.SetActive(true);
 
-        if (m_fatherController != null && m_sonAtFatherArea)
+        if (m_fatherController != null && m_grandfatherAtFatherArea)
         {
             GrandfatherMovesToAdultSon();
         }

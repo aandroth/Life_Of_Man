@@ -9,9 +9,9 @@ public class PlayerController : MonoBehaviour
     public I_SpriteController m_spriteController;
     public Rigidbody2D m_rb;
     public bool m_inputControlsAreOn = true;
+    public CameraController m_cameraController;
 
-    public int m_growthCount;
-    public float m_fatherHeadRotateSpeed = 1;
+    public int m_growthCount = 0;
 
     public enum PLAYER_STATE {CHILD, FATHER, GRANDFATHER}
     public PLAYER_STATE m_state = PLAYER_STATE.CHILD;
