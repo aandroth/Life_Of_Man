@@ -55,6 +55,7 @@ public class GameController : MonoBehaviour
 
     public void Start()
     {
+        //InitFather(true);
         InitFather();
         if (m_grandfatherAtStartArea)
         {
@@ -63,8 +64,7 @@ public class GameController : MonoBehaviour
             m_grandfatherController.transform.localPosition = m_grandfatherController.m_carriedByFatherOffset;
             m_fatherCarryingGrandfather = true;
         }
-        //InitChild(true, m_fatherController);
-        InitTeenager(true);
+        InitChild(true, m_fatherController);
     }
 
     public void InitChild(bool initAsPlayer = false, SpriteController_Father spriteController = null)
@@ -85,10 +85,11 @@ public class GameController : MonoBehaviour
             m_childHandler.GetComponent<SpriteDriver_Child>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
 
-        m_childController.GetComponent<SpriteController_Child>().m_reportTookDamage = SonTookDamageAndIsNow;
+        m_childController.GetComponent<SpriteController_Child>().m_innerHandler.GetComponent<HurtableCollider>().m_reportHealthChangedAndIsNow = SonHealthChangedAndIsNow;
         m_childController.GetComponent<SpriteController_Child>().m_reportAtStart = SonReportsReachesStartArea;
         m_childController.GetComponent<SpriteController_Child>().m_reportAtPyramid = SonReportsReachesPyramid;
         m_childController.GetComponent<SpriteController_Child>().m_reportGotOlder = SpriteReportsGotOlder;
+        m_childController.GetComponent<SpriteController_Child>().m_reportGotTreasure = SonGotTreasure;
         if (m_speedThroughAnims)
         {
             m_childController.m_speed = m_speedThroughModifier;
@@ -114,10 +115,11 @@ public class GameController : MonoBehaviour
 
         m_sonIsReadyToBeTeenager = false;
         m_sonIsTeenager = true;
-        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportTookDamage = SonTookDamageAndIsNow;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_innerHandler.GetComponent<HurtableCollider>().m_reportHealthChangedAndIsNow = SonHealthChangedAndIsNow;
         m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAtStart = SonReportsReachesStartArea;
         m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportAtPyramid = SonReportsReachesPyramid;
         m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportGotOlder = SpriteReportsGotOlder;
+        m_teenagerController.GetComponent<SpriteController_Teenager>().m_reportGotTreasure = SonGotTreasure;
         if (m_speedThroughAnims)
         {
             m_teenagerController.m_speed = m_speedThroughModifier;
@@ -444,8 +446,26 @@ public class GameController : MonoBehaviour
         //m_player.GetComponent<PlayerController>().EnablePlayerControls();
     }
 
-    public void SonTookDamageAndIsNow(int health)
+    public void SonGotTreasure()
+    {
+        if (m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
+        {
+            m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
+        }
+    }
+
+    public void SonHealthChangedAndIsNow(int health)
     {
         m_hearts[health].gameObject.SetActive(false);
+
+        if (health == 3)
+        {
+            for (int ii = 0; ii < 3; ++ii)
+            {
+                m_hearts[ii].SetActive(true);
+            }
+        }
+        else
+            m_hearts[health].SetActive(false);
     }
 }

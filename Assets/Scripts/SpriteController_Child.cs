@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpriteController_Child : MonoBehaviour, I_SpriteController
 {
-    public enum STATE {RUNNING, IDLE}
+    public enum STATE {RUNNING, IDLE, KNOCKBACK}
     public STATE m_state = STATE.IDLE;
     public GameObject m_sprite;
     public GameObject m_spriteHandler;
@@ -19,6 +19,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public float m_jumpRate = 0.1f;
     public float m_growthRate = 0.1f;
     public float m_growthCount = 0;
+    public float m_speedIncreaseRate = 0.1f;
 
     public delegate void ReportAtPyramid(bool b);
     public ReportAtPyramid m_reportAtPyramid;
@@ -28,13 +29,17 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public ReportTookDamage m_reportTookDamage;    
     public delegate void ReportAgedOut(SpriteController_Child c);
     public ReportAgedOut m_reportGotOlder;
-    public int m_health = 3;
+    public delegate void ReportGotTreasure();
+    public ReportGotTreasure m_reportGotTreasure;
+    public float m_runSpeedLimit, m_runSpeedFriction_Air, m_runSpeedFriction_Ground;
 
     public GameObject m_nextForm = null;
     public GameObject m_groundDetector;
     public LayerMask m_groundLayer;
     public float m_jumpDelayCountdown = 1, m_jumpDelayCountdownMax = 1;
     public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
+    public float m_knockbackTimer = 0.25f, m_knockbackTimerMax = 0.25f;
+    public int m_knockbackDirection = 1;
 
     // Start is called before the first frame update
     void Awake()
@@ -48,16 +53,24 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_state == STATE.RUNNING)
         {
-            m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_sprite.transform.localScale.x) * -m_speed * Time.deltaTime);
-            m_keepRunningTimer -= Time.deltaTime;
-            if (m_keepRunningTimer <= 0)
-                m_state = STATE.IDLE;
+            if (m_keepRunningTimer > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+            {
+                m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_sprite.transform.localScale.x) * -m_speed * Time.deltaTime);
+                m_keepRunningTimer -= Time.deltaTime;
+            }
+            else
+            {
+                Idle();
+            }
+        }
+        else if (m_state == STATE.KNOCKBACK)
+        {
+
         }
     }
 
     void FixedUpdate()
     {
-        Debug.DrawRay(transform.position, new Vector3(m_innerHandler.transform.up.x, m_innerHandler.transform.up.y, 0));
         if (m_jumpDelayCountdown < 0)
             m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, 0.03f, m_groundLayer);
         else
@@ -127,6 +140,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         {
             GetOlder();
             collision.gameObject.GetComponent<Treasure>().DestroyHandler();
+            m_reportGotTreasure.Invoke();
         }
     }
 
@@ -137,7 +151,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         {
             float newScale = transform.localScale.x + m_growthRate;
             Debug.Log($"newScale: {newScale}");
-            transform.localScale = new Vector3(newScale, newScale, newScale);
+            transform.localScale = new Vector3(newScale, Mathf.Abs(newScale), Mathf.Abs(newScale));
             Debug.Log($"localScale: {transform.localScale}");
             m_innerHandler.transform.localPosition += m_spriteHandler.transform.up * newScale * 2;
 

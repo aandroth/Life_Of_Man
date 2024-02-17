@@ -54,11 +54,11 @@ public class PlayerController : MonoBehaviour
                 m_spriteController.GetOlder();
             }
 
-            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-            {
-                if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-                    m_spriteController.Idle();
-            }
+            //if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            //{
+            //    if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            //        m_spriteController.Idle();
+            //}
         }
     }
 

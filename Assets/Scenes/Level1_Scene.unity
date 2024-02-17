@@ -1576,8 +1576,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122289309}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 80.75, z: 0}
-  m_LocalScale: {x: 1.7867, y: 1.7867, z: 1.7867}
+  m_LocalPosition: {x: -0, y: 80.55, z: 0}
+  m_LocalScale: {x: 1.2971442, y: 1.2971442, z: 1.2971442}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 617924674}
@@ -8453,12 +8453,12 @@ MonoBehaviour:
   m_speed: 10
   m_playerIsAdult: 0
   m_cinematicZoomDistance: 5
-  m_zoomDistancesIndex: 3
+  m_zoomDistancesIndex: 0
   m_zoomDistances:
-  - 0.85
-  - 1.1
-  - 1.35
-  - 1.6
+  - 1
+  - 1.5
+  - 1.75
+  - 2
   - 7.6
   - 8.5
   - 9.5
@@ -10068,6 +10068,7 @@ MonoBehaviour:
   m_twinkleHandler: {fileID: 230566752}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &364072061
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17477,7 +17478,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &548401463
 Transform:
   m_ObjectHideFlags: 0
@@ -19673,7 +19674,7 @@ Transform:
   m_GameObject: {fileID: 664889505}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 80.75, z: 0}
-  m_LocalScale: {x: 1.7867, y: 1.7867, z: 1.7867}
+  m_LocalScale: {x: 2.4972706, y: 2.4972706, z: 2.4972706}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2143525742}
@@ -22108,10 +22109,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 1032061649}
-  m_twinkle: {fileID: 1766566455}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 1636619355}
+  m_twinkleHandler: {fileID: 1766566455}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &850467944
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -22913,10 +22915,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 702830856}
-  m_twinkle: {fileID: 235092054}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 976041782}
+  m_twinkleHandler: {fileID: 235092054}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &887838674
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -28609,6 +28612,7 @@ MonoBehaviour:
   m_twinkleHandler: {fileID: 230566752}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &1244205289
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -29007,10 +29011,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 1256761921}
-  m_twinkle: {fileID: 757378416}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 1238126703}
+  m_twinkleHandler: {fileID: 757378416}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &1265769060
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -29908,8 +29913,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1345923006}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 80.75, z: 0}
-  m_LocalScale: {x: 1.7867, y: 1.7867, z: 1.7867}
+  m_LocalPosition: {x: -0, y: 80.86, z: 0}
+  m_LocalScale: {x: 2.3868525, y: 2.3868525, z: 2.3868525}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 527300586}
@@ -33200,10 +33205,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 101009423}
-  m_twinkle: {fileID: 83512681}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 600372360}
+  m_twinkleHandler: {fileID: 83512681}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &1639432317
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -34533,8 +34539,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703987690}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 82.69, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0, y: 83.11, z: 0}
+  m_LocalScale: {x: 1.1237, y: 1.1237, z: 1.1237}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 947594507}
@@ -35337,10 +35343,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 1162128236}
-  m_twinkle: {fileID: 1870496283}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 1013656750}
+  m_twinkleHandler: {fileID: 1870496283}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &1749518725
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -35351,7 +35358,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -35676,7 +35683,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1772686991}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -38.5, y: -8.7, z: 0}
+  m_LocalPosition: {x: 60.9, y: 79.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36007,10 +36014,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 152951057}
-  m_twinkle: {fileID: 106178608}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 773884921}
+  m_twinkleHandler: {fileID: 106178608}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &1786901806
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -36225,10 +36233,11 @@ MonoBehaviour:
   m_moveSpeed: 1
   m_isChasing: 0
   m_handler: {fileID: 1195956861}
-  m_twinkle: {fileID: 877267166}
-  m_twinkleHandler: {fileID: 0}
+  m_twinkle: {fileID: 1645056243}
+  m_twinkleHandler: {fileID: 877267166}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &1797366314
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -37522,7 +37531,7 @@ MonoBehaviour:
   m_fatherAtStartArea: 0
   m_grandfatherAtStartArea: 1
   m_grandfatherAtFatherArea: 0
-  m_speedThroughAnims: 1
+  m_speedThroughAnims: 0
   m_speedThroughModifier: 20
 --- !u!1 &1938205434
 GameObject:
@@ -42908,14 +42917,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006316517}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 80.46, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.005235626, w: 0.9999863}
+  m_LocalPosition: {x: 0, y: 80.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 766676051}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.6}
 --- !u!212 &2006316519
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -43423,6 +43432,7 @@ MonoBehaviour:
   m_twinkleHandler: {fileID: 0}
   m_isActive: 1
   m_stunnedTime: 3
+  m_knockbackForce: 10
 --- !u!61 &2026099521
 BoxCollider2D:
   m_ObjectHideFlags: 0

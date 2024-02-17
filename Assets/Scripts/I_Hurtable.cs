@@ -5,24 +5,23 @@ using UnityEngine;
 public class I_Hurtable : MonoBehaviour
 {
     public int m_health = 3;
-    public GameObject[] m_heartSprites;
+    public delegate void ReportTookDamage(int i);
+    public ReportTookDamage m_reportHealthChangedAndIsNow;
 
     public void TakeDamage()
     {
         --m_health;
-        m_heartSprites[m_health].SetActive(false);
 
         if(m_health == 0)
         {
             // son dies
         }
+        m_reportHealthChangedAndIsNow.Invoke(m_health);
     }
     public void Heal()
     {
-        foreach(GameObject go in m_heartSprites)
-        {
-            go.SetActive(true);
-        }
         m_health = 3;
+
+        m_reportHealthChangedAndIsNow(3);
     }
 }

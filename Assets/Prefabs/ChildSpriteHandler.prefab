@@ -187,14 +187,17 @@ MonoBehaviour:
   m_jumpRate: 0.1
   m_growthRate: 0.02
   m_growthCount: 0
-  m_health: 3
+  m_speedIncreaseRate: 5
+  m_runSpeedLimit: 0
+  m_runSpeedFriction_Air: 0
+  m_runSpeedFriction_Ground: 0
   m_nextForm: {fileID: 8544902837826691666, guid: fb5ad0c5eb1fccf4cb5bb857547c1929, type: 3}
   m_groundDetector: {fileID: 2841606851707948176}
   m_groundLayer:
     serializedVersion: 2
     m_Bits: 8
   m_jumpDelayCountdown: 1
-  m_jumpDelayCountdownMax: 1.5
+  m_jumpDelayCountdownMax: 0.1
   m_keepRunningTimer: 0.25
   m_keepRunningTimerMax: 0.25
 --- !u!1 &4203722756637227444
@@ -209,9 +212,10 @@ GameObject:
   - component: {fileID: 807017113938070209}
   - component: {fileID: 4833046513223078520}
   - component: {fileID: 7526827283106332869}
+  - component: {fileID: 8742854430752958814}
   m_Layer: 0
   m_Name: InnerHandler
-  m_TagString: Untagged
+  m_TagString: Son
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -295,6 +299,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_gravity: 10
   m_rb: {fileID: 4833046513223078520}
+--- !u!114 &8742854430752958814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4203722756637227444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 396c07791541e684c9eaa09130df0232, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_health: 3
 --- !u!1 &5218057947922383361
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,8 +382,8 @@ MonoBehaviour:
   m_sprite: {fileID: 3455952931664485557}
   m_rb: {fileID: 0}
   m_inputControlsAreOn: 1
+  m_cameraController: {fileID: 0}
   m_growthCount: 0
-  m_fatherHeadRotateSpeed: 1
   m_state: 0
 --- !u!1 &5548919673006664071
 GameObject:
@@ -378,6 +395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8677226540727130431}
   - component: {fileID: 6604778037856438594}
+  - component: {fileID: 4886247461494146410}
   m_Layer: 3
   m_Name: GroundCollider
   m_TagString: Ground
@@ -393,7 +411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5548919673006664071}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.04, y: 79.55, z: 0}
+  m_LocalPosition: {x: 0, y: 79.55, z: 0}
   m_LocalScale: {x: 12.776762, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -426,6 +444,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4886247461494146410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5548919673006664071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb63d98d9dcf214da65ad8359dc71fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7190688229554256309
 GameObject:
   m_ObjectHideFlags: 0

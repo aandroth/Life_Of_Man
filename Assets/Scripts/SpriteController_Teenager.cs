@@ -18,6 +18,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public float m_speedRate = 0.9f;
     public float m_jumpRate = 0.1f;
     public float m_growthRate = 0.1f;
+    public float m_growthOffset = 0.05f;
     public float m_growthCount = 0;
     public float m_speed = 1f;
     public float m_attackRecoveryTime = 1.5f;
@@ -27,10 +28,10 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportAtPyramid m_reportAtPyramid;
     public delegate void ReportAtStart(bool b);
     public ReportAtStart m_reportAtStart;
-    public delegate void ReportTookDamage(int i);
-    public ReportTookDamage m_reportTookDamage;
     public delegate void ReportGotOlder(SpriteController_Teenager t);
     public ReportGotOlder m_reportGotOlder;
+    public delegate void ReportGotTreasure();
+    public ReportGotTreasure m_reportGotTreasure;
     public int m_health = 3;
     public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
 
@@ -143,10 +144,12 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     {
         if (m_growthCount < 3)
         {
-            float newScale = transform.localScale.x + m_growthRate;
+            float newScale = m_innerHandler.transform.localScale.x + m_growthRate;
+            float newPos = m_innerHandler.transform.localPosition.y + m_growthRate;
             Debug.Log($"newScale: {newScale}");
-            transform.localScale = new Vector3(newScale, newScale, newScale);
-            Debug.Log($"localScale: {transform.localScale}");
+            m_innerHandler.transform.localScale = new Vector3(newScale, newScale, newScale);
+            m_innerHandler.transform.localPosition = m_innerHandler.transform.localPosition + (m_innerHandler.transform.up * m_growthOffset);
+            Debug.Log($"localScale: {m_innerHandler.transform.localScale}");
             //m_spriteHandler.transform.localPosition += m_spriteHandler.transform.up * newScale * 2;
 
             m_speed *= m_speedRate;
