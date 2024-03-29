@@ -44,6 +44,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
   - {fileID: 21300000, guid: 971c8661cd3ed8c46956811bf539d177, type: 3}
   - {fileID: 21300000, guid: 8930da81a64e43046ac69a2a9dc85b62, type: 3}
+  - {fileID: 21300000, guid: 10fa9883aea52824f8621b22e5a68ee7, type: 3}
   - {fileID: 21300000, guid: 06fc3004241eb81428b605048f5f0336, type: 3}
   - {fileID: 21300000, guid: 6b6dea64442b638418e31594b108f654, type: 3}
   - {fileID: 21300000, guid: 069a1215abfc7d7478febd81158293aa, type: 3}
@@ -59,6 +60,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d7140fd9ea47163499933431db39011c, type: 3}
   - {fileID: 21300000, guid: 0d14162a278bd4e43ab526f8469c10d3, type: 3}
   - {fileID: 21300000, guid: 7a8aa5ba6a08c2142b7dbcac83ee5eb4, type: 3}
+  - {fileID: 21300000, guid: 8dc7721b90015c34299db1184a96e8fa, type: 3}
   - {fileID: 21300000, guid: 7c0be97b57a9f854f99f3f9ca541323e, type: 3}
   - {fileID: 21300000, guid: e53df68b7d37dbe4bbf72932a82a8731, type: 3}
   - {fileID: 21300000, guid: 544c40bb054c0eb4fb949294b802f538, type: 3}
@@ -69,6 +71,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 833205ad3de4eb9438a5ddd5f02693c0, type: 3}
   - {fileID: 21300000, guid: 4a81d70ea8714a8449bed53d4058a732, type: 3}
   - {fileID: 21300000, guid: fde01f1e4a127164582c57913944d3f8, type: 3}
+  - {fileID: 21300000, guid: 6c81543ecb0336b47af83088372cb94f, type: 3}
+  - {fileID: 21300000, guid: 0cbcf79ede321eb4ab727eb5405613f8, type: 3}
+  - {fileID: 21300000, guid: 5d306b0f702370548b335c339d375847, type: 3}
   - {fileID: 21300000, guid: 2f12a5afd0a07234981c4e74c0cac8e1, type: 3}
   - {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -78,6 +83,7 @@ SpriteAtlas:
   - Father_ArmR
   - Son_0_1
   - Tree
+  - PanelSpriteOutline
   - Son_Idle
   - Spotlight
   - Treasure
@@ -93,6 +99,7 @@ SpriteAtlas:
   - TheWorld
   - Father_ArmL
   - PointerBackground
+  - Marker
   - Tear
   - Grass
   - DiamondBlue
@@ -103,6 +110,9 @@ SpriteAtlas:
   - Father_LegL
   - Dead_Grandfather
   - Heart_Empty
+  - EndingCard
+  - Shield
+  - ShieldOutline
   - Brain
   - Father_Head
   m_RenderDataMap: {}

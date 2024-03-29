@@ -8,6 +8,14 @@ public class FatherEyeRay : MonoBehaviour
     public LayerMask m_layerMask = 7;
     public GameObject m_worldHitPos;
     public float m_worldSurface = 80;
+    public GameObject m_hiddenObject = null;
+    public CollisionReporter m_hiddenObjectDetector = null;
+
+    public void Start()
+    {
+        m_hiddenObjectDetector.m_reportCollision = SetHiddenObject;
+        m_hiddenObjectDetector.m_reportCollisionStopped = UnSetHiddenObject;
+    }
 
     // Update is called once per frame
     void Update()
@@ -22,5 +30,14 @@ public class FatherEyeRay : MonoBehaviour
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector2.right) * m_eyeRayLength);
         }
+    }
+
+    public void SetHiddenObject(Collider2D collision)
+    {
+
+    }
+    public void UnSetHiddenObject()
+    {
+
     }
 }

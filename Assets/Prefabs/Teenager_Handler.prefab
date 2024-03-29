@@ -724,15 +724,18 @@ MonoBehaviour:
   m_speedRate: 0.9
   m_jumpRate: 0.1
   m_growthRate: 0.1
-  m_growthOffset: 0.4
+  m_growthOffset: 0.35
   m_growthCount: 0
   m_speed: 5
-  m_attackRecoveryTime: 1.5
+  m_attackRecoveryTime: 0.1
   m_upperEnemyDestroyerCollider: {fileID: 8770747010104505087}
   m_lowerEnemyDestroyerCollider: {fileID: 2640520360555670824}
   m_health: 3
   m_keepRunningTimer: 0.25
   m_keepRunningTimerMax: 0.25
+  m_knockbackTimer: 0.25
+  m_knockbackTimerMax: 0.25
+  m_knockbackDirection: 1
   m_nextForm: {fileID: 3343203610053202465, guid: 5fb89f9a849fd0f4f96299d1743c6d32, type: 3}
 --- !u!1 &8544902838843733676
 GameObject:
@@ -823,12 +826,12 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!1 &8544902839027643296
 GameObject:
   m_ObjectHideFlags: 0

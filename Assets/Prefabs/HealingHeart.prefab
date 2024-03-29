@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2037434283166845631}
   - component: {fileID: 2228121951414275903}
   - component: {fileID: 5843919888733863139}
+  - component: {fileID: 8219628518208918408}
   m_Layer: 0
   m_Name: HealingHeart
   m_TagString: Untagged
@@ -106,6 +107,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8219628518208918408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434338511418441534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f2a40ac9268fd540bd418508b6442d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_healingRadius: 200
+  m_centerOffset: {x: 0, y: 0, z: 0}
+  m_animator: {fileID: 5843919888733863139}
+  m_heartHealAnimName: Heart_Healing
 --- !u!1 &6748267888495993762
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +197,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 44
   m_Sprite: {fileID: 21300000, guid: eb5d4477811f2854b8af2a1441727dae, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.6784314, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

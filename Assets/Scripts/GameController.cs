@@ -7,8 +7,8 @@ public class GameController : MonoBehaviour
     public List<GameObject> m_hearts;
 
     public Pyramid m_pyramid;
-    public GameObject m_treasuresA;
-    public GameObject m_treasuresB;
+    public GameObject[] m_treasuresA;
+    public GameObject[] m_treasuresB;
     public GameObject m_treasurePointer;
 
     public GameObject m_childSpritePrefab;
@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
     public GameObject m_childHandler;
     public GameObject m_teenagerHandler;
     public GameObject m_fatherHandler;
-    public GameObject m_grandfatherSprite;
+    public GameObject m_grandfatherHandler;
 
     
     public SpriteController_Child m_childController;
@@ -55,16 +55,21 @@ public class GameController : MonoBehaviour
 
     public void Start()
     {
-        //InitFather(true);
         InitFather();
+        //InitFather(true);
         if (m_grandfatherAtStartArea)
         {
             InitGrandfather(false, m_fatherController);
+            //InitGrandfather(true, m_fatherController);
             m_grandfatherController.transform.SetParent(m_fatherController.gameObject.transform);
             m_grandfatherController.transform.localPosition = m_grandfatherController.m_carriedByFatherOffset;
             m_fatherCarryingGrandfather = true;
         }
         InitChild(true, m_fatherController);
+        //m_pyramid.m_blockCount = 2;
+        //m_sonIsReadyToBeTeenager = true;
+        //m_camera.m_zoomDistancesIndex = m_camera.m_zoomDistances.Length - 2;
+        //m_camera.ZoomOut();
     }
 
     public void InitChild(bool initAsPlayer = false, SpriteController_Father spriteController = null)
@@ -85,7 +90,7 @@ public class GameController : MonoBehaviour
             m_childHandler.GetComponent<SpriteDriver_Child>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
 
-        m_childController.GetComponent<SpriteController_Child>().m_innerHandler.GetComponent<HurtableCollider>().m_reportHealthChangedAndIsNow = SonHealthChangedAndIsNow;
+        m_childController.GetComponent<HurtableCollider>().m_reportHealthChangedAndIsNow = SonHealthChangedAndIsNow;
         m_childController.GetComponent<SpriteController_Child>().m_reportAtStart = SonReportsReachesStartArea;
         m_childController.GetComponent<SpriteController_Child>().m_reportAtPyramid = SonReportsReachesPyramid;
         m_childController.GetComponent<SpriteController_Child>().m_reportGotOlder = SpriteReportsGotOlder;
@@ -106,6 +111,7 @@ public class GameController : MonoBehaviour
             m_teenagerHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_teenagerController.gameObject;
             m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
+            m_camera.m_zoomDistancesIndex = 4;
             m_camera.ZoomOut();
         }
         else
@@ -137,8 +143,10 @@ public class GameController : MonoBehaviour
             m_fatherHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_fatherController.gameObject;
             m_camera.PlayerBecomesAdult();
-            m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
+            m_fatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
+            m_camera.m_zoomDistancesIndex = 7;
             m_camera.ZoomOut();
+            m_camera.m_lookAhead = 7;
         }
         else
         {
@@ -167,14 +175,14 @@ public class GameController : MonoBehaviour
     public void InitGrandfather(bool initAsPlayer = false, SpriteController_Father spriteController = null)
     {
         Quaternion rotation = spriteController == null ? Quaternion.identity : spriteController.m_spriteHandler.transform.rotation;
-        m_grandfatherSprite = Instantiate(m_grandfatherSpritePrefab, Vector3.zero, rotation, m_world.transform);
-        m_grandfatherController = m_grandfatherSprite.GetComponent<SpriteDriver_Grandfather>().m_spriteController;
+        m_grandfatherHandler = Instantiate(m_grandfatherSpritePrefab, Vector3.zero, rotation, m_world.transform);
+        m_grandfatherController = m_grandfatherHandler.GetComponent<SpriteDriver_Grandfather>().m_spriteController;
         if (initAsPlayer)
         {
-            m_grandfatherSprite.GetComponent<SpriteDriver_Grandfather>().enabled = false;
-            m_grandfatherSprite.GetComponent<PlayerController>().enabled = true;
+            m_grandfatherHandler.GetComponent<SpriteDriver_Grandfather>().enabled = false;
+            m_grandfatherHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_grandfatherController.gameObject;
-            m_childHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
+            m_grandfatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
         }
         m_grandfatherController.GetComponent<SpriteController_Grandfather>().m_reportGrowOldMoveToTargetDone = GrandfatherMovesToAdultSonDone;
         m_grandfatherController.GetComponent<SpriteController_Grandfather>().m_reportRevealPyramid = GrandfatherReportsRevealPyramidAnim;
@@ -225,9 +233,14 @@ public class GameController : MonoBehaviour
         m_sonAtFatherArea = b;
 
         // Father at pyramid buries Grandfather and Child becomes Teenager
-        if (m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_grandfatherSprite != null && m_fatherCarryingGrandfather)
+        if (m_sonIsReadyToBeTeenager && m_fatherCarryingGrandfather)
         {
-            m_grandfatherController.BeginRevealPyramidAnim();
+            if(m_fatherAtPyramid && m_grandfatherHandler != null)
+                m_grandfatherController.BeginRevealPyramidAnim();
+        }
+        if(m_sonAtFatherArea && m_fatherCarryingGrandfather && !m_grandfatherController.m_spriteHandler.GetComponent<PlayerController>().enabled)
+        {
+            m_grandfatherController.Action();
         }
     }
 
@@ -236,7 +249,7 @@ public class GameController : MonoBehaviour
         m_grandfatherAtFatherArea = grandfatherIsAtFather;
 
         // Father at Grandfather picks him up
-        if (m_grandfatherAtFatherArea && m_grandfatherSprite != null)
+        if (m_grandfatherAtFatherArea && m_grandfatherHandler != null)
         {
             GrandfatherMovesToAdultSon();
         }
@@ -253,8 +266,12 @@ public class GameController : MonoBehaviour
         else
         {
             m_pyramid.HidePyramid();
+            foreach(GameObject g in m_treasuresA)
+            {
+                g.SetActive(true);
+            }
         }
-        if (m_fatherCarryingGrandfather && m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_grandfatherSprite != null)
+        if (m_fatherCarryingGrandfather && m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_grandfatherHandler != null)
             m_grandfatherController.BeginRevealPyramidAnim();
     }
 
@@ -279,7 +296,7 @@ public class GameController : MonoBehaviour
     public void SonReportsReachesPyramid(bool b)
     {
         m_sonAtPyramid = b;
-        if (m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_sonAtPyramid && m_grandfatherSprite != null && m_fatherCarryingGrandfather)
+        if (m_sonIsReadyToBeTeenager && m_fatherAtPyramid && m_sonAtPyramid && m_grandfatherHandler != null && m_fatherCarryingGrandfather)
             m_grandfatherController.BeginRevealPyramidAnim();
     }
 
@@ -289,12 +306,19 @@ public class GameController : MonoBehaviour
         if(m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
             m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
         m_grandfatherAtFatherArea = false;
-        m_grandfatherSprite.SetActive(false);
+        m_grandfatherHandler.SetActive(false);
         if(m_speedThroughAnims)
             m_fatherController.GetComponent<Animator>().speed = m_speedThroughModifier;
         if(m_fatherCarryingGrandfather)
         {
-            m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfather");
+            if(m_pyramid.m_powerState == Pyramid.POWER_STATE.GOLD && m_grandfatherHandler.GetComponent<PlayerController>().enabled)
+            {
+                m_camera.EnterCinematicMode(m_pyramid.GetNextBlock());
+                m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfatherHeartAndMind");
+                m_playerDies = true;
+            }
+            else
+                m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfather");
             m_grandfatherController.DestroySelf();
         }
         else
@@ -314,11 +338,22 @@ public class GameController : MonoBehaviour
 
     public void FatherAtPyramidAnimDone()
     {
-        m_fatherController.ContinueWalking();
-        m_treasuresB.SetActive(true);
-        m_fatherController.FatherGainsHeart();
+        m_fatherController.ContinueWalking(); 
+        if (m_playerDies)
+        {
+            m_camera.EnterCinematicEndingMode();
+        }
+        else
+        {
+            m_pyramid.HidePyramid();
+            m_camera.ExitCinematicMode();
+            foreach (GameObject g in m_treasuresB)
+            {
+                g.SetActive(true);
+            }
+        }
         ChildBecomesTeenager();
-        if(m_fatherCarryingGrandfather)
+        if (m_fatherCarryingGrandfather)
             m_fatherCarryingGrandfather = false;
     }
     public void FatherReportsReachesStartArea(bool b)
@@ -372,7 +407,6 @@ public class GameController : MonoBehaviour
         m_fatherController.gameObject.SetActive(false);
         AdultBecomesOld();
         TeenagerBecomesAdult();
-        m_treasuresA.SetActive(true);
 
         if (m_fatherController != null && m_grandfatherAtFatherArea)
         {
@@ -456,8 +490,6 @@ public class GameController : MonoBehaviour
 
     public void SonHealthChangedAndIsNow(int health)
     {
-        m_hearts[health].gameObject.SetActive(false);
-
         if (health == 3)
         {
             for (int ii = 0; ii < 3; ++ii)

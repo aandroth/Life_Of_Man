@@ -4,8 +4,37 @@ using UnityEngine;
 
 public class Treasure : MonoBehaviour
 {
+    public bool m_isActive = true;
+    public GameObject m_twinkleHandler;
+    public float m_respawnTime = 10;
     public void DestroyHandler()
     {
         transform.parent.gameObject.SetActive(false);
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Father")
+        {
+            m_isActive = false;
+            m_twinkleHandler.SetActive(false);
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "Father")
+        {
+            Respawn();
+        }
+    }
+
+    public IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(m_respawnTime);
+        m_isActive = true;
+        m_twinkleHandler.SetActive(true);
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 }

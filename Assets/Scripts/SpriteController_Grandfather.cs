@@ -39,7 +39,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     {
         // Heal son
         if (m_timePassed == 0)
-            Heal();
+            StartCoroutine(Heal());
     }
 
     public IEnumerator Heal()

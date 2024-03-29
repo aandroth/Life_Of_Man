@@ -13,7 +13,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
 
     public Animator m_animator;
     public string m_attackAnimName = "";
-    public enum TEENAGER_STATE { IDLE, RUNNING, ATTACKING };
+    public enum TEENAGER_STATE { IDLE, RUNNING, ATTACKING, KNOCKBACK };
     public TEENAGER_STATE m_state = TEENAGER_STATE.IDLE;
     public float m_speedRate = 0.9f;
     public float m_jumpRate = 0.1f;
@@ -34,6 +34,8 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportGotTreasure m_reportGotTreasure;
     public int m_health = 3;
     public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
+    public float m_knockbackTimer = 0.25f, m_knockbackTimerMax = 0.25f;
+    public int m_knockbackDirection = 1;
 
     public GameObject m_nextForm;
 
@@ -50,54 +52,67 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     {
         if (m_state == TEENAGER_STATE.RUNNING)
         {
-            m_keepRunningTimer -= Time.deltaTime;
-            m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_innerHandler.transform.localScale.x) * -m_speed * Time.deltaTime);
+            if (m_keepRunningTimer > 0)
+            {
+                m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_innerHandler.transform.localScale.x) * -m_speed * Time.deltaTime);
+                m_keepRunningTimer -= Time.deltaTime;
+            }
+            else
+            {
+                Idle();
+            }
+        }
+        else if(m_state == TEENAGER_STATE.KNOCKBACK)
+        {
 
-            if (m_keepRunningTimer <= 0)
-                m_state = TEENAGER_STATE.IDLE;
         }
     }
     public void PushForward()
     {
-        m_keepRunningTimer = m_keepRunningTimerMax;
-        // set sprite to forward
-        if (m_innerHandler.transform.localScale.x < 0) 
+        if(m_state != TEENAGER_STATE.KNOCKBACK && m_state != TEENAGER_STATE.ATTACKING)
         {
-            m_innerHandler.transform.localScale = new Vector3(-m_innerHandler.transform.localScale.x,
-                                                               m_innerHandler.transform.localScale.y,
-                                                               m_innerHandler.transform.localScale.z);
+            m_keepRunningTimer = m_keepRunningTimerMax;
+            // set sprite to forward
+            if (m_innerHandler.transform.localScale.x < 0)
+            {
+                m_innerHandler.transform.localScale = new Vector3(-m_innerHandler.transform.localScale.x,
+                                                                   m_innerHandler.transform.localScale.y,
+                                                                   m_innerHandler.transform.localScale.z);
+            }
+            //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
+            // play run animation
+            if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                m_spriteAnimator.Play("Walk");
+            if (m_state != TEENAGER_STATE.RUNNING)
+                m_state = TEENAGER_STATE.RUNNING;
         }
-        //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
-        // play run animation
-        if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            m_spriteAnimator.Play("Walk");
-        if (m_state != TEENAGER_STATE.RUNNING)
-            m_state = TEENAGER_STATE.RUNNING;
     }
     public void PushBackward()
     {
-        m_keepRunningTimer = m_keepRunningTimerMax;
-        // set sprite to backward
-        if (m_innerHandler.transform.localScale.x > 0) 
+        if (m_state != TEENAGER_STATE.KNOCKBACK && m_state != TEENAGER_STATE.ATTACKING)
         {
-            m_innerHandler.transform.localScale = new Vector3(-m_innerHandler.transform.localScale.x,
-                                                               m_innerHandler.transform.localScale.y,
-                                                               m_innerHandler.transform.localScale.z);
+            m_keepRunningTimer = m_keepRunningTimerMax;
+            // set sprite to backward
+            if (m_innerHandler.transform.localScale.x > 0)
+            {
+                m_innerHandler.transform.localScale = new Vector3(-m_innerHandler.transform.localScale.x,
+                                                                   m_innerHandler.transform.localScale.y,
+                                                                   m_innerHandler.transform.localScale.z);
+            }
+            //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
+            // play run animation
+            if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                m_spriteAnimator.Play("Walk");
+            // move sprite using handler
+            if (m_state != TEENAGER_STATE.RUNNING)
+                m_state = TEENAGER_STATE.RUNNING;
         }
-        //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
-        // play run animation
-        if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            m_spriteAnimator.Play("Walk");
-        // move sprite using handler
-        if (m_state != TEENAGER_STATE.RUNNING)
-            m_state = TEENAGER_STATE.RUNNING;
     }
 
     public void Action()
     {
         if (m_state != TEENAGER_STATE.ATTACKING)
         {
-            //Debug.Log($"Teen attack called");
             m_state = TEENAGER_STATE.ATTACKING;
             m_animator.Play(m_attackAnimName);
             StartCoroutine("Attacking");
@@ -109,14 +124,15 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         m_spriteAnimator.Play("Idle");
     }
     public virtual Transform ReturnSpecialTransform() { return null; }
-
-
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Treasure")
         {
-            GetOlder();
-            collision.gameObject.GetComponent<Treasure>().DestroyHandler();
+            if (collision.GetComponent<Treasure>().m_isActive)
+            {
+                GetOlder();
+                collision.gameObject.GetComponent<Treasure>().DestroyHandler();
+            }
         }
         else if (collision.tag == "Pyramid")
         {
@@ -144,13 +160,10 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     {
         if (m_growthCount < 3)
         {
-            float newScale = m_innerHandler.transform.localScale.x + m_growthRate;
+            float newScale = Mathf.Abs(m_innerHandler.transform.localScale.x) + m_growthRate;
             float newPos = m_innerHandler.transform.localPosition.y + m_growthRate;
-            Debug.Log($"newScale: {newScale}");
-            m_innerHandler.transform.localScale = new Vector3(newScale, newScale, newScale);
+            m_innerHandler.transform.localScale = new Vector3(newScale*Mathf.Sign(m_innerHandler.transform.localScale.x), Mathf.Abs(newScale), newScale);
             m_innerHandler.transform.localPosition = m_innerHandler.transform.localPosition + (m_innerHandler.transform.up * m_growthOffset);
-            Debug.Log($"localScale: {m_innerHandler.transform.localScale}");
-            //m_spriteHandler.transform.localPosition += m_spriteHandler.transform.up * newScale * 2;
 
             m_speed *= m_speedRate;
 

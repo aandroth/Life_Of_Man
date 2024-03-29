@@ -16,7 +16,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     private Animator m_spriteAnimator;
     public float m_headUpLimit = 355, m_headDownLimit = 280;
     public bool m_hasHeart = false;
-    public GameObject m_heart;
+    public GameObject m_heart, m_mind;
     public float m_timePassed = 0, m_timeMax = 3;
 
     // Sprite Collisions
@@ -134,6 +134,8 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
         else if (collision.tag == "Son")
         {
             m_reportFatherHasSonInArea?.Invoke(false);
+
+
         }
     }
 
@@ -166,9 +168,9 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
         m_heart.SetActive(true);
     }
 
-    public void GetOlder()
+    public void FatherGainsMind()
     {
-
+        m_mind.SetActive(true);
     }
 
     public void DestroySelf()

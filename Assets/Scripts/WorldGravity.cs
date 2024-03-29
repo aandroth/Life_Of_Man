@@ -20,6 +20,7 @@ public class WorldGravity : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log($"Gravity");
         m_rb.AddForce(-gameObject.transform.up * m_gravity);
     }
 }

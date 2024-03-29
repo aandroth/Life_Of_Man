@@ -73,20 +73,10 @@ public class Enemy : MonoBehaviour
         Debug.Log("Collision detected");
         if (collision.gameObject.tag == "Son" && m_isActive)
         {
-            CauseDamage(collision);
+            m_twinkle.SetActive(false);
+            GetComponent<SpriteRenderer>().maskInteraction = 0;
+            collision.gameObject.GetComponent<I_SpriteController>().TakeDamage(gameObject, m_knockbackForce);
         }
-    }
-
-    public void CauseDamage(Collision2D collision)
-    {
-        collision.gameObject.GetComponent<I_Hurtable>().TakeDamage();
-        Debug.Log($"player vel: {collision.gameObject.GetComponent<Rigidbody2D>().velocity}");
-        Vector2 knockbackDirection = new Vector2(collision.transform.position.x - transform.position.x, collision.transform.position.y - transform.position.y);
-        Vector3 v = -collision.gameObject.GetComponent<Rigidbody2D>().velocity + (knockbackDirection * m_knockbackForce);
-        collision.gameObject.GetComponent<Rigidbody2D>().velocity = (v);
-        Debug.Log($"player vel: {collision.gameObject.GetComponent<Rigidbody2D>().velocity}");
-        m_twinkle.SetActive(false);
-        GetComponent<SpriteRenderer>().maskInteraction = 0;
     }
 
     public void Die()

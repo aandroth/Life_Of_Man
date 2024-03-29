@@ -12,7 +12,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public float m_jumpForce = 450f;
     public GameObject m_innerHandler;
 
-    private Rigidbody2D m_innerHandler_rb;
+    private Rigidbody2D m_rb;
     public bool m_canJump = false;
     private Animator m_spriteAnimator;
     public float m_speedRate = 0.9f;
@@ -45,7 +45,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
-        m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
+        m_rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -53,7 +53,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_state == STATE.RUNNING)
         {
-            if (m_keepRunningTimer > 0 && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+            if (m_keepRunningTimer > 0)
             {
                 m_spriteHandler.transform.Rotate(0, 0, Mathf.Sign(m_sprite.transform.localScale.x) * -m_speed * Time.deltaTime);
                 m_keepRunningTimer -= Time.deltaTime;
@@ -65,7 +65,10 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         }
         else if (m_state == STATE.KNOCKBACK)
         {
-
+            m_knockbackTimer -= Time.deltaTime;
+            m_spriteHandler.transform.Rotate(0, 0, m_speed * Time.deltaTime);
+            if (m_knockbackTimer <= 0)
+                m_state = STATE.IDLE;
         }
     }
 
@@ -79,42 +82,48 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
     public void PushForward()
     {
-        m_keepRunningTimer = m_keepRunningTimerMax;
-        // set sprite to forward
-        if (m_sprite.transform.localScale.x < 0) 
-        { 
-            m_sprite.transform.localScale = new Vector3(-m_sprite.transform.localScale.x,
-                                                         m_sprite.transform.localScale.y, 
-                                                         m_sprite.transform.localScale.z); 
+        if (m_state != STATE.KNOCKBACK)
+        {
+            m_keepRunningTimer = m_keepRunningTimerMax;
+            // set sprite to forward
+            if (m_sprite.transform.localScale.x < 0)
+            {
+                m_sprite.transform.localScale = new Vector3(-m_sprite.transform.localScale.x,
+                                                             m_sprite.transform.localScale.y,
+                                                             m_sprite.transform.localScale.z);
+            }
+            // play run animation
+            if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                m_spriteAnimator.Play("Walk");
+            if (m_state != STATE.RUNNING)
+                m_state = STATE.RUNNING;
         }
-        // play run animation
-        if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            m_spriteAnimator.Play("Walk");
-        if (m_state != STATE.RUNNING)
-            m_state = STATE.RUNNING;
     }
     public void PushBackward()
     {
-        m_keepRunningTimer = m_keepRunningTimerMax;
-        // set sprite to backward
-        if (m_sprite.transform.localScale.x > 0) 
-        { 
-            m_sprite.transform.localScale = new Vector3(-m_sprite.transform.localScale.x, 
-                                                         m_sprite.transform.localScale.y, 
-                                                         m_sprite.transform.localScale.z); 
+        if (m_state != STATE.KNOCKBACK)
+        {
+            m_keepRunningTimer = m_keepRunningTimerMax;
+            // set sprite to backward
+            if (m_sprite.transform.localScale.x > 0)
+            {
+                m_sprite.transform.localScale = new Vector3(-m_sprite.transform.localScale.x,
+                                                             m_sprite.transform.localScale.y,
+                                                             m_sprite.transform.localScale.z);
+            }
+            // play run animation
+            if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                m_spriteAnimator.Play("Walk");
+            // move sprite using handler
+            if (m_state != STATE.RUNNING)
+                m_state = STATE.RUNNING;
         }
-        // play run animation
-        if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            m_spriteAnimator.Play("Walk");
-        // move sprite using handler
-        if (m_state != STATE.RUNNING)
-            m_state = STATE.RUNNING;
     }
     public void Action() 
     {
         if (m_canJump)
         {
-            m_innerHandler_rb.AddForce(new Vector2(transform.up.x, transform.up.y) * m_jumpForce);
+            m_rb.AddForce(new Vector2(m_innerHandler.transform.up.x, m_innerHandler.transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
         }
@@ -128,9 +137,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             m_state = STATE.IDLE;
     }
 
-    public void GroundCollision(Collider2D collision)
+    public void GroundCollision(Collision2D collision)
     {
-        if (!m_canJump && collision.tag == "Ground")
+        if (!m_canJump && collision.gameObject.tag == "Ground")
             m_canJump = true;
     }
 
@@ -141,6 +150,14 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             GetOlder();
             collision.gameObject.GetComponent<Treasure>().DestroyHandler();
             m_reportGotTreasure.Invoke();
+        }
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            GroundCollision(collision);
         }
     }
 
@@ -161,6 +178,18 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             ++m_growthCount;
 
             m_reportGotOlder.Invoke(GetComponent<SpriteController_Child>());
+        }
+    }
+
+    public void TakeDamage(GameObject gO, float knockbackForce)
+    {
+        if (m_state != STATE.KNOCKBACK)
+        {
+            m_state = STATE.KNOCKBACK;
+            GetComponent<I_Hurtable>().TakeDamage();
+            Vector2 knockbackDirection = new Vector2(transform.position.x - transform.position.x, transform.position.y - transform.position.y);
+            Vector3 v = -gameObject.GetComponent<Rigidbody2D>().velocity + (knockbackDirection * knockbackForce);
+            gameObject.GetComponent<Rigidbody2D>().velocity = (v);
         }
     }
 

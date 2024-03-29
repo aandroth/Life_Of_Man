@@ -11,5 +11,6 @@ public interface I_SpriteController
     public virtual Transform ReturnSpecialTransform() { return null; }
 
     public void DestroySelf();
-    public void GetOlder();
+    public void GetOlder() { }
+    public void TakeDamage(GameObject g, float knockbackForce) { }
 }
