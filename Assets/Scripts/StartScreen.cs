@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,23 +9,36 @@ public class StartScreen : MonoBehaviour
     public float m_loadSceneDelay = 2f;
     public float m_fadeTime = 1f;
     public Image m_fadeOutPanel;
+
+    public List<GameObject> m_levelButtonsList;
+
+    public void Start()
+    {
+        DataManager.Load();
+
+        if (DataManager.m_gameData.m_level_2_Unlocked)
+            m_levelButtonsList[1].SetActive(true);
+        if (DataManager.m_gameData.m_level_3_Unlocked)
+            m_levelButtonsList[2].SetActive(true);
+    }
+
     public void ChoseLevel_1()
     {
-        IEnumerator c = ChoseLevel_Async("Level1_Scene");
+        IEnumerator c = LoadLevel_Async("Level1_Scene");
         StartCoroutine(c);
     }
     public void ChoseLevel_2()
     {
-        IEnumerator c = ChoseLevel_Async("Level2_Scene");
+        IEnumerator c = LoadLevel_Async("Level2_Scene");
         StartCoroutine(c);
     }
     public void ChoseLevel_3()
     {
-        IEnumerator c = ChoseLevel_Async("Level3_Scene");
+        IEnumerator c = LoadLevel_Async("Level3_Scene");
         StartCoroutine(c);
     }
 
-    public IEnumerator ChoseLevel_Async(string _levelName)
+    public IEnumerator LoadLevel_Async(string _levelName)
     {
         float timeFaded = 0;
         while (timeFaded < m_fadeTime)

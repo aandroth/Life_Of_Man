@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject m_sprite;
-    [SerializeField]
     public I_SpriteController m_spriteController;
     public Rigidbody2D m_rb;
     public bool m_inputControlsAreOn = true;

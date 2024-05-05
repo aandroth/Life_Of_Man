@@ -159,8 +159,11 @@ MonoBehaviour:
   m_sprite: {fileID: 3455952931664485557}
   m_spriteHandler: {fileID: 5218057947922383361}
   m_speed: 3
+  m_speedMax: 7
+  m_speedCurr: 0
   m_jumpForce: 300
   m_innerHandler: {fileID: 4203722756637227444}
+  m_rb: {fileID: 4747026840170580063}
   m_canJump: 0
   m_speedRate: 0.9
   m_jumpRate: 150
@@ -177,10 +180,17 @@ MonoBehaviour:
     m_Bits: 8
   m_jumpDelayCountdown: 1
   m_jumpDelayCountdownMax: 0.1
-  m_keepRunningTimer: 0.25
-  m_keepRunningTimerMax: 0.25
+  m_keepRunningTimer: 0.01
+  m_keepRunningTimerMax: 0.01
+  m_damageImmunityTimer: 0
+  m_damageImmunityTimeMax: 2.5
+  m_minFadeDuringDamageImmunity: 0.5
+  m_damageImmunityFadeSpeed: 10
+  m_controlLossTimer: -1
+  m_controlLossTimeMax: 0.5
   m_knockbackTimer: 0.25
   m_knockbackTimerMax: 0.25
+  m_knockbackDistance: 1
   m_knockbackDirection: 1
 --- !u!50 &4747026840170580063
 Rigidbody2D:
@@ -293,7 +303,7 @@ GameObject:
   - component: {fileID: 8382497264506479852}
   m_Layer: 0
   m_Name: InnerHandler
-  m_TagString: Son
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -328,7 +338,7 @@ GameObject:
   - component: {fileID: 7048478167409383285}
   m_Layer: 0
   m_Name: ChildSpriteHandler
-  m_TagString: Son
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -399,6 +409,7 @@ GameObject:
   - component: {fileID: 8677226540727130431}
   - component: {fileID: 6604778037856438594}
   - component: {fileID: 4886247461494146410}
+  - component: {fileID: 5243903363318653295}
   m_Layer: 3
   m_Name: GroundCollider
   m_TagString: Ground
@@ -459,6 +470,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cb63d98d9dcf214da65ad8359dc71fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5243903363318653295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5548919673006664071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c25f5ccdbf9794c8e9fa1a02ca0007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_target: {fileID: 3455952931664485557}
+  m_distance: 79.61
 --- !u!1 &7190688229554256309
 GameObject:
   m_ObjectHideFlags: 0

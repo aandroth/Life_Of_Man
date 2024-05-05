@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpriteDriver_Child : SpriteDriver_Abstract
 {
     public GameObject m_sprite;
-    [SerializeField]
     public new SpriteController_Child m_spriteController;
     public float m_timeMax = 3;
     public float m_timePassed = 0;
@@ -13,13 +12,12 @@ public class SpriteDriver_Child : SpriteDriver_Abstract
     public GameObject m_target;
     public float m_jumpThreshold = 0.01f;
 
-    // Start is called before the first frame update
     void Start()
     {
         m_controlsEnabled = true;
+        //m_spriteController.m_jumpForce *= 0.1f;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (m_controlsEnabled)

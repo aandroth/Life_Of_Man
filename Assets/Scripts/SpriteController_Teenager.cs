@@ -24,6 +24,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public float m_attackRecoveryTime = 1.5f;
     public GameObject m_upperEnemyDestroyerCollider, m_lowerEnemyDestroyerCollider;
 
+    public bool m_isAtGrandfather = false;
     public delegate void ReportAtPyramid(bool b);
     public ReportAtPyramid m_reportAtPyramid;
     public delegate void ReportAtStart(bool b);
@@ -32,14 +33,16 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportGotOlder m_reportGotOlder;
     public delegate void ReportGotTreasure();
     public ReportGotTreasure m_reportGotTreasure;
+    public delegate void ReportPickingUpGrandfather();
+    public ReportPickingUpGrandfather m_reportPickingUpGrandfather;
     public int m_health = 3;
     public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
     public float m_knockbackTimer = 0.25f, m_knockbackTimerMax = 0.25f;
     public int m_knockbackDirection = 1;
+    public Shield m_shield;
 
     public GameObject m_nextForm;
 
-    // Start is called before the first frame update
     void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
@@ -47,7 +50,6 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         Physics2D.SyncTransforms();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (m_state == TEENAGER_STATE.RUNNING)
@@ -79,7 +81,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
                                                                    m_innerHandler.transform.localScale.y,
                                                                    m_innerHandler.transform.localScale.z);
             }
-            //Debug.Log($"m_innerHandler.transform.localScale.x: {m_innerHandler.transform.localScale.x}");
+
             // play run animation
             if (!m_spriteAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
                 m_spriteAnimator.Play("Walk");
@@ -111,11 +113,17 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
 
     public void Action()
     {
+        if(m_isAtGrandfather && m_growthCount == 3)
+        {
+            m_animator.Play(m_attackAnimName);
+            m_reportPickingUpGrandfather.Invoke();
+            return;
+        }
         if (m_state != TEENAGER_STATE.ATTACKING)
         {
             m_state = TEENAGER_STATE.ATTACKING;
             m_animator.Play(m_attackAnimName);
-            StartCoroutine("Attacking");
+            StartCoroutine(Attacking());
         }
     }
     public void Idle()
@@ -124,9 +132,10 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         m_spriteAnimator.Play("Idle");
     }
     public virtual Transform ReturnSpecialTransform() { return null; }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Treasure")
+        if (collision.gameObject.CompareTag("Treasure"))
         {
             if (collision.GetComponent<Treasure>().m_isActive)
             {
@@ -134,26 +143,34 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
                 collision.gameObject.GetComponent<Treasure>().DestroyHandler();
             }
         }
-        else if (collision.tag == "Pyramid")
+        else if (collision.CompareTag("Pyramid"))
         {
             m_reportAtPyramid?.Invoke(true);
         }
-        else if (collision.tag == "StartingArea")
+        else if (collision.CompareTag("StartingArea"))
         {
             m_reportAtStart?.Invoke(true);
+        }
+        else if (collision.CompareTag("Grandfather"))
+        {
+            m_isAtGrandfather = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         //Debug.Log("Trigger undetected: " + collision.tag);
-        if (collision.tag == "Pyramid")
+        if (collision.CompareTag("Pyramid"))
         {
             m_reportAtPyramid?.Invoke(false);
         }
-        else if (collision.tag == "StartingArea")
+        else if (collision.CompareTag("StartingArea"))
         {
             m_reportAtStart?.Invoke(false);
+        }
+        else if (collision.CompareTag("Grandfather"))
+        {
+            m_isAtGrandfather = false;
         }
     }
     public void GetOlder()
@@ -173,9 +190,46 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         }
     }
 
+    //public IEnumerator FadePulseAfterDamage()
+    //{
+    //    Color c;
+    //    Debug.Log($"m_damageImmunityTimer is gained");
+    //    m_damageImmunityTimer = m_damageImmunityTimeMax;
+    //    m_controlLossTimer = m_controlLossTimeMax;
+    //    while (m_damageImmunityTimer > 0)
+    //    {
+    //        c = m_spriteRenderer.color;
+    //        c.a = Mathf.Max(Mathf.Sin(m_damageImmunityTimer * m_damageImmunityFadeSpeed), m_minFadeDuringDamageImmunity);
+    //        m_spriteRenderer.color = c;
+    //        m_damageImmunityTimer -= Time.deltaTime;
+    //        if (m_controlLossTimer > 0)
+    //        {
+    //            m_controlLossTimer -= Time.deltaTime;
+    //            if (m_controlLossTimer < 0)
+    //            {
+    //                Debug.Log($"Control is regained");
+    //                if (m_spriteHandler.GetComponent<PlayerController>().enabled)
+    //                    m_spriteHandler.GetComponent<PlayerController>().EnablePlayerControls();
+    //                else
+    //                    m_spriteHandler.GetComponent<SpriteDriver_Child>().EnableControls();
+    //            }
+    //        }
+    //        yield return null;
+    //    }
+    //    Debug.Log($"m_damageImmunityTimer is lost");
+    //    c = m_spriteRenderer.color;
+    //    c.a = 1;
+    //    m_spriteRenderer.color = c;
+    //}
+
+    public void TakeDamage(GameObject gO, float knockbackForce)
+    {
+        m_shield.gameObject.SetActive(true);
+        GetComponent<I_Hurtable>().TakeDamage();
+    }
+
     public IEnumerator Attacking()
     {
-        //Debug.Log($"Teen attacking");
         m_upperEnemyDestroyerCollider.SetActive(true);
         m_lowerEnemyDestroyerCollider.SetActive(true);
         yield return new WaitForSeconds(1);

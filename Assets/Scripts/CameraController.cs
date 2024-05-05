@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     public float[] m_zoomDistances;
     public float m_zoomOutSpeed = 1, m_zoomOutSpeedEnding = 0.25f;
     public float m_fadeInEndingCardTime = 3f, m_fadeInEndingCardDelay = 3f;
+    public float m_cameraLerpValue = 0f;
     public GameObject m_endingCard;
     private SpriteRenderer m_endingCardSpriteRenderer;
 
@@ -50,7 +51,7 @@ public class CameraController : MonoBehaviour
         {
             transform.rotation = m_playerTarget.transform.rotation;
             Vector3 lookAheadVector = (((m_state == CAMERA_STATE.FOLLOW_TARGET_RIGHT) ? transform.right : -transform.right) * m_lookAhead);
-            lookAheadVector += transform.up * m_lookAhead * 0.35f;
+            lookAheadVector += 0.35f * m_lookAhead * transform.up;
             pos.x = Mathf.Lerp(this.transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
             pos.y = Mathf.Lerp(this.transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);
         }
@@ -117,8 +118,10 @@ public class CameraController : MonoBehaviour
         ZoomOut(m_cinematicZoomDistance);
     }
 
-    public void EnterCinematicEndingMode()
+    public void EnterCinematicEndingMode(GameObject g = null)
     {
+        if (g != null)
+            m_cinematicTarget = g;
         StartCoroutine(FadeInEndingCardCoroutine());
         m_state = CAMERA_STATE.ENDING;
         ZoomOut(m_cinematicZoomDistance);

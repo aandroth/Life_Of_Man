@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d67a3db772a87243b14c200e00d16c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  events:
+  m_events:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8607040791847593177}
@@ -143,6 +143,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_eventStartAfterRandomTime: 0
+  m_minRandomDelayTime: 0
+  m_maxRandomDelayTime: 0
+  m_delay: 0
+  m_eventsInvoked: 0
+  m_resetOnEachStartup: 0
 --- !u!1 &2921012384894529192
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,7 +646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d67a3db772a87243b14c200e00d16c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  events:
+  m_events:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8607040791847593177}
@@ -655,6 +661,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_eventStartAfterRandomTime: 0
+  m_minRandomDelayTime: 0
+  m_maxRandomDelayTime: 0
+  m_delay: 0
+  m_eventsInvoked: 0
+  m_resetOnEachStartup: 0
 --- !u!1001 &6541765108036581191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -743,6 +755,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_healingRadius: 12
   m_centerOffset: {x: 0, y: 0, z: 0}
+  m_animator: {fileID: 0}
+  m_heartHealAnimName: Heart_Healing
 --- !u!4 &5084404666914864632 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2037434283166845631, guid: deb869f2f7e0c0f4196a91049f3848c9, type: 3}

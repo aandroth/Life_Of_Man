@@ -14,7 +14,7 @@ public class Treasure : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Father")
+        if(collision.CompareTag("Father"))
         {
             m_isActive = false;
             m_twinkleHandler.SetActive(false);
@@ -24,9 +24,9 @@ public class Treasure : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "Father")
+        if(collision.CompareTag("Father"))
         {
-            Respawn();
+            StartCoroutine(Respawn());
         }
     }
 

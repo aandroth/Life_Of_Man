@@ -15,7 +15,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     public GameObject m_heart;
     public float m_timeMax = 3;
     public float m_timePassed = 0;
-    public Vector3 m_carriedByFatherOffset = new Vector3(-1.55f, 2.2f, 0f);
+    public Vector3 m_carriedByFatherOffset = new(-1.55f, 2.2f, 0f);
     public GameObject m_targetIndicator;
 
     public delegate void ReportGrowOldMoveToTargetDone();
@@ -72,7 +72,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
         //transform.rotation = Quaternion.identity;
         m_targetIndicator.transform.SetParent(m_moveTarget.transform);
         m_targetIndicator.transform.localPosition = m_carriedByFatherOffset; //(m_carriedByFatherOffset + m_moveTarget.transform.position);
-        GameObject tempGameObject = new GameObject();
+        GameObject tempGameObject = new();
         tempGameObject.transform.position = transform.position;
         while (true)
         {
@@ -82,10 +82,11 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
             {
                 transform.localPosition = m_carriedByFatherOffset;
                 m_reportGrowOldMoveToTargetDone.Invoke();
+                Destroy(tempGameObject);
                 StopCoroutine(coroutine);
             }
             
-            tempGameObject.transform.Translate(Vector3.Normalize(vectorToTarget) * m_moveSpeed * 0.1f);
+            tempGameObject.transform.Translate(0.1f * m_moveSpeed * Vector3.Normalize(vectorToTarget));
             transform.position = tempGameObject.transform.position;
             Debug.DrawLine(transform.position, m_targetIndicator.transform.position);
             Debug.DrawRay(transform.position, vectorToTarget, Color.red);
@@ -114,6 +115,8 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
 
     public void BeginRevealPyramidAnim()
     {
+        Debug.Log($"Grandfather anim called");
+
         m_spriteAnimator.Play("GrandfatherEye");
     }
 

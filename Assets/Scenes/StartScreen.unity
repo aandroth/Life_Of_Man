@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 440693495}
   - component: {fileID: 440693494}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Button_Level_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -327,12 +327,12 @@ GameObject:
   - component: {fileID: 506921269}
   - component: {fileID: 506921268}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: Button_Level_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &506921267
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1080,12 +1080,12 @@ GameObject:
   - component: {fileID: 1676806446}
   - component: {fileID: 1676806445}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Button_Level_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1676806444
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1233,6 +1233,10 @@ MonoBehaviour:
   m_loadSceneDelay: 2
   m_fadeTime: 5
   m_fadeOutPanel: {fileID: 858520133}
+  m_levelButtonsList:
+  - {fileID: 440693492}
+  - {fileID: 1676806443}
+  - {fileID: 506921266}
 --- !u!4 &1733394080
 Transform:
   m_ObjectHideFlags: 0

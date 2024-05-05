@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpriteDriver_Teenager : SpriteDriver_Abstract
 {
     public GameObject m_sprite;
-    [SerializeField]
     public new SpriteController_Teenager m_spriteController;
 
     public CollisionReporter m_collisionReporter = null;
@@ -47,7 +46,7 @@ public class SpriteDriver_Teenager : SpriteDriver_Abstract
 
     public void ObjectDetected(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             m_spriteController.Action();
         }

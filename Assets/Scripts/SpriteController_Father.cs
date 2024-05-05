@@ -7,9 +7,11 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public GameObject m_sprite;
     public GameObject m_spriteHandler;
     public GameObject m_visionToWorldHitPoint = null;
+    public Shield m_shield = null;
+    public Collider2D m_collider;
     public float m_headSpeed = 1f;
     public float m_walkSpeed = 1f;
-    private float m_currSpeed = 1f;
+    public float m_currSpeed = 1f;
     public GameObject m_innerHandler;
     private Rigidbody2D m_innerHandler_rb;
     public GameObject m_fatherHead;
@@ -22,8 +24,8 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     // Sprite Collisions
     public delegate void ReportFatherHasSonInArea(bool b);
     public ReportFatherHasSonInArea m_reportFatherHasSonInArea;
-    public delegate void ReportFatherHasGrandfatherInArea(bool b);
-    public ReportFatherHasGrandfatherInArea m_reportFatherHasGrandfatherInArea;
+    public delegate void ReportFatherReachesGrowOldArea(bool b); 
+    public ReportFatherReachesGrowOldArea m_reportFatherReachesGrowOldArea;
     public delegate void ReportFatherReachedPyramid(bool b);
     public ReportFatherReachedPyramid m_reportFatherReachedPyramid;
     public delegate void ReportFatherReachedStartArea(bool b);
@@ -36,6 +38,8 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public ReportPyramidAnimDone m_reportPyramidAnimDone;
     public delegate void ReportGrowOldAnimDone();
     public ReportGrowOldAnimDone m_reportGrowOldAnimDone;
+
+    private static readonly int m_walkStateNameHash = Animator.StringToHash("Walk");
 
     // Start is called before the first frame update
     void Awake()
@@ -68,8 +72,8 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public void Action()
     {
         // Heal son
-        if (m_timePassed == 0)
-            Heal();
+        if (m_hasHeart && m_timePassed == 0)
+            StartCoroutine(Heal());
     }
 
 
@@ -94,48 +98,53 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public void ContinueWalking()
     {
         m_currSpeed = m_walkSpeed;
-        m_spriteAnimator.Play("Walk");
+        m_spriteAnimator.Play(m_walkStateNameHash);
     }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Trigger detected: " + collision.tag);
-        if (collision.tag == "Pyramid")
+        if (collision.CompareTag("Pyramid"))
         {
             m_reportFatherReachedPyramid?.Invoke(true);
         }
-        else if (collision.tag == "StartingArea")
+        else if (collision.CompareTag("StartingArea"))
         {
             m_reportFatherReachedStartArea?.Invoke(true);
         }
-        else if (collision.tag == "Son")
+        else if (collision.CompareTag("Son"))
         {
             m_reportFatherHasSonInArea?.Invoke(true);
+            if (!m_shield.gameObject.activeSelf && m_shield.m_state == Shield.STATE.BRONZE)
+            {
+                m_shield.gameObject.SetActive(true);
+            }
         }
-        else if (collision.tag == "Grandfather")
+        else if (collision.CompareTag("GrowOldArea"))
         {
-                Debug.Log($"Grandfather detected");
-                m_reportFatherHasGrandfatherInArea?.Invoke(true);
+                m_reportFatherReachesGrowOldArea?.Invoke(true);
         }
     }    
     
     private void OnTriggerExit2D(Collider2D collision)
     {
         //Debug.Log("Trigger undetected: " + collision.tag);
-        if (collision.tag == "Pyramid")
+        if (collision.CompareTag("Pyramid"))
         {
             m_reportFatherReachedPyramid?.Invoke(false);
         }
-        else if (collision.tag == "StartingArea")
+        else if (collision.CompareTag("StartingArea"))
         {
             m_reportFatherReachedStartArea?.Invoke(false);
         }
-        else if (collision.tag == "Son")
+        else if (collision.CompareTag("Son"))
         {
             m_reportFatherHasSonInArea?.Invoke(false);
-
-
+        }
+        else if (collision.CompareTag("GrowOldArea"))
+        {
+            m_reportFatherReachesGrowOldArea?.Invoke(false);
         }
     }
 
@@ -171,6 +180,17 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public void FatherGainsMind()
     {
         m_mind.SetActive(true);
+    }
+
+    public void FatherGainsSilverShield()
+    {
+        if (m_shield != null)
+        {
+            m_shield.gameObject.SetActive(true);
+            m_shield.UpgradeToSilver();
+        }
+        else
+            Debug.LogError($"Tried to upgrade shield on empty shield!");
     }
 
     public void DestroySelf()

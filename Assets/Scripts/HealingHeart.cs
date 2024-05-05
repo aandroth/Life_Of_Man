@@ -5,7 +5,7 @@ using UnityEngine;
 public class HealingHeart : MonoBehaviour
 {
     public float m_healingRadius = 12;
-    public Vector3 m_centerOffset = new Vector3(0,0,0);
+    public Vector3 m_centerOffset = Vector3.zero;
     public Animator m_animator;
     public string m_heartHealAnimName = "Heart_Healing";
 

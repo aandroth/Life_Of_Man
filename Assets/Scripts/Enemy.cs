@@ -20,17 +20,42 @@ public class Enemy : MonoBehaviour
         m_target = GameObject.FindGameObjectWithTag("Son");
     }
 
+    public void OnEnable()
+    {
+        if (m_twinkleHandler != null)
+        {
+            transform.position = m_twinkleHandler.transform.position;
+            m_isChasing = false;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if(m_isChasing) 
-            transform.Translate(Vector3.Normalize(m_target.transform.position - transform.position) *m_moveSpeed*Time.deltaTime);
+        transform.up = transform.position;
+        if (m_isChasing && m_target != null)
+        {
+            transform.Translate(m_moveSpeed * Time.deltaTime * Vector3.Normalize(m_target.transform.position - transform.position));
+        }
+    }
+
+    public void SetToChasing()
+    {
+        m_isChasing = true;
+        if (m_twinkle != null) { m_twinkle.SetActive(false); }
+        GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.None;
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        //Debug.Log("Trigger detected: "+collision.tag);
-        if(collision.tag == "Father")
+        Debug.Log("OnTriggerEnter2D");
+        if (collision.CompareTag("Shield"))
+        {
+            Debug.Log("Shield");
+            if (m_isChasing || m_twinkle == null)
+               Die();
+        }
+        if(collision.CompareTag("Father"))
         {
             if (!m_isChasing && m_twinkle != null)
             {
@@ -39,28 +64,24 @@ public class Enemy : MonoBehaviour
                 m_twinkleHandler.SetActive(false);
                 m_isActive = false;
             }
-            else
-               Die();
         }
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.tag == "Father")
+        if(collision.CompareTag("Father"))
         {
             if (!m_isChasing && m_twinkle != null)
             {
                 StartCoroutine(StunRecovery(m_stunnedTime));
             }
-            else
-               Die();
         }
     }
 
     public IEnumerator StunRecovery(float duration)
     {
         yield return new WaitForSeconds(duration - 1);
-        m_twinkleHandler?.SetActive(true);
+        if(m_twinkleHandler != null) m_twinkleHandler.SetActive(true);
 
         yield return new WaitForSeconds(1);
         m_isActive = true;
@@ -70,23 +91,21 @@ public class Enemy : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision detected");
-        if (collision.gameObject.tag == "Son" && m_isActive)
+        //Debug.Log("Collision detected");
+        if (collision.gameObject.CompareTag("Son") && m_isActive)
         {
-            m_twinkle.SetActive(false);
+            if(m_twinkle != null) m_twinkle.SetActive(false);
             GetComponent<SpriteRenderer>().maskInteraction = 0;
+            SetToChasing();
             collision.gameObject.GetComponent<I_SpriteController>().TakeDamage(gameObject, m_knockbackForce);
         }
     }
 
     public void Die()
     {
-        Debug.Log("Die");
-        Destroy(m_handler);
-    }
-
-    public void HurtTarget()
-    {
-        //m_target
+        if (m_handler != null)
+            m_handler.SetActive(false);
+        else
+            gameObject.SetActive(false);
     }
 }

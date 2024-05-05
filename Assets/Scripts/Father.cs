@@ -18,20 +18,20 @@ public class Father : MonoBehaviour
     {
         m_head.transform.localEulerAngles = new Vector3(0, 0, -45);
         m_currTime = m_timeMax;
-        StartCoroutine("CountdownToLookAhead");
+        StartCoroutine(CountdownToLookAhead());
     }
    public void LookAhead()
     {
         m_head.transform.localEulerAngles = new Vector3(0, 0, 0);
     }
 
-    public IEnumerable CountdownToLookAhead()
+    public IEnumerator CountdownToLookAhead()
     {
         m_currTime -= Time.deltaTime;
         if (m_currTime <= 0)
         {
             LookAhead();
-            StopCoroutine("CountdownToLookAhead");
+            StopCoroutine(CountdownToLookAhead());
         }
         yield return null;
     }

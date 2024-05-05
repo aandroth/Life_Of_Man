@@ -60,7 +60,7 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
 
     public void ObjectDetected(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Treasure")
+        if(collision.gameObject.CompareTag("Treasure"))
         {
             //Debug.Log($"Treasure detected");
             m_state = FATHER_STATE.LOOKING_AT_TREASURE;
@@ -68,7 +68,7 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
             m_treasurePointer.SetActive(true);
             m_treasurePointer.GetComponent<TreasurePointer>().SetTarget(collision.gameObject);
         }
-        else if(collision.gameObject.tag == "Enemy")
+        else if(collision.gameObject.CompareTag("Enemy"))
         {
             EnterLookDownState();
         }
@@ -91,7 +91,7 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
 
     public void CreateLookDownTarget()
     {
-        m_downTarget = new GameObject();
+        m_downTarget = new();
         m_downTarget.name = "FatherLookDownTarget";
         m_downTarget.transform.SetParent(transform);
         m_downTarget.transform.localPosition = transform.localPosition + m_downAndRightPos;
