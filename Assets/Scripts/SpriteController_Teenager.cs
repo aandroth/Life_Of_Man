@@ -33,6 +33,8 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportGotOlder m_reportGotOlder;
     public delegate void ReportGotTreasure();
     public ReportGotTreasure m_reportGotTreasure;
+    public delegate void ReportReachingGrandfather(bool b);
+    public ReportReachingGrandfather m_reportReachingGrandfather;
     public delegate void ReportPickingUpGrandfather();
     public ReportPickingUpGrandfather m_reportPickingUpGrandfather;
     public int m_health = 3;
@@ -140,7 +142,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
             if (collision.GetComponent<Treasure>().m_isActive)
             {
                 GetOlder();
-                collision.gameObject.GetComponent<Treasure>().DestroyHandler();
+                collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
             }
         }
         else if (collision.CompareTag("Pyramid"))
@@ -154,6 +156,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         else if (collision.CompareTag("Grandfather"))
         {
             m_isAtGrandfather = true;
+            m_reportReachingGrandfather?.Invoke(true);
         }
     }
 
@@ -177,9 +180,9 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     {
         if (m_growthCount < 3)
         {
-            float newScale = Mathf.Abs(m_innerHandler.transform.localScale.x) + m_growthRate;
+            float newScale = m_innerHandler.transform.localScale.y + m_growthRate;
             float newPos = m_innerHandler.transform.localPosition.y + m_growthRate;
-            m_innerHandler.transform.localScale = new Vector3(newScale*Mathf.Sign(m_innerHandler.transform.localScale.x), Mathf.Abs(newScale), newScale);
+            m_innerHandler.transform.localScale = new Vector3(newScale*Mathf.Sign(m_innerHandler.transform.localScale.x), newScale, newScale);
             m_innerHandler.transform.localPosition = m_innerHandler.transform.localPosition + (m_innerHandler.transform.up * m_growthOffset);
 
             m_speed *= m_speedRate;

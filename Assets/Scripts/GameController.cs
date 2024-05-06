@@ -95,7 +95,7 @@ public class GameController : MonoBehaviour
 
     public void LoadLevel_1()
     {
-        InitFather(false);
+        InitFather(true);
         m_fatherController.FatherGainsSilverShield();
 
         //InitGrandfather(false, m_fatherController);
@@ -103,7 +103,7 @@ public class GameController : MonoBehaviour
         //m_grandfatherController.transform.localPosition = m_grandfatherController.m_carriedByFatherOffset;
         //m_fatherCarryingGrandfather = true;
         //InitChild(true);
-        InitTeenager(true);
+        //InitTeenager(true);
     }
     public void LoadLevel_2()
     {
@@ -137,6 +137,7 @@ public class GameController : MonoBehaviour
         m_childController.m_reportAtPyramid = SonReportsReachesPyramid;
         m_childController.m_reportGotOlder = SpriteReportsGotOlder;
         m_childController.m_reportGotTreasure = SonGotTreasure;
+        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().SetTargetHandler_AndTarget_AndActivateSpawner(m_childHandler, m_childController.gameObject);
         if (m_speedThroughAnims)
         {
             m_childController.m_speed = m_speedThroughModifier;
@@ -168,7 +169,10 @@ public class GameController : MonoBehaviour
         m_teenagerController.m_reportAtPyramid = SonReportsReachesPyramid;
         m_teenagerController.m_reportGotOlder = SpriteReportsGotOlder;
         m_teenagerController.m_reportGotTreasure = SonGotTreasure;
+        m_teenagerController.m_reportReachingGrandfather = TeenagerReportsGrandfatherEnteredArea;
         m_teenagerController.m_reportPickingUpGrandfather = TeenagerPicksUpGrandfather;
+        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().SetTargetHandler_AndTarget_AndActivateSpawner(m_teenagerHandler, m_teenagerController.gameObject);
+
         if (m_speedThroughAnims)
         {
             m_teenagerController.m_speed = m_speedThroughModifier;
@@ -238,7 +242,6 @@ public class GameController : MonoBehaviour
     {
         InitTeenager(m_childController.m_spriteHandler.GetComponent<PlayerController>().enabled, m_childController);
         m_childController.DestroySelf();
-        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().m_targetHandler = m_teenagerHandler;
     }
 
     public void PutChildIntoCinematicMode()
@@ -253,7 +256,7 @@ public class GameController : MonoBehaviour
     public void TeenagerBecomesAdult()
     {
         m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().m_targetHandler = null;
-        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemies();
+        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemiesAndDeactivateSpawner();
         m_tricksPointer.SetActive(false);
         m_enemySpawnerHandler.SetActive(false);
         InitFather(m_teenagerController.m_spriteHandler.GetComponent<PlayerController>().enabled, m_teenagerController);
@@ -272,14 +275,17 @@ public class GameController : MonoBehaviour
     }
     public void MoveTeenagerToGameObject(GameObject g)
     {
-        if(g == null && m_sonMovingToFatherArea) // Cancels a move
+        if (g == null && m_sonMovingToFatherArea) // Cancels a move
         {
             if (m_teenagerHandler.GetComponent<PlayerController>().enabled)
             {
                 m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled = false;
                 m_teenagerHandler.GetComponent<PlayerController>().EnablePlayerControls();
             }
+            else
+                m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().m_target = g;
             m_sonMovingToFatherArea = false;
+            m_teenagerController.Idle();
             return;
         }
 
@@ -374,10 +380,21 @@ public class GameController : MonoBehaviour
     {
         m_grandfatherAtTeenagerArea = grandfatherIsAtTeenager;
 
-        if(m_grandfatherAtTeenagerArea && m_sonIsReadyToBeFather)
-            PlayFatherGrowsOldSequence();
+        if (m_grandfatherReadyToBeCarried && m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled)
+            m_teenagerController.Action(); //TeenagerExecutesActionAfterDelay();
+        if (m_sonMovingToFatherArea)
+            MoveTeenagerToGameObject(null);
     }
-
+    public IEnumerator TeenagerExecutesActionAfterDelay()
+    {
+        float delay = 0.5f;
+        while (delay > 0)
+        {
+            delay -= Time.deltaTime;
+            yield return null;
+        }
+        m_teenagerController.Action(); // Teenager picks up the grandfather
+    }
     public void TeenagerPicksUpGrandfather()
     {
         TeenagerBecomesAdult();
@@ -446,8 +463,6 @@ public class GameController : MonoBehaviour
         {
             InitChild(false, m_fatherController);
             SetTreasureArray_ToActiveOrInactive(m_treasuresA, true);
-            m_enemySpawnerHandler.SetActive(true);
-            m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().m_targetHandler = m_childHandler;
         }
     }
 
@@ -550,7 +565,7 @@ public class GameController : MonoBehaviour
 
     public void FatherBecomesGrandfather()
     {
-        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemies();
+        m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemiesAndDeactivateSpawner();
         m_enemySpawnerHandler.SetActive(false);
         InitGrandfather((m_fatherController).m_spriteHandler.GetComponent<PlayerController>().enabled, m_fatherController);
         m_fatherController.DestroySelf();
@@ -572,9 +587,10 @@ public class GameController : MonoBehaviour
         FatherBecomesGrandfather();
 
         //Make the teenager move back to the father->grandfather
-        if (m_teenagerHandler != null && !m_teenagerHandler.GetComponent<PlayerController>().enabled)
+        if (m_teenagerHandler != null && m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled)
         {
-            m_teenagerController.Action(); // Teenager picks up the grandfather
+            MoveTeenagerToGameObject(m_grandfatherController.gameObject);
+            //StartCoroutine(TeenagerExecutesActionAfterDelay());
         }
     }
 

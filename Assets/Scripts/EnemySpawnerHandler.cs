@@ -16,8 +16,16 @@ public class EnemySpawnerHandler : MonoBehaviour
         }
     }
 
-    public void DespawnAllEnemies()
+    public void SetTargetHandler_AndTarget_AndActivateSpawner(GameObject targetHandler, GameObject target)
+    {
+        m_targetHandler = targetHandler;
+        m_spawner.m_target = target;
+        m_spawner.gameObject.SetActive(true);
+    }
+
+    public void DespawnAllEnemiesAndDeactivateSpawner()
     {
         m_spawner.DespawnAllEnemies();
+        m_spawner.gameObject.SetActive(true);
     }
 }

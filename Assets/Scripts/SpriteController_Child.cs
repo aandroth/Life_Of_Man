@@ -89,7 +89,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public IEnumerator CountDownDamageImmunityAndControlFreeze()
     {
         Color c;
-        Debug.Log($"m_damageImmunityTimer is gained");
         m_damageImmunityTimer = m_damageImmunityTimeMax;
         m_controlLossTimer = m_controlLossTimeMax;
         while(m_damageImmunityTimer > 0)
@@ -103,7 +102,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
                 m_controlLossTimer -= Time.deltaTime;
                 if(m_controlLossTimer < 0)
                 {
-                    Debug.Log($"Control is regained");
                     if(m_spriteHandler.GetComponent<PlayerController>().enabled)
                         m_spriteHandler.GetComponent<PlayerController>().EnablePlayerControls();
                     else
@@ -112,7 +110,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             }
             yield return null;
         }
-        Debug.Log($"m_damageImmunityTimer is lost");
         c = m_spriteRenderer.color;
         c.a = 1;
         m_spriteRenderer.color = c;
@@ -198,8 +195,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if(collision.gameObject.CompareTag("Treasure"))
         {
+            Debug.Log("Treasure");
             GetOlder();
-            collision.gameObject.GetComponent<Treasure>().DestroyHandler();
+            collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
             m_reportGotTreasure.Invoke();
         }
     }
@@ -217,8 +215,8 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if(m_growthCount < 3)
         {
-            float newScale = transform.localScale.x + m_growthRate;
-            transform.localScale = new Vector3(newScale, Mathf.Abs(newScale), Mathf.Abs(newScale));
+            float newScale = transform.localScale.y + m_growthRate;
+            transform.localScale = new Vector3(newScale*Mathf.Sign(transform.localScale.x), newScale, newScale);
             m_innerHandler.transform.localPosition += 2 * newScale * m_spriteHandler.transform.up;
 
             m_speed *= m_speedRate;

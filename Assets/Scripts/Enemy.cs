@@ -48,10 +48,8 @@ public class Enemy : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnTriggerEnter2D");
         if (collision.CompareTag("Shield"))
         {
-            Debug.Log("Shield");
             if (m_isChasing || m_twinkle == null)
                Die();
         }

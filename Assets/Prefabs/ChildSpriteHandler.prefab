@@ -159,6 +159,7 @@ MonoBehaviour:
   m_sprite: {fileID: 3455952931664485557}
   m_spriteHandler: {fileID: 5218057947922383361}
   m_speed: 3
+  m_speedMin: 1
   m_speedMax: 7
   m_speedCurr: 0
   m_jumpForce: 300
@@ -290,7 +291,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10.24, y: 10.24}
+  m_Size: {x: 5, y: 5}
   m_EdgeRadius: 0
 --- !u!1 &4203722756637227444
 GameObject:
@@ -379,7 +380,7 @@ MonoBehaviour:
   m_forward: 1
   m_controlsEnabled: 1
   m_target: {fileID: 0}
-  m_jumpThreshold: 0.5
+  m_jumpThreshold: 0.15
 --- !u!114 &7048478167409383285
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
     public float m_spawnRadius = 10f;
     public uint m_enemyObjectPoolCount = 10;
     public List<GameObject> m_enemyObjectPool = null;
+    public GameObject m_target;
 
     // Start is called before the first frame update
     void Start()
@@ -26,12 +27,15 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(m_spawnTimer >= m_spawnFrequencyMax)
+        if (m_target != null)
         {
-            SpawnEnemy();
-            m_spawnTimer = 0;
+            if (m_spawnTimer >= m_spawnFrequencyMax)
+            {
+                SpawnEnemy();
+                m_spawnTimer = 0;
+            }
+            m_spawnTimer += Time.deltaTime;
         }
-        m_spawnTimer += Time.deltaTime;
     }
 
     public void SpawnEnemy()
@@ -49,6 +53,14 @@ public class EnemySpawner : MonoBehaviour
                 g.SetActive(true);
                 break;
             }
+        }
+    }
+
+    public void SetAllEnemiesSpeed(float speed)
+    {
+        foreach (GameObject g in m_enemyObjectPool)
+        {
+            g.GetComponent<Enemy>().m_moveSpeed = speed;
         }
     }
 

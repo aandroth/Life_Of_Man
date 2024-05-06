@@ -23,10 +23,8 @@ public class Shield : MonoBehaviour
     {
         if(m_fadeCoroutine == null)
             m_fadeCoroutine = FadeAwayShield();
-        Debug.Log($"Shield activated");
         if (m_state == STATE.BRONZE)
         {
-            Debug.Log($"Shield activated");
             m_shieldSpriteRenderer.color = m_bronzeShieldDefaultColor;
             StartCoroutine(m_fadeCoroutine);
         }
