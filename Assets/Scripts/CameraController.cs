@@ -16,12 +16,24 @@ public class CameraController : MonoBehaviour
     public float m_zoomOutSpeed = 1, m_zoomOutSpeedEnding = 0.25f;
     public float m_fadeInEndingCardTime = 3f, m_fadeInEndingCardDelay = 3f;
     public float m_cameraLerpValue = 0f;
-    public GameObject m_endingCard;
-    private SpriteRenderer m_endingCardSpriteRenderer;
+    public GameObject m_blankCard;
+    public GameObject m_level1CompleteCard;
+    public GameObject m_level2CompleteCard;
+    public GameObject m_level3CompleteCard;
+    public GameObject m_gameOverCard;
+    private SpriteRenderer m_blankCardSpriteRenderer;
+    private SpriteRenderer m_level1CompleteCardSpriteRenderer;
+    private SpriteRenderer m_level2CompleteCardSpriteRenderer;
+    private SpriteRenderer m_level3CompleteCardSpriteRenderer;
+    private SpriteRenderer m_gameOverCardSpriteRenderer;
 
     public void Start()
     {
-        m_endingCardSpriteRenderer = m_endingCard.GetComponent<SpriteRenderer>();
+        m_blankCardSpriteRenderer = m_blankCard.GetComponent<SpriteRenderer>();
+        m_level1CompleteCardSpriteRenderer = m_level1CompleteCard.GetComponent<SpriteRenderer>();
+        m_level2CompleteCardSpriteRenderer = m_level2CompleteCard.GetComponent<SpriteRenderer>();
+        m_level3CompleteCardSpriteRenderer = m_level3CompleteCard.GetComponent<SpriteRenderer>();
+        m_gameOverCardSpriteRenderer = m_gameOverCard.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -81,9 +93,15 @@ public class CameraController : MonoBehaviour
         this.GetComponent<Camera>().orthographicSize = amount;
     }
 
-    public IEnumerator FadeInEndingCardCoroutine()
+    public void FadeInBlankCard() { StartCoroutine(FadeInCardCoroutine(m_blankCard, m_blankCardSpriteRenderer)); }
+    public void FadeInLevel1CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level1CompleteCard, m_level1CompleteCardSpriteRenderer)); }
+    public void FadeInLevel2CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level2CompleteCard, m_level2CompleteCardSpriteRenderer)); }
+    public void FadeInLevel3CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level3CompleteCard, m_level3CompleteCardSpriteRenderer)); }
+    public void FadeInGameOverCard() { StartCoroutine(FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer)); }
+
+    public IEnumerator FadeInCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer)
     {
-        m_endingCard.SetActive(true);
+        card.SetActive(true);
         float fadeProgress = 0;
         Color c;
 
@@ -93,17 +111,16 @@ public class CameraController : MonoBehaviour
             yield return null;
         }
 
+        c = cardSpriteRenderer.color;
         while (fadeProgress < 1)
         {
             fadeProgress += Time.deltaTime / m_fadeInEndingCardTime;
-            c = m_endingCardSpriteRenderer.color;
             c.a = Mathf.Lerp(0, 1, fadeProgress);
-            m_endingCardSpriteRenderer.color = c;
+            cardSpriteRenderer.color = c;
             yield return null;
         }
-        c = m_endingCardSpriteRenderer.color;
         c.a = 1;
-        m_endingCardSpriteRenderer.color = c;
+        cardSpriteRenderer.color = c;
     }
 
     public void SetLookAhead_Right(bool lookRight)
@@ -122,7 +139,6 @@ public class CameraController : MonoBehaviour
     {
         if (g != null)
             m_cinematicTarget = g;
-        StartCoroutine(FadeInEndingCardCoroutine());
         m_state = CAMERA_STATE.ENDING;
         ZoomOut(m_cinematicZoomDistance);
 

@@ -17,6 +17,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     public float m_timePassed = 0;
     public Vector3 m_carriedByFatherOffset = new(-1.55f, 2.2f, 0f);
     public GameObject m_targetIndicator;
+    public string m_grandfatherDeathAnimName = "GrandfatherDies";
 
     public delegate void ReportGrowOldMoveToTargetDone();
     public ReportGrowOldMoveToTargetDone m_reportGrowOldMoveToTargetDone;
@@ -24,6 +25,8 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     public ReportRevealPyramid m_reportRevealPyramid;    
     public delegate void ReportRevealPyramidDone();
     public ReportRevealPyramidDone m_reportRevealPyramidDone;
+    public delegate void ReportGrandfatherDiesAloneDone();
+    public ReportGrandfatherDiesAloneDone m_reportGrandfatherDiesAloneDone;
 
     public void Awake()
     {
@@ -128,6 +131,16 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     public void ReportRevealPyramidDoneEvent()
     {
         m_reportRevealPyramidDone.Invoke();
+    }
+
+    public void PlayGrandfatherDiesAloneAnim()
+    {
+        m_spriteAnimator.Play(m_grandfatherDeathAnimName);
+    }
+
+    public void ReportGrandfatherDiesAloneDoneEvent()
+    {
+        m_reportGrandfatherDiesAloneDone.Invoke();
     }
 
     public void DestroySelf()
