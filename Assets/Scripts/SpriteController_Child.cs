@@ -31,6 +31,8 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public ReportAgedOut m_reportGotOlder;
     public delegate void ReportGotTreasure();
     public ReportGotTreasure m_reportGotTreasure;
+    public delegate void ReportDies(I_SpriteController iSC);
+    public ReportDies m_reportDies;
     public float m_runSpeedLimit, m_runSpeedFriction_Air, m_runSpeedFriction_Ground;
 
     public GameObject m_nextForm = null;
@@ -235,6 +237,11 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             m_state = STATE.KNOCKBACK;
             m_knockbackTimer = m_knockbackTimerMax;
             GetComponent<I_Hurtable>().TakeDamage();
+
+            if(GetComponent<I_Hurtable>().m_health <= 0)
+            {
+                m_reportDies.Invoke(this);
+            }
 
             float enemyDirection = transform.up.x * gO.transform.position.y - transform.up.y * gO.transform.position.x;
             m_speedCurr = (m_sprite.transform.localScale.x > 0 ? m_speedMax : -m_speedMax);

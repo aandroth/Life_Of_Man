@@ -7,9 +7,10 @@ public class GameController : MonoBehaviour
 {
     public enum LEVEL_STATE { LEVEL_1, LEVEL_2, LEVEL_3 };
     public LEVEL_STATE m_levelState = LEVEL_STATE.LEVEL_1;
+    public enum CHECKPOINT_STATE { START, PLAYER_AS_TEENAGER_REACHES_PYRAMID, PLAYER_AS_FATHER_REACHES_START, PLAYER_AS_FATHER_REACHES_PYRAMID, PLAYER_AS_GRANDFATHER_REACHES_START };
+    public CHECKPOINT_STATE m_checkpointState = CHECKPOINT_STATE.START;
     public List<GameObject> m_hearts;
-    public GameObject m_startScreenButton;
-    public GameObject m_retryLevelButton;
+    public GameObject m_resetOptionsButtons;
 
     public Pyramid m_pyramid;
     public GameObject[] m_treasuresA;
@@ -78,7 +79,17 @@ public class GameController : MonoBehaviour
         if (m_instance != null)
             Destroy(this);
         m_instance = this;
+        LoadLevel();
+    }
 
+    public void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.C))
+            m_childController.TakeDamage(m_childController.gameObject, 0);
+    }
+
+    public void LoadLevel()
+    {
         switch (m_levelState)
         {
             case LEVEL_STATE.LEVEL_3:
@@ -95,6 +106,7 @@ public class GameController : MonoBehaviour
 
     public void LoadLevel_1()
     {
+
         InitFather(true);
         m_fatherController.FatherGainsSilverShield();
 
@@ -137,6 +149,7 @@ public class GameController : MonoBehaviour
         m_childController.m_reportAtPyramid = SonReportsReachesPyramid;
         m_childController.m_reportGotOlder = SpriteReportsGotOlder;
         m_childController.m_reportGotTreasure = SonGotTreasure;
+        m_childController.m_reportDies = SonDies;
         m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().SetTargetHandler_AndTarget_AndActivateSpawner(m_childHandler, m_childController.gameObject);
         if (m_speedThroughAnims)
         {
@@ -171,6 +184,7 @@ public class GameController : MonoBehaviour
         m_teenagerController.m_reportGotTreasure = SonGotTreasure;
         m_teenagerController.m_reportReachingGrandfather = TeenagerReportsGrandfatherEnteredArea;
         m_teenagerController.m_reportPickingUpGrandfather = TeenagerPicksUpGrandfather;
+        m_childController.m_reportDies = SonDies;
         m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().SetTargetHandler_AndTarget_AndActivateSpawner(m_teenagerHandler, m_teenagerController.gameObject);
 
         if (m_speedThroughAnims)
@@ -399,6 +413,29 @@ public class GameController : MonoBehaviour
     {
         TeenagerBecomesAdult();
         GrandfatherMovesToAdultSon();
+    }
+    public void SonDies(I_SpriteController spriteController)
+    {
+        if(spriteController.GetType() == typeof(SpriteController_Child) && m_childHandler != null)
+        {
+            if (m_childHandler.GetComponent<PlayerController>().enabled)
+                LoadLevel(); // Reset Level or checkpoint
+            else
+            {
+                StartCoroutine(ShowResetButtons_Seconds(10));
+                m_childController.DestroySelf();
+            }
+        }
+        else if (spriteController.GetType() == typeof(SpriteController_Teenager) && m_teenagerHandler != null)
+        {
+            if (m_teenagerHandler.GetComponent<PlayerController>().enabled)
+                LoadLevel(); // Reset Level or checkpoint
+            else
+            {
+                StartCoroutine(ShowResetButtons_Seconds(10));
+                m_teenagerController.DestroySelf();
+            }
+        }
     }
 
     public void FatherReportsSonAtArea(bool b)
@@ -740,8 +777,7 @@ public class GameController : MonoBehaviour
             buttonDelay -= Time.deltaTime;
             yield return null;
         }
-        m_startScreenButton.SetActive(true);
-        m_retryLevelButton.SetActive(true);
+        m_resetOptionsButtons.SetActive(false);
     }
 
     public IEnumerator ReloadLevel()
@@ -755,18 +791,7 @@ public class GameController : MonoBehaviour
             fadeValue += Time.deltaTime;
             yield return null;
         }
-        switch(m_levelState)
-        {
-            case LEVEL_STATE.LEVEL_1:
-                SceneManager.LoadScene("Level1_Scene");
-                break;
-            case LEVEL_STATE.LEVEL_2:
-                SceneManager.LoadScene("Level2_Scene");
-                break;
-            case LEVEL_STATE.LEVEL_3:
-                SceneManager.LoadScene("Level3_Scene");
-                break;
-        }
+        LoadLevel();
     }
 
     public IEnumerator FadeToStartScreen()
@@ -781,5 +806,68 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         SceneManager.LoadScene("StartScreen");
+    }
+
+    public IEnumerator ShowResetButtons_Seconds(float secondsToShowButtons = 10)
+    {
+        m_resetOptionsButtons.SetActive(true);
+        while(secondsToShowButtons > 0)
+        {
+            secondsToShowButtons -= Time.deltaTime;
+            yield return null;
+        }
+        HideResetButtons();
+    }
+
+    public void HideResetButtons()
+    {
+        m_resetOptionsButtons.SetActive(false);
+    }
+
+    public void LoadLastCheckpoint()
+    {
+        switch (m_checkpointState)
+        {
+            case CHECKPOINT_STATE.START:
+                LoadStartCheckpoint();
+                break;
+            case CHECKPOINT_STATE.PLAYER_AS_TEENAGER_REACHES_PYRAMID:
+                LoadStartCheckpoint();
+                break;
+            case CHECKPOINT_STATE.PLAYER_AS_FATHER_REACHES_START:
+                LoadStartCheckpoint();
+                break;
+            case CHECKPOINT_STATE.PLAYER_AS_FATHER_REACHES_PYRAMID:
+                LoadStartCheckpoint();
+                break;
+            case CHECKPOINT_STATE.PLAYER_AS_GRANDFATHER_REACHES_START:
+                LoadStartCheckpoint();
+                break;
+        }
+    }
+
+    public void LoadStartCheckpoint()
+    {
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+    }
+
+    public void LoadPlayerAsTeenagerReachesPyramidCheckpoint()
+    {
+        //if()
+    }
+
+    public void LoadPlayerAsFatherReachesStartCheckpoint()
+    {
+
+    }
+
+    public void LoadPlayerAsFatherReachesPyramidCheckpoint()
+    {
+
+    }
+
+    public void LoadPlayerAsGrandfatherReachesPyramidCheckpoint()
+    {
+
     }
 }
