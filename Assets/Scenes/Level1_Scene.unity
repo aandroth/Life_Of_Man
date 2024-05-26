@@ -8531,7 +8531,7 @@ MonoBehaviour:
   m_lookAhead: 0.7
   m_state: 0
   m_speed: 10
-  m_cinematicSpeed: 0.25
+  m_cinematicSpeed: 0.5
   m_cinematicRotationSpeed: 0.25
   m_playerIsAdult: 0
   m_cinematicZoomDistance: 15
@@ -8547,8 +8547,8 @@ MonoBehaviour:
   - 9.5
   - 11
   - 13
-  m_zoomOutSpeed: 10
-  m_zoomOutSpeedEnding: 0.25
+  m_zoomOutSpeed: 3
+  m_zoomOutSpeedEnding: 15
   m_fadeInEndingCardTime: 3
   m_fadeInEndingCardDelay: 3
   m_cameraLerpValue: 0
@@ -20619,6 +20619,7 @@ RectTransform:
   - {fileID: 331347249}
   - {fileID: 716746023}
   - {fileID: 1898093685}
+  - {fileID: 2126120496}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -22932,8 +22933,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 6c81543ecb0336b47af83088372cb94f, type: 3}
+  m_SortingOrder: 200
+  m_Sprite: {fileID: 21300000, guid: c1da0f7f7d593ba41bae9cffe51d8026, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
@@ -24403,7 +24404,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 200
   m_Sprite: {fileID: 21300000, guid: 6c81543ecb0336b47af83088372cb94f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
@@ -34842,7 +34843,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 201
   m_Sprite: {fileID: 21300000, guid: 7b29971ca431ba94ab5c8c469ef7a354, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_FlipX: 0
@@ -35708,7 +35709,6 @@ RectTransform:
   m_Children:
   - {fileID: 531706435}
   - {fileID: 617440340}
-  - {fileID: 2126120496}
   m_Father: {fileID: 716233761}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -35977,8 +35977,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 6c81543ecb0336b47af83088372cb94f, type: 3}
+  m_SortingOrder: 200
+  m_Sprite: {fileID: 21300000, guid: 540b984c8aeb654428f506d7714fa424, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
@@ -36040,6 +36040,10 @@ MonoBehaviour:
   - {fileID: 2077942901}
   - {fileID: 458351734}
   m_resetOptionsButtons: {fileID: 1898093684}
+  m_continueButton: {fileID: 2126120495}
+  m_levelIntroCard: {fileID: 0}
+  m_levelCompleteCard: {fileID: 0}
+  m_reloadLevelDelay: 10
   m_pyramid: {fileID: 1938205437}
   m_treasuresA:
   - {fileID: 672377891}
@@ -36071,7 +36075,6 @@ MonoBehaviour:
   m_grandfatherController: {fileID: 0}
   m_camera: {fileID: 257225835}
   m_world: {fileID: 1407455631}
-  m_fadeCardRenderer: {fileID: 0}
   m_grandfatherDies: 0
   m_fatherBecomingGrandfather: 0
   m_fatherNowGrandfatherDies: 0
@@ -48191,7 +48194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2126120496
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48199,14 +48202,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2126120495}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8241153}
-  m_Father: {fileID: 1898093685}
-  m_RootOrder: 2
+  m_Father: {fileID: 716233761}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -48257,10 +48260,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1898093684}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1933229895}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: ContinueGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -48463,8 +48466,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 6c81543ecb0336b47af83088372cb94f, type: 3}
+  m_SortingOrder: 200
+  m_Sprite: {fileID: 21300000, guid: 1d64729ea49ef2340a98ba548ab6a3d8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0

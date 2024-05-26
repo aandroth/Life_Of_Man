@@ -37,7 +37,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportReachingGrandfather m_reportReachingGrandfather;
     public delegate void ReportPickingUpGrandfather();
     public ReportPickingUpGrandfather m_reportPickingUpGrandfather;
-    public delegate void ReportDies(I_SpriteController iSC);
+    public delegate void ReportDies();
     public ReportDies m_reportDies;
     public int m_health = 3;
     public float m_keepRunningTimer = 0.25f, m_keepRunningTimerMax = 0.25f;
@@ -234,7 +234,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
 
         if (GetComponent<I_Hurtable>().m_health <= 0)
         {
-            m_reportDies.Invoke(this);
+            m_reportDies.Invoke();
         }
     }
 

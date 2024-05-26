@@ -49,9 +49,12 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6b6dea64442b638418e31594b108f654, type: 3}
   - {fileID: 21300000, guid: 069a1215abfc7d7478febd81158293aa, type: 3}
   - {fileID: 21300000, guid: c1926cf5e93279f4e9217fe78c2fa392, type: 3}
+  - {fileID: 21300000, guid: fa5a4f56f9f714f4ab89a6fea72445b0, type: 3}
   - {fileID: 21300000, guid: 4b04b7a6d9e5d2b4fb0166d65655a824, type: 3}
   - {fileID: 21300000, guid: 1465883735d685340ab031e395ab2631, type: 3}
   - {fileID: 21300000, guid: eb5d4477811f2854b8af2a1441727dae, type: 3}
+  - {fileID: 21300000, guid: 54e65f87e4aeac24e8674209177973cb, type: 3}
+  - {fileID: 21300000, guid: 1c62adb7b3bf7734f838ae65898ef26a, type: 3}
   - {fileID: 21300000, guid: 6a1e1c283b227cf4fbba5c3259876276, type: 3}
   - {fileID: 21300000, guid: 49133ad8d4485ff499bca2426e14b863, type: 3}
   - {fileID: 21300000, guid: a5697c190a500a84d9b072ca34077ba8, type: 3}
@@ -66,14 +69,17 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 544c40bb054c0eb4fb949294b802f538, type: 3}
   - {fileID: 21300000, guid: 7b29971ca431ba94ab5c8c469ef7a354, type: 3}
   - {fileID: 21300000, guid: 469aa73cfd2c7d647ab6becbf32e0ce7, type: 3}
+  - {fileID: 21300000, guid: 540b984c8aeb654428f506d7714fa424, type: 3}
   - {fileID: 21300000, guid: f854412de9a91474fa51df2da6514162, type: 3}
   - {fileID: 21300000, guid: 30b07c9db8a09884a96f96a8c216898b, type: 3}
   - {fileID: 21300000, guid: 833205ad3de4eb9438a5ddd5f02693c0, type: 3}
   - {fileID: 21300000, guid: 4a81d70ea8714a8449bed53d4058a732, type: 3}
   - {fileID: 21300000, guid: fde01f1e4a127164582c57913944d3f8, type: 3}
   - {fileID: 21300000, guid: 6c81543ecb0336b47af83088372cb94f, type: 3}
+  - {fileID: 21300000, guid: 1d64729ea49ef2340a98ba548ab6a3d8, type: 3}
   - {fileID: 21300000, guid: 0cbcf79ede321eb4ab727eb5405613f8, type: 3}
   - {fileID: 21300000, guid: 5d306b0f702370548b335c339d375847, type: 3}
+  - {fileID: 21300000, guid: c1da0f7f7d593ba41bae9cffe51d8026, type: 3}
   - {fileID: 21300000, guid: 2f12a5afd0a07234981c4e74c0cac8e1, type: 3}
   - {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -88,9 +94,12 @@ SpriteAtlas:
   - Spotlight
   - Treasure
   - Father_LegR
+  - spacebar-icon-25 copy
   - Grandfather
   - Twinkle
   - Heart
+  - Key_A
+  - Key_D
   - Mushroom1
   - Eye
   - Enemy
@@ -105,14 +114,17 @@ SpriteAtlas:
   - DiamondBlue
   - PanelSprite
   - Diamond
+  - GameOverCard
   - Son_0_0
   - Mushroom0
   - Father_LegL
   - Dead_Grandfather
   - Heart_Empty
-  - EndingCard
+  - EndingCompleteCard2
+  - EndingCompleteCard0
   - Shield
   - ShieldOutline
+  - EndingCompleteCard1
   - Brain
   - Father_Head
   m_RenderDataMap: {}

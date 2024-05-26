@@ -49,9 +49,8 @@ public class CameraController : MonoBehaviour
         Vector3 pos = this.transform.position;
         if (m_state == CAMERA_STATE.ENDING)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, m_cinematicTarget.transform.rotation, m_cinematicRotationSpeed);
-            pos.x = Mathf.Lerp(this.transform.position.x, m_cinematicTarget.transform.position.x, interp);
-            pos.y = Mathf.Lerp(this.transform.position.y, m_cinematicTarget.transform.position.y, interp);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, m_cinematicTarget.transform.rotation, m_cinematicRotationSpeed);
+            //pos.z = Mathf.Lerp(this.transform.position.z, m_cinematicZoomDistanceEnding, interp);
         }
         else if (m_state == CAMERA_STATE.CINEMATIC)
         {
@@ -79,15 +78,19 @@ public class CameraController : MonoBehaviour
     public IEnumerator ZoomOutCoroutine(float amount = 0)
     {
         float prevAmount = this.GetComponent<Camera>().orthographicSize;
-        if (amount == 0 && m_zoomDistancesIndex < m_zoomDistances.Length-1)
+        if (m_state != CAMERA_STATE.ENDING && amount == 0 && m_zoomDistancesIndex < m_zoomDistances.Length - 1)
         {
             ++m_zoomDistancesIndex;
             amount = m_zoomDistances[m_zoomDistancesIndex];
         }
+        else
+            amount = m_cinematicZoomDistanceEnding;
 
-        while (this.GetComponent<Camera>().orthographicSize < m_zoomDistances[m_zoomDistancesIndex])
+        float zoomProgress = 0f;
+        while (zoomProgress < (m_state != CAMERA_STATE.ENDING ? m_zoomOutSpeed : m_zoomOutSpeedEnding))
         {
-            this.GetComponent<Camera>().orthographicSize = Mathf.Lerp(prevAmount, amount, (m_state != CAMERA_STATE.ENDING ? m_zoomOutSpeed : m_zoomOutSpeedEnding));
+            zoomProgress += Time.deltaTime;
+            this.GetComponent<Camera>().orthographicSize = Mathf.Lerp(prevAmount, amount, zoomProgress/(m_state != CAMERA_STATE.ENDING ? m_zoomOutSpeed : m_zoomOutSpeedEnding));
             yield return null;
         }
         this.GetComponent<Camera>().orthographicSize = amount;
@@ -97,19 +100,16 @@ public class CameraController : MonoBehaviour
     public void FadeInLevel1CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level1CompleteCard, m_level1CompleteCardSpriteRenderer)); }
     public void FadeInLevel2CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level2CompleteCard, m_level2CompleteCardSpriteRenderer)); }
     public void FadeInLevel3CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level3CompleteCard, m_level3CompleteCardSpriteRenderer)); }
-    public void FadeInGameOverCard() { StartCoroutine(FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer)); }
+    public void FadeInGameOverCard() { StartCoroutine(FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer, 0)); }
 
-    public IEnumerator FadeInCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer)
+    public IEnumerator FadeInCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer, float fadeDelay = 3)
     {
+        Debug.Log("TRACE");
         card.SetActive(true);
         float fadeProgress = 0;
         Color c;
 
-        while (m_fadeInEndingCardDelay > 0)
-        {
-            m_fadeInEndingCardDelay -= Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(fadeDelay);
 
         c = cardSpriteRenderer.color;
         while (fadeProgress < 1)
@@ -128,10 +128,13 @@ public class CameraController : MonoBehaviour
         m_lookAhead = (lookRight) ? Mathf.Abs(m_lookAhead) : -1 * Mathf.Abs(m_lookAhead);
     }
 
-    public void EnterCinematicMode(GameObject cinematicTarget)
+    public void EnterCinematicMode(GameObject cinematicTarget = null)
     {
         m_state = CAMERA_STATE.CINEMATIC;
-        m_cinematicTarget = cinematicTarget;
+        if (m_cinematicTarget != null)
+            m_cinematicTarget = cinematicTarget;
+        else
+            m_cinematicTarget = gameObject;
         ZoomOut(m_cinematicZoomDistance);
     }
 
@@ -139,6 +142,8 @@ public class CameraController : MonoBehaviour
     {
         if (g != null)
             m_cinematicTarget = g;
+        else
+            m_cinematicTarget = gameObject;
         m_state = CAMERA_STATE.ENDING;
         ZoomOut(m_cinematicZoomDistance);
 

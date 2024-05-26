@@ -31,7 +31,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public ReportAgedOut m_reportGotOlder;
     public delegate void ReportGotTreasure();
     public ReportGotTreasure m_reportGotTreasure;
-    public delegate void ReportDies(I_SpriteController iSC);
+    public delegate void ReportDies();
     public ReportDies m_reportDies;
     public float m_runSpeedLimit, m_runSpeedFriction_Air, m_runSpeedFriction_Ground;
 
@@ -48,6 +48,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
     private static readonly int m_walkStateNameHash = Animator.StringToHash("Walk");
     private static readonly int m_idleStateNameHash = Animator.StringToHash("Idle");
+    public float m_startingY = -1.634216f;
 
     private SpriteRenderer m_spriteRenderer;
 
@@ -56,6 +57,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         m_rb = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
+        //m_startingY = transform.position.y;
     }
 
     // Update is called once per frame
@@ -123,6 +125,10 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, 0.03f, m_groundLayer);
         else
             m_jumpDelayCountdown -= Time.deltaTime;
+        if (transform.position.y < m_startingY)
+        {
+            transform.position = new Vector3(transform.position.x, m_startingY, transform.position.z);
+        }
     }
 
     public void PushForward()
@@ -240,7 +246,8 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
             if(GetComponent<I_Hurtable>().m_health <= 0)
             {
-                m_reportDies.Invoke(this);
+                m_reportDies.Invoke();
+                return;
             }
 
             float enemyDirection = transform.up.x * gO.transform.position.y - transform.up.y * gO.transform.position.x;

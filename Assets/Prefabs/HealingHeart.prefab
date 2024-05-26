@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 45
   m_Sprite: {fileID: 21300000, guid: eb5d4477811f2854b8af2a1441727dae, type: 3}
-  m_Color: {r: 1, g: 0.67876756, b: 0, a: 1}
+  m_Color: {r: 0.5, g: 0.32911378, b: 0.20518869, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -119,6 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f2a40ac9268fd540bd418508b6442d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_state: 0
+  m_goldHeartDefaultColor: {r: 1, g: 0.6784314, b: 0, a: 1}
   m_healingRadius: 200
   m_centerOffset: {x: 0, y: 0, z: 0}
   m_animator: {fileID: 5843919888733863139}

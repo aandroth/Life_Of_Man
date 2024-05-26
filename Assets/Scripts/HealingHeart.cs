@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HealingHeart : MonoBehaviour
 {
+    public enum STATE { BRONZE, GOLD }
+    public STATE m_state = STATE.BRONZE;
+    public Color m_goldHeartDefaultColor;
     public float m_healingRadius = 12;
     public Vector3 m_centerOffset = Vector3.zero;
     public Animator m_animator;
@@ -22,5 +25,11 @@ public class HealingHeart : MonoBehaviour
         foreach (Collider2D c in cArr)
             if (c.gameObject.GetComponent<I_Hurtable>())
                 c.gameObject.GetComponent<I_Hurtable>().Heal();
+    }
+
+    public void UpgradeHeartToGold()
+    {
+        m_state = STATE.GOLD;
+        GetComponent<SpriteRenderer>().color = m_goldHeartDefaultColor;
     }
 }
