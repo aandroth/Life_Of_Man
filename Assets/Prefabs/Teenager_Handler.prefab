@@ -152,7 +152,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 23
+  m_SortingOrder: 53
   m_Sprite: {fileID: 21300000, guid: c1926cf5e93279f4e9217fe78c2fa392, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -236,7 +236,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 23
+  m_SortingOrder: 53
   m_Sprite: {fileID: 21300000, guid: 833205ad3de4eb9438a5ddd5f02693c0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -458,7 +458,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 25
+  m_SortingOrder: 55
   m_Sprite: {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -542,7 +542,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 23
+  m_SortingOrder: 53
   m_Sprite: {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -670,7 +670,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 21
+  m_SortingOrder: 51
   m_Sprite: {fileID: 21300000, guid: e1d574493fc8f294fba689658c1e2608, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -782,6 +782,7 @@ MonoBehaviour:
   m_attackRecoveryTime: 0.1
   m_upperEnemyDestroyerCollider: {fileID: 8770747010104505087}
   m_lowerEnemyDestroyerCollider: {fileID: 2640520360555670824}
+  m_isAtGrandfather: 0
   m_health: 3
   m_keepRunningTimer: 0.25
   m_keepRunningTimerMax: 0.25
@@ -928,7 +929,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 23
+  m_SortingOrder: 53
   m_Sprite: {fileID: 21300000, guid: 9fccaa5044c093f48a17a53bbbfba841, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1121,6 +1122,10 @@ PrefabInstance:
     - target: {fileID: 6204378767965888578, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
       propertyPath: m_Color.r
       value: 0.8862745
+      objectReference: {fileID: 0}
+    - target: {fileID: 6204378767965888578, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6491027249968212417, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
       propertyPath: m_RootOrder

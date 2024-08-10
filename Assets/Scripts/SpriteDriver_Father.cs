@@ -20,6 +20,7 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
     public GameObject m_treasurePointer;
     public float m_fatherLookAtThreshold = 0.25f;
     public bool m_sonNeedsHealing = false;
+    public bool m_avoidEnemies = true;
 
     // Start is called before the first frame update
     void Start()
@@ -70,7 +71,10 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
         }
         else if(collision.gameObject.CompareTag("Enemy"))
         {
-            EnterLookDownState();
+            if (m_avoidEnemies)
+                EnterLookDownState();
+            else
+                m_currTarget = collision.gameObject;
         }
     }
 
@@ -95,5 +99,10 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
         m_downTarget.name = "FatherLookDownTarget";
         m_downTarget.transform.SetParent(transform);
         m_downTarget.transform.localPosition = transform.localPosition + m_downAndRightPos;
+    }
+
+    public void PullBackSon()
+    {
+        EnterLookDownState();
     }
 }

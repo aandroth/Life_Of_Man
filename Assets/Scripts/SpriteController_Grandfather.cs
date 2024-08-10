@@ -12,7 +12,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     private IEnumerator coroutine;
     public Vector3 m_offset;
     public GameObject m_sprite;
-    public GameObject m_heart;
+    public HealingHeart m_heart;
     public float m_timeMax = 3;
     public float m_timePassed = 0;
     public Vector3 m_carriedByFatherOffset = new(-1.55f, 2.2f, 0f);
@@ -114,6 +114,11 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
     public void RestoreHandlerSpeed()
     {
 
+    }
+
+    public void UpgradeHeart()
+    {
+        m_heart.UpgradeHeartToGold();
     }
 
     public void BeginRevealPyramidAnim()

@@ -19,11 +19,12 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public float m_jumpRate = 0.1f;
     public float m_growthRate = 0.1f;
     public float m_growthOffset = 0.05f;
-    public float m_growthCount = 0;
+    public int m_growthCount = 0;
     public float m_speed = 1f;
     public float m_attackRecoveryTime = 1.5f;
     public GameObject m_upperEnemyDestroyerCollider, m_lowerEnemyDestroyerCollider;
 
+    public bool m_treasureCooldown;
     public bool m_isAtGrandfather = false;
     public delegate void ReportAtPyramid(bool b);
     public ReportAtPyramid m_reportAtPyramid;
@@ -31,7 +32,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public ReportAtStart m_reportAtStart;
     public delegate void ReportGotOlder(SpriteController_Teenager t);
     public ReportGotOlder m_reportGotOlder;
-    public delegate void ReportGotTreasure();
+    public delegate void ReportGotTreasure(int i);
     public ReportGotTreasure m_reportGotTreasure;
     public delegate void ReportReachingGrandfather(bool b);
     public ReportReachingGrandfather m_reportReachingGrandfather;
@@ -143,7 +144,9 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         {
             if (collision.GetComponent<Treasure>().m_isActive)
             {
+                StartCoroutine(CountDownTreasureCooldown());
                 GetOlder();
+                m_reportGotTreasure.Invoke(m_growthCount);
                 collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
             }
         }
@@ -178,6 +181,18 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
             m_isAtGrandfather = false;
         }
     }
+
+    public IEnumerator CountDownTreasureCooldown(float duration = 3.0f)
+    {
+        m_treasureCooldown = true;
+        while (duration > 0)
+        {
+            duration -= Time.deltaTime;
+            yield return null;
+        }
+        m_treasureCooldown = false;
+    }
+
     public void GetOlder()
     {
         if (m_growthCount < 3)

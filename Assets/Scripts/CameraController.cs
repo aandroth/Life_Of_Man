@@ -96,30 +96,55 @@ public class CameraController : MonoBehaviour
         this.GetComponent<Camera>().orthographicSize = amount;
     }
 
-    public void FadeInBlankCard() { StartCoroutine(FadeInCardCoroutine(m_blankCard, m_blankCardSpriteRenderer)); }
-    public void FadeInLevel1CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level1CompleteCard, m_level1CompleteCardSpriteRenderer)); }
-    public void FadeInLevel2CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level2CompleteCard, m_level2CompleteCardSpriteRenderer)); }
-    public void FadeInLevel3CompleteCard() { StartCoroutine(FadeInCardCoroutine(m_level3CompleteCard, m_level3CompleteCardSpriteRenderer)); }
-    public void FadeInGameOverCard() { StartCoroutine(FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer, 0)); }
+    public void FadeInBlankCard_Duration_Delay(float duration = 2, float delay = 3) { Debug.Log("FadeIn called"); ; StartCoroutine(FadeInCardCoroutine(m_blankCard, m_blankCardSpriteRenderer, duration, delay)); }
+    public void FadeOutBlankCard_Duration_Delay(float duration = 2, float delay = 3) { Debug.Log("FadeOut called"); StartCoroutine(FadeOutCardCoroutine(m_blankCard, m_blankCardSpriteRenderer, duration, delay)); }
+    public void FadeInLevel1CompleteCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_level1CompleteCard, m_level1CompleteCardSpriteRenderer, duration, delay)); }
+    public void FadeInLevel2CompleteCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_level2CompleteCard, m_level2CompleteCardSpriteRenderer, duration, delay)); }
+    public void FadeInLevel3CompleteCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_level3CompleteCard, m_level3CompleteCardSpriteRenderer, duration, delay)); }
+    public void FadeInGameOverCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer, duration, delay)); }
 
-    public IEnumerator FadeInCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer, float fadeDelay = 3)
+    public IEnumerator FadeInCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer, float fadeDuration = 2, float fadeDelay = 3)
     {
-        Debug.Log("TRACE");
         card.SetActive(true);
         float fadeProgress = 0;
-        Color c;
+        Color c = cardSpriteRenderer.color;
 
         yield return new WaitForSeconds(fadeDelay);
-
-        c = cardSpriteRenderer.color;
-        while (fadeProgress < 1)
+        if(fadeDuration > 0)
         {
-            fadeProgress += Time.deltaTime / m_fadeInEndingCardTime;
-            c.a = Mathf.Lerp(0, 1, fadeProgress);
+            c.a = 0;
             cardSpriteRenderer.color = c;
-            yield return null;
+            while (fadeProgress < 1)
+            {
+                fadeProgress += Time.deltaTime / fadeDuration;
+                c.a = Mathf.Lerp(0, 1, fadeProgress);
+                cardSpriteRenderer.color = c;
+                yield return null;
+            }
         }
         c.a = 1;
+        cardSpriteRenderer.color = c;
+    }
+    public IEnumerator FadeOutCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer, float fadeDuration, float fadeDelay = 3)
+    {
+        card.SetActive(true);
+        float fadeProgress = 0;
+        Color c = cardSpriteRenderer.color;
+
+        yield return new WaitForSeconds(fadeDelay);
+        if (fadeDuration > 0)
+        {
+            c.a = 1;
+            cardSpriteRenderer.color = c;
+            while (fadeProgress < 1)
+            {
+                fadeProgress += Time.deltaTime / m_fadeInEndingCardTime;
+                c.a = Mathf.Lerp(1, 0, fadeProgress);
+                cardSpriteRenderer.color = c;
+                yield return null;
+            }
+        }
+        c.a = 0;
         cardSpriteRenderer.color = c;
     }
 

@@ -12,6 +12,8 @@ TagManager:
   - Ground
   - Grandfather
   - StartingArea
+  - Shield
+  - GrowOldArea
   layers:
   - Default
   - TransparentFX

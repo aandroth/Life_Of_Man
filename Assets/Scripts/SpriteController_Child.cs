@@ -10,15 +10,17 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public GameObject m_spriteHandler;
     public float m_speed = 1f, m_speedMin = 1.0f, m_speedMax = 2.0f, m_speedCurr;
     public float m_jumpForce = 450f;
-    public GameObject m_innerHandler;
+    //public GameObject m_innerHandler;
     public Rigidbody2D m_rb;
+    public float m_groundCollisionRadius = 0.03f;
 
+    public bool m_treasureCooldown = false;
     public bool m_canJump = false;
     private Animator m_spriteAnimator;
     public float m_speedRate = 0.9f;
     public float m_jumpRate = 0.1f;
     public float m_growthRate = 0.1f;
-    public float m_growthCount = 0;
+    public int m_growthCount = 0;
     public float m_speedIncreaseRate = 0.1f;
 
     public delegate void ReportAtPyramid(bool b);
@@ -29,7 +31,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     public ReportTookDamage m_reportTookDamage;    
     public delegate void ReportAgedOut(SpriteController_Child c);
     public ReportAgedOut m_reportGotOlder;
-    public delegate void ReportGotTreasure();
+    public delegate void ReportGotTreasure(int i);
     public ReportGotTreasure m_reportGotTreasure;
     public delegate void ReportDies();
     public ReportDies m_reportDies;
@@ -95,7 +97,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         Color c;
         m_damageImmunityTimer = m_damageImmunityTimeMax;
         m_controlLossTimer = m_controlLossTimeMax;
-        while(m_damageImmunityTimer > 0)
+        while (m_damageImmunityTimer > 0)
         {
             c = m_spriteRenderer.color;
             c.a = Mathf.Max(Mathf.Sin(m_damageImmunityTimer * m_damageImmunityFadeSpeed), m_minFadeDuringDamageImmunity);
@@ -104,9 +106,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             if (m_controlLossTimer > 0)
             {
                 m_controlLossTimer -= Time.deltaTime;
-                if(m_controlLossTimer < 0)
+                if (m_controlLossTimer < 0)
                 {
-                    if(m_spriteHandler.GetComponent<PlayerController>().enabled)
+                    if (m_spriteHandler.GetComponent<PlayerController>().enabled)
                         m_spriteHandler.GetComponent<PlayerController>().EnablePlayerControls();
                     else
                         m_spriteHandler.GetComponent<SpriteDriver_Child>().EnableControls();
@@ -119,15 +121,31 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         m_spriteRenderer.color = c;
     }
 
+    public IEnumerator CountDownTreasureCooldown(float duration = 3.0f)
+    {
+        m_treasureCooldown = true;
+        while (duration > 0)
+        {
+            duration -= Time.deltaTime;
+            yield return null;
+        }
+        m_treasureCooldown = false;
+    }
+
     void FixedUpdate()
     {
-        if (m_jumpDelayCountdown < 0)
-            m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, 0.03f, m_groundLayer);
-        else
-            m_jumpDelayCountdown -= Time.deltaTime;
-        if (transform.position.y < m_startingY)
+        if (m_jumpDelayCountdown > 0)
         {
-            transform.position = new Vector3(transform.position.x, m_startingY, transform.position.z);
+            m_jumpDelayCountdown -= Time.deltaTime;
+            m_canJump = false;
+        }
+        else
+        {
+            m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, m_groundCollisionRadius, m_groundLayer);
+        }
+        if (transform.localPosition.y < m_startingY)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, m_startingY, transform.localPosition.z);
         }
     }
 
@@ -178,7 +196,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_canJump)
         {
-            m_rb.AddForce(new Vector2(m_innerHandler.transform.up.x, m_innerHandler.transform.up.y) * m_jumpForce);
+            m_rb.AddForce(new Vector2(transform.up.x, transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
         }
@@ -201,12 +219,13 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Treasure"))
+        if(collision.gameObject.CompareTag("Treasure") && !m_treasureCooldown)
         {
-            Debug.Log("Treasure");
+            StartCoroutine(CountDownTreasureCooldown());
+            //Debug.Log("Treasure");
             GetOlder();
+            m_reportGotTreasure.Invoke(m_growthCount);
             collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
-            m_reportGotTreasure.Invoke();
         }
     }
 
@@ -225,7 +244,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         {
             float newScale = transform.localScale.y + m_growthRate;
             transform.localScale = new Vector3(newScale*Mathf.Sign(transform.localScale.x), newScale, newScale);
-            m_innerHandler.transform.localPosition += 2 * newScale * m_spriteHandler.transform.up;
+            transform.position += 2 * newScale * m_spriteHandler.transform.up;
 
             m_speed *= m_speedRate;
             m_jumpForce += m_jumpRate;

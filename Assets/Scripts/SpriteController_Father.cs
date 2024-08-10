@@ -193,6 +193,16 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
             Debug.LogError($"Tried to upgrade shield on empty shield!");
     }
 
+    public void FatherGainsGoldHeart()
+    {
+        if (m_heart != null)
+        {
+            m_heart.GetComponent<HealingHeart>().UpgradeHeartToGold();
+        }
+        else
+            Debug.LogError($"Tried to upgrade heart on empty heart!");
+    }
+
     public void DestroySelf()
     {
         Destroy(m_spriteHandler);

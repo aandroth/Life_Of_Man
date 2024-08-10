@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Pyramid : MonoBehaviour
 {
+    public bool m_pyramidIsRevealed = false;
     public int m_blockCount = 0;
     public List<GameObject> m_newBlocks;
     public List<string> m_blockPlacementAnims;
@@ -23,17 +24,19 @@ public class Pyramid : MonoBehaviour
     }
     public void RevealPyramid()
     {
-        if (m_blockCount < m_newBlocks.Count)
+        if (!m_pyramidIsRevealed && m_blockCount < m_newBlocks.Count)
         {
             GetComponent<Animator>().Play(m_RevealAnims[m_blockCount]);
+            m_pyramidIsRevealed = true;
         }
     }
 
     public void HidePyramid()
     {
-        if (m_blockCount < m_newBlocks.Count)
+        if (m_pyramidIsRevealed && m_blockCount < m_newBlocks.Count)
         {
             GetComponent<Animator>().SetBool(m_HideBools[m_blockCount-1], true);
+            m_pyramidIsRevealed = false;
         }
     }
 
