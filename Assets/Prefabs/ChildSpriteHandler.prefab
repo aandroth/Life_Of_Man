@@ -163,8 +163,9 @@ MonoBehaviour:
   m_speedMax: 7
   m_speedCurr: 0
   m_jumpForce: 300
-  m_innerHandler: {fileID: 4203722756637227444}
   m_rb: {fileID: 4747026840170580063}
+  m_groundCollisionRadius: 0.03
+  m_treasureCooldown: 0
   m_canJump: 0
   m_speedRate: 0.9
   m_jumpRate: 150
@@ -193,6 +194,7 @@ MonoBehaviour:
   m_knockbackTimerMax: 0.25
   m_knockbackDistance: 1
   m_knockbackDirection: 1
+  m_startingY: -1.634216
 --- !u!50 &4747026840170580063
 Rigidbody2D:
   serializedVersion: 4
@@ -207,7 +209,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0

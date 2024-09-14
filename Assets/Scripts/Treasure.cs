@@ -14,17 +14,18 @@ public class Treasure : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Father") && gameObject.activeSelf)
+        if((collision.CompareTag("Father") || collision.CompareTag("Shield")) && gameObject.activeSelf)
         {
             m_isActive = false;
             m_twinkleHandler.SetActive(false);
             GetComponent<SpriteRenderer>().enabled = false;
+            gameObject.tag = "Untagged";
         }
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.CompareTag("Father") && gameObject.activeSelf)
+        if((collision.CompareTag("Father") || collision.CompareTag("Shield")) && gameObject.activeSelf)
         {
             StartCoroutine(Respawn());
         }
@@ -36,5 +37,6 @@ public class Treasure : MonoBehaviour
         m_isActive = true;
         m_twinkleHandler.SetActive(true);
         GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.tag = "Treasure";
     }
 }

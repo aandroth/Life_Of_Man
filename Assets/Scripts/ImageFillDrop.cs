@@ -23,10 +23,8 @@ public class ImageFillDrop : MonoBehaviour
     public IEnumerator UnfillFromFull()
     {
         m_image.fillAmount = 1;
-        Debug.Log($"Unfilling start");
         while (m_image.fillAmount > 0)
         {
-            Debug.Log($"Unfilling");
             m_image.fillAmount -= Time.deltaTime / m_duration;
             yield return null;
         }

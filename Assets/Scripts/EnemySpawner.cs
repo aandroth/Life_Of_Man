@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject m_enemyPrefab;
+    public GameObject m_enemyWorldHandlerPrefab;
     public float m_spawnFrequencyMin = 0, m_spawnFrequencyMax = 2;
     public float m_spawnTimer = 0f;
     public float m_spawnRadius = 10f;
@@ -17,10 +17,10 @@ public class EnemySpawner : MonoBehaviour
     {
         for(int ii=0; ii<m_enemyObjectPoolCount; ++ii)
         {
-            GameObject g = Instantiate(m_enemyPrefab, transform.position, Quaternion.identity);
-            g.GetComponent<Enemy>().SetToChasing();
-            g.SetActive(false);
-            m_enemyObjectPool.Add(g);
+            GameObject g = Instantiate(m_enemyWorldHandlerPrefab, Vector3.zero, transform.rotation);
+            g.GetComponentInChildren<Enemy>().SetToChasing();
+            g.transform.GetChild(0).gameObject.SetActive(false);
+            m_enemyObjectPool.Add(g.transform.GetChild(0).gameObject);
         }
     }
 
@@ -44,12 +44,11 @@ public class EnemySpawner : MonoBehaviour
         {
             if (!g.activeSelf)
             {
-                float randRot = Random.Range(1, 360);
-                float randPos = Random.Range(0, m_spawnRadius);
-                Vector3 pos = Vector3.zero;
-                pos.x = randPos;
-                g.transform.position = transform.position + pos;
-                g.transform.RotateAround(transform.position, transform.forward, randRot);
+                float randRot = Random.Range(-m_spawnRadius, m_spawnRadius);
+                float randPos = Random.Range(-m_spawnRadius, m_spawnRadius);
+                g.transform.localPosition = transform.localPosition + new Vector3(0, randPos, 0);
+                g.GetComponent<Enemy>().m_worldHandler.transform.RotateAround(Vector3.zero, transform.forward, randRot + transform.parent.transform.eulerAngles.z);
+                g.GetComponent<Enemy>().m_target = m_target;
                 g.SetActive(true);
                 break;
             }
@@ -69,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
         foreach (GameObject g in m_enemyObjectPool)
         {
             if(g.activeSelf)
-                g.SetActive(false);
+                g.GetComponent<Enemy>().Die();
         }
     }
 }

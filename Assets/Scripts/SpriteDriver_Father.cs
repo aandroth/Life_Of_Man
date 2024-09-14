@@ -27,7 +27,8 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
     {
         CreateLookDownTarget();
         CreateHiddenObjectDetector();
-        m_currTarget = m_downTarget;
+        CreateHiddenObjectUndetector();
+         m_currTarget = m_downTarget;
     }
 
     // Update is called once per frame
@@ -78,6 +79,14 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
         }
     }
 
+    public void ObjectunDetected(Collider2D collision)
+    {
+        if(collision.gameObject == m_currTarget.gameObject)
+        {
+            EnterLookDownState();
+        }
+    }
+
     public void EnterLookDownState()
     {
         //Debug.Log($"Enemy detected");
@@ -91,6 +100,15 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
         GameObject go = Instantiate(m_hiddenObjectDetectorPrefab, transform);
         m_collisionReporter = go.GetComponent<CollisionReporter>();
         m_collisionReporter.m_reportCollision = ObjectDetected;
+    }
+
+    public void CreateHiddenObjectUndetector()
+    {
+        GameObject go = Instantiate(m_hiddenObjectDetectorPrefab, transform);
+        go.transform.localPosition = transform.localPosition + m_downAndRightPos;
+        go.name = "TwinkleObjectUndetector";
+        m_collisionReporter = go.GetComponent<CollisionReporter>();
+        m_collisionReporter.m_reportCollision = ObjectunDetected;
     }
 
     public void CreateLookDownTarget()

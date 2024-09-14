@@ -196,9 +196,10 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_canJump)
         {
-            m_rb.AddForce(new Vector2(transform.up.x, transform.up.y) * m_jumpForce);
+            m_rb.AddForce(new Vector2(transform.parent.transform.up.x, transform.parent.transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
+            Debug.DrawRay(transform.position, transform.up, Color.blue, 100);
         }
     }
 

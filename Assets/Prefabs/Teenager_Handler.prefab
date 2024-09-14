@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6622105140201589557}
   m_Layer: 0
   m_Name: LowerEnemyDestroyerCollider
-  m_TagString: Father
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -782,6 +782,7 @@ MonoBehaviour:
   m_attackRecoveryTime: 0.1
   m_upperEnemyDestroyerCollider: {fileID: 8770747010104505087}
   m_lowerEnemyDestroyerCollider: {fileID: 2640520360555670824}
+  m_treasureCooldown: 0
   m_isAtGrandfather: 0
   m_health: 3
   m_keepRunningTimer: 0.25
@@ -954,7 +955,7 @@ GameObject:
   - component: {fileID: 7349013477421640352}
   m_Layer: 0
   m_Name: UpperEnemyDestroyerCollider
-  m_TagString: Father
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

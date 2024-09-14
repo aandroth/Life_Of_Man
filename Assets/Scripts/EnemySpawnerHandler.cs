@@ -23,9 +23,11 @@ public class EnemySpawnerHandler : MonoBehaviour
         m_spawner.gameObject.SetActive(true);
     }
 
-    public void DespawnAllEnemiesAndDeactivateSpawner()
+    public void DespawnAllEnemiesAndDeactivateSpawner(bool deactivateSpawner = true)
     {
         m_spawner.DespawnAllEnemies();
-        m_spawner.gameObject.SetActive(true);
+        m_spawner.gameObject.SetActive(!deactivateSpawner);
+        m_spawner.m_target = null;
+        m_targetHandler = null;
     }
 }

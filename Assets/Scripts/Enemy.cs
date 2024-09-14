@@ -13,12 +13,9 @@ public class Enemy : MonoBehaviour
     public bool m_isActive = true;
     public float m_stunnedTime = 3;
     public float m_knockbackForce = 10;
+    public GameObject m_worldHandler;
+    public float m_targetVertOffset = 20;
 
-    // Update is called once per frame
-    void Start()
-    {
-        m_target = GameObject.FindGameObjectWithTag("Son");
-    }
 
     public void OnEnable()
     {
@@ -35,7 +32,14 @@ public class Enemy : MonoBehaviour
         transform.up = transform.position;
         if (m_isChasing && m_target != null)
         {
-            transform.Translate(m_moveSpeed * Time.deltaTime * Vector3.Normalize(m_target.transform.position - transform.position));
+            float crossProductResult = transform.up.x * m_target.transform.position.y - transform.up.y * m_target.transform.position.x;
+            m_worldHandler.transform.Rotate(0, 0, ( m_moveSpeed) * Time.deltaTime * (crossProductResult > 0 ? 1 : -1));
+            Vector3 targetPos = m_target.transform.parent.position + m_target.transform.localPosition;
+            transform.localPosition = new Vector3(
+                transform.localPosition.x,
+                transform.localPosition.y + ((m_moveSpeed * Time.deltaTime) * ((Vector3.Distance(m_target.transform.parent.position, Vector3.zero) + m_target.transform.localPosition.y) > transform.localPosition.y ? 1 : -1)),
+                transform.localPosition.z);
+            //Debug.DrawLine(transform.position, targetPos);
         }
     }
 
@@ -52,6 +56,13 @@ public class Enemy : MonoBehaviour
         {
             if (m_isChasing || m_twinkle == null)
                Die();
+            else
+            {
+                GetComponent<SpriteRenderer>().enabled = false;
+                m_twinkle.GetComponent<Animator>().enabled = false;
+                m_twinkleHandler.SetActive(false);
+                m_isActive = false;
+            }
         }
         if(collision.CompareTag("Father"))
         {
@@ -67,7 +78,7 @@ public class Enemy : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.CompareTag("Father"))
+        if(collision.CompareTag("Father") || collision.CompareTag("Shield"))
         {
             if (!m_isChasing && m_twinkle != null)
             {

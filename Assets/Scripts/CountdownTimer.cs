@@ -39,27 +39,34 @@ public class CountdownTimer : MonoBehaviour
         StopCoroutine(m_runningTimerCoroutine);
     }
 
-    public void StartFadeTimer()
+    public void StartFadeTimer(int duration = 3)
     {
         StopCoroutine(m_runningTimerCoroutine);
-        StartCoroutine(FadeTimer());
+        StartCoroutine(FadeTimer(duration));
     }
 
     IEnumerator FadeTimer(float duration = 3)
     {
         Color cColor = m_circle.color;
         Color tColor = m_timerText.color;
-        while(m_timerText.color.a > 0)
+        if (duration > 0)
         {
-            float timeChange = Time.deltaTime * (1 / duration);
-            float tempC = cColor.a - timeChange;
-            float tempT = tColor.a - timeChange;
-            cColor.a = tempC;
-            tColor.a = tempT;
-            m_circle.color = cColor;
-            m_timerText.color = tColor;
-            yield return null;
+            while (m_timerText.color.a > 0)
+            {
+                float timeChange = Time.deltaTime * (1 / duration);
+                float tempC = cColor.a - timeChange;
+                float tempT = tColor.a - timeChange;
+                cColor.a = tempC;
+                tColor.a = tempT;
+                m_circle.color = cColor;
+                m_timerText.color = tColor;
+                yield return null;
+            }
         }
+        cColor.a = 0;
+        tColor.a = 0;
+        m_circle.color = cColor;
+        m_timerText.color = tColor;
         gameObject.SetActive(false);
     }
 
