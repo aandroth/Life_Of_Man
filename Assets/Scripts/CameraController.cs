@@ -26,6 +26,7 @@ public class CameraController : MonoBehaviour
     private SpriteRenderer m_level2CompleteCardSpriteRenderer;
     private SpriteRenderer m_level3CompleteCardSpriteRenderer;
     private SpriteRenderer m_gameOverCardSpriteRenderer;
+    private IEnumerator m_fadeInGameOverCardCoroutine;
 
     public void Start()
     {
@@ -101,7 +102,8 @@ public class CameraController : MonoBehaviour
     public void FadeInLevel1CompleteCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_level1CompleteCard, m_level1CompleteCardSpriteRenderer, duration, delay)); }
     public void FadeInLevel2CompleteCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_level2CompleteCard, m_level2CompleteCardSpriteRenderer, duration, delay)); }
     public void FadeInLevel3CompleteCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_level3CompleteCard, m_level3CompleteCardSpriteRenderer, duration, delay)); }
-    public void FadeInGameOverCard_Duration_Delay(float duration = 2, float delay = 3) { StartCoroutine(FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer, duration, delay)); }
+    public void FadeInGameOverCard_Duration_Delay(float duration = 2, float delay = 3) { m_fadeInGameOverCardCoroutine = FadeInCardCoroutine(m_gameOverCard, m_gameOverCardSpriteRenderer, duration, delay);
+                                                                                         StartCoroutine(m_fadeInGameOverCardCoroutine); }
 
     public IEnumerator FadeInCardCoroutine(GameObject card, SpriteRenderer cardSpriteRenderer, float fadeDuration = 2, float fadeDelay = 3)
     {
@@ -146,6 +148,11 @@ public class CameraController : MonoBehaviour
         }
         c.a = 0;
         cardSpriteRenderer.color = c;
+    }
+
+    public void CancelFadeInGameOverCard()
+    {
+
     }
 
     public void SetLookAhead_Right(bool lookRight)

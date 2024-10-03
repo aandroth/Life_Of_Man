@@ -155,7 +155,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
             //Debug.Log("ReportAnimationFinished: PlacedGrandfatherFinished");
             m_reportPlacedGrandfatherdAnimDone.Invoke();
         }
-        if(animName == "Pyramid")
+        else if(animName == "Pyramid")
         {
             m_reportPyramidAnimDone.Invoke();
         }

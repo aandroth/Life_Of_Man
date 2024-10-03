@@ -52,6 +52,16 @@ public class EnemySpawner : MonoBehaviour
                 g.SetActive(true);
                 break;
             }
+            else if (!g.transform.parent.gameObject.activeSelf)
+            {
+                float randRot = Random.Range(-m_spawnRadius, m_spawnRadius);
+                float randPos = Random.Range(-m_spawnRadius, m_spawnRadius);
+                g.transform.localPosition = transform.localPosition + new Vector3(0, randPos, 0);
+                g.GetComponent<Enemy>().m_worldHandler.transform.RotateAround(Vector3.zero, transform.forward, randRot + transform.parent.transform.eulerAngles.z);
+                g.GetComponent<Enemy>().m_target = m_target;
+                g.transform.parent.gameObject.SetActive(true);
+                break;
+            }
         }
     }
 

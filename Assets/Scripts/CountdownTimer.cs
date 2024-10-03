@@ -41,7 +41,7 @@ public class CountdownTimer : MonoBehaviour
 
     public void StartFadeTimer(int duration = 3)
     {
-        StopCoroutine(m_runningTimerCoroutine);
+        if(m_runningTimerCoroutine != null) StopCoroutine(m_runningTimerCoroutine);
         StartCoroutine(FadeTimer(duration));
     }
 

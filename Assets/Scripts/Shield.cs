@@ -15,14 +15,14 @@ public class Shield : MonoBehaviour
     public void Start()
     {
         m_shieldSpriteRenderer = GetComponent<SpriteRenderer>();
-        m_fadeCoroutine = FadeAwayShield();
+        //m_fadeCoroutine = FadeAwayShield();
+        //m_fadeCoroutine = FadeAwayShield();
     }
 
     // Start is called before the first frame update
     public void OnEnable()
     {
-        if(m_fadeCoroutine == null)
-            m_fadeCoroutine = FadeAwayShield();
+        m_fadeCoroutine = FadeAwayShield();
         if (m_state == STATE.BRONZE)
         {
             m_shieldSpriteRenderer.color = m_bronzeShieldDefaultColor;

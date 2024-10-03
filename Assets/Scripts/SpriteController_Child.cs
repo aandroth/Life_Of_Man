@@ -65,6 +65,8 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     // Update is called once per frame
     void Update()
     {
+        float yDist = Vector3.Distance(transform.position, Vector3.zero);
+        transform.position = transform.parent.transform.position.normalized * yDist;
         if (m_state == STATE.RUNNING)
         {
             if (m_keepRunningTimer > 0)
@@ -80,6 +82,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             {
                 Idle();
             }
+
         }
         else if (m_state == STATE.KNOCKBACK)
         {
@@ -143,10 +146,12 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         {
             m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, m_groundCollisionRadius, m_groundLayer);
         }
-        if (transform.localPosition.y < m_startingY)
-        {
-            transform.localPosition = new Vector3(transform.localPosition.x, m_startingY, transform.localPosition.z);
-        }
+        //if (transform.localPosition.y < m_startingY)
+        //{
+        //    transform.localPosition = new Vector3(transform.localPosition.x, m_startingY, transform.localPosition.z);
+        //}
+
+
     }
 
     public void PushForward()
@@ -166,8 +171,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
                 m_spriteAnimator.Play(m_walkStateNameHash);
             if (m_state != STATE.RUNNING)
                 m_state = STATE.RUNNING;
-            if (m_speedCurr == m_speedMin)
-                m_speedCurr = m_speedMin;
         }
     }
     public void PushBackward()
@@ -199,7 +202,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             m_rb.AddForce(new Vector2(transform.parent.transform.up.x, transform.parent.transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
-            Debug.DrawRay(transform.position, transform.up, Color.blue, 100);
         }
     }
 
@@ -208,7 +210,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         if (!(m_spriteAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash == m_idleStateNameHash))
             m_spriteAnimator.Play(m_idleStateNameHash);
         if (m_state != STATE.IDLE)
-            m_state = STATE.IDLE;
+            m_state  = STATE.IDLE;
         m_speedCurr = m_speedMin;
     }
 
@@ -227,6 +229,17 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             GetOlder();
             m_reportGotTreasure.Invoke(m_growthCount);
             collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
+        }
+        if(collision.gameObject.CompareTag("Pyramid"))
+        {
+            m_reportAtPyramid.Invoke(true);
+        }
+    }
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Pyramid"))
+        {
+            m_reportAtPyramid.Invoke(false);
         }
     }
 

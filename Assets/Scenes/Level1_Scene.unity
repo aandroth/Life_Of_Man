@@ -1625,13 +1625,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1945365887}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (6)
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -3214,6 +3218,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -9714,7 +9722,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1933229895}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: LoadLastCheckpoint
+        m_MethodName: LoadSpecificCheckpoint
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16021,6 +16029,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -17607,13 +17619,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1945365887}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (4)
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -17864,7 +17880,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1933229895}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: LoadLastCheckpoint
+        m_MethodName: LoadSpecificCheckpoint
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18087,6 +18103,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -19173,6 +19193,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -24159,6 +24183,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -24505,7 +24533,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1933229895}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: LoadLastCheckpoint
+        m_MethodName: LoadSpecificCheckpoint
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24639,7 +24667,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1933229895}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: LoadLastCheckpoint
+        m_MethodName: LoadSpecificCheckpoint
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25426,9 +25454,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 566321920}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -26472,9 +26508,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 566321920}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -27472,9 +27516,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 566321920}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -27793,7 +27845,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1933229895}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: LoadLastCheckpoint
+        m_MethodName: LoadSpecificCheckpoint
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28444,13 +28496,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1945365887}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (5)
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -36563,9 +36619,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 566321920}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
@@ -38508,7 +38572,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1933229895}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: ChildDies
+        m_MethodName: KillSon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -39511,6 +39575,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -39699,7 +39767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8524c136a35fad142aa42a88a89f37c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_levelState: 1
+  m_levelState: 0
   m_checkpointState: 0
   m_hearts:
   - {fileID: 1692746566}
@@ -39757,11 +39825,11 @@ MonoBehaviour:
   m_sonAtStartArea: 1
   m_sonMovingToFatherArea: 0
   m_sonAtFatherArea: 1
-  m_sonDied: 0
+  m_sonDiedAsChild: 0
+  m_sonDiedAsTeenager: 0
   m_fatherAtPyramid: 0
   m_fatherAtStartArea: 0
   m_fatherAtGrowOldArea: 0
-  m_fatherHasSilverShield: 0
   m_fatherIsReadyToBeGrandfather: 0
   m_fatherCarryingGrandfather: 0
   m_fatherBecomingGrandfather: 0
@@ -52545,6 +52613,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 548401463}
     m_Modifications:
+    - target: {fileID: 6398677062805763478, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6398677063560664954, guid: a1ac81fa3910178418b67610d9bec751, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -52607,13 +52679,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1945365887}
     m_Modifications:
+    - target: {fileID: 7598326885099117447, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_Name
       value: Treasure_Handler
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562627, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7598326885473562628, guid: 718708061b9622640a3edf8cdb3e7aaf, type: 3}
       propertyPath: m_RootOrder
