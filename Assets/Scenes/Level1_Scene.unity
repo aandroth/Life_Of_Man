@@ -8982,6 +8982,8 @@ MonoBehaviour:
   m_level2CompleteCard: {fileID: 905887632}
   m_level3CompleteCard: {fileID: 1040201830}
   m_gameOverCard: {fileID: 1921944521}
+  m_grandfatherPosOffset: {x: -2, y: -6, z: 0}
+  m_grandfatherRotOffset: {x: 0, y: 0, z: 0}
 --- !u!81 &257225836
 AudioListener:
   m_ObjectHideFlags: 0
@@ -20854,6 +20856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pyramidIsRevealed: 0
   m_blockCount: 0
+  m_bronzeBlocks: []
   m_newBlocks:
   - {fileID: 634631952}
   - {fileID: 795554176}
@@ -23080,6 +23083,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pyramidIsRevealed: 0
   m_blockCount: 0
+  m_bronzeBlocks: []
   m_newBlocks:
   - {fileID: 634631952}
   - {fileID: 795554176}
@@ -35495,6 +35499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pyramidIsRevealed: 0
   m_blockCount: 0
+  m_bronzeBlocks: []
   m_newBlocks:
   - {fileID: 634631952}
   - {fileID: 795554176}
@@ -39767,7 +39772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8524c136a35fad142aa42a88a89f37c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_levelState: 0
+  m_levelState: 2
   m_checkpointState: 0
   m_hearts:
   - {fileID: 1692746566}
@@ -39818,6 +39823,7 @@ MonoBehaviour:
   m_playerBecomesFather: 0
   m_playerBecomesGrandfather: 0
   m_playerDiesAsGrandfather: 0
+  m_PlayersFatherDiedAlone: 0
   m_sonIsReadyToBeTeenager: 0
   m_sonIsTeenager: 0
   m_sonIsReadyToBeFather: 0
@@ -39839,7 +39845,6 @@ MonoBehaviour:
   m_grandfatherAtFatherArea: 0
   m_grandfatherReadyToBeCarried: 0
   m_grandfatherHadSilverShield: 0
-  m_grandfatherDiedAlone: 0
   m_grandfatherDies: 0
   m_speedThroughAnims: 0
   m_speedThroughModifier: 20
@@ -39940,21 +39945,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pyramidIsRevealed: 0
   m_blockCount: 0
+  m_bronzeBlocks:
+  - {fileID: 1300666438}
+  - {fileID: 12998898}
   m_newBlocks:
   - {fileID: 241441205}
   - {fileID: 1095748206}
   - {fileID: 444016654}
+  - {fileID: 1300666438}
+  - {fileID: 12998898}
   m_blockPlacementAnims:
   - Pyramid_PlaceBlock0
   - Pyramid_PlaceBlock1
   - Pyramid_PlaceBlock2
+  - Pyramid_PlaceBlock3
   m_RevealAnims:
   - PyramidAppears0
   - PyramidAppears1
   - PyramidAppears2
+  - PyramidAppears3
+  - PyramidAppears4
   m_HideBools:
   - hide0
   - hide1
+  - hide2
   m_powerState: 2
 --- !u!1 &1938662970
 GameObject:

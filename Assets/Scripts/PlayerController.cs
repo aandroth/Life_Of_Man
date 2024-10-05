@@ -48,14 +48,6 @@ public class PlayerController : MonoBehaviour
             {
                 m_spriteController.Action();
             }
-            if (Input.GetKeyUp(KeyCode.E) && m_growthCount < 4)
-            {
-                m_spriteController.GetOlder();
-            }
-            if (Input.GetKeyUp(KeyCode.K))
-            {
-                m_spriteController.TakeDamage(m_sprite, 3);
-            }
 
             //if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
             //{

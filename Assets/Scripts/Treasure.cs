@@ -7,6 +7,12 @@ public class Treasure : MonoBehaviour
     public bool m_isActive = true;
     public GameObject m_twinkleHandler;
     public float m_respawnTime = 10;
+
+    public void OnEnable()
+    {
+        Respawn();
+    }
+
     public void DeactivateHandler()
     {
         transform.parent.gameObject.SetActive(false);

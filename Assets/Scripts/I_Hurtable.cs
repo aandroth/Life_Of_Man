@@ -12,9 +12,9 @@ public class I_Hurtable : MonoBehaviour
     {
         --m_health;
 
-        if(m_health == 0)
+        if(m_health < 0)
         {
-            // son dies
+            m_health = 0;
         }
         m_reportHealthChangedAndIsNow.Invoke(m_health);
     }

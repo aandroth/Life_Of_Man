@@ -30,4 +30,10 @@ public class EnemySpawnerHandler : MonoBehaviour
         m_spawner.m_target = null;
         m_targetHandler = null;
     }
+
+    public void SetSpawnFrequency(float min = 0, float max = 2)
+    {
+        m_spawner.m_spawnFrequencyMax = max;
+        m_spawner.m_spawnFrequencyMin = min;
+    }
 }

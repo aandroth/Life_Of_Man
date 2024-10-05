@@ -47,7 +47,8 @@ public class EnemySpawner : MonoBehaviour
                 float randRot = Random.Range(-m_spawnRadius, m_spawnRadius);
                 float randPos = Random.Range(-m_spawnRadius, m_spawnRadius);
                 g.transform.localPosition = transform.localPosition + new Vector3(0, randPos, 0);
-                g.GetComponent<Enemy>().m_worldHandler.transform.RotateAround(Vector3.zero, transform.forward, randRot + transform.parent.transform.eulerAngles.z);
+                g.GetComponent<Enemy>().m_worldHandler.transform.rotation = transform.parent.transform.rotation;
+                g.GetComponent<Enemy>().m_worldHandler.transform.RotateAround(Vector3.zero, transform.forward, randRot);
                 g.GetComponent<Enemy>().m_target = m_target;
                 g.SetActive(true);
                 break;
@@ -57,7 +58,8 @@ public class EnemySpawner : MonoBehaviour
                 float randRot = Random.Range(-m_spawnRadius, m_spawnRadius);
                 float randPos = Random.Range(-m_spawnRadius, m_spawnRadius);
                 g.transform.localPosition = transform.localPosition + new Vector3(0, randPos, 0);
-                g.GetComponent<Enemy>().m_worldHandler.transform.RotateAround(Vector3.zero, transform.forward, randRot + transform.parent.transform.eulerAngles.z);
+                g.GetComponent<Enemy>().m_worldHandler.transform.rotation = transform.parent.transform.rotation;
+                g.GetComponent<Enemy>().m_worldHandler.transform.RotateAround(Vector3.zero, transform.forward, randRot);
                 g.GetComponent<Enemy>().m_target = m_target;
                 g.transform.parent.gameObject.SetActive(true);
                 break;

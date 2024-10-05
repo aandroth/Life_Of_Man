@@ -93,6 +93,14 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
                 Idle();
             }
         }
+        if (Input.GetKeyUp(KeyCode.E) && m_growthCount < 4)
+        {
+            GetOlder();
+        }
+        if (Input.GetKeyUp(KeyCode.K))
+        {
+            TakeDamage(m_sprite, 3);
+        }
     }
 
     public IEnumerator CountDownDamageImmunityAndControlFreeze()
@@ -224,6 +232,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if(collision.gameObject.CompareTag("Treasure") && !m_treasureCooldown)
         {
+            GetComponent<I_Hurtable>().Heal();
             StartCoroutine(CountDownTreasureCooldown());
             //Debug.Log("Treasure");
             GetOlder();

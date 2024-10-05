@@ -195,6 +195,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
 
     public void FatherGainsGoldHeart()
     {
+        Debug.Log("Golden Heart");
         if (m_heart != null)
         {
             m_heart.GetComponent<HealingHeart>().UpgradeHeartToGold();

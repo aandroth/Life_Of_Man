@@ -114,7 +114,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3343203609252945668}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6754263594490274974
 MonoBehaviour:
@@ -6110,6 +6110,7 @@ Transform:
   - {fileID: 1500536111700456696}
   - {fileID: 7464148357964345217}
   - {fileID: 1135216270023074109}
+  - {fileID: 5295531247036567861}
   - {fileID: 8124384277283057259}
   - {fileID: 7824613253029069737}
   - {fileID: 2332112515227961732}
@@ -6528,6 +6529,7 @@ MonoBehaviour:
   m_treasurePointer: {fileID: 0}
   m_fatherLookAtThreshold: 0.1
   m_sonNeedsHealing: 0
+  m_avoidEnemies: 1
 --- !u!114 &262692603842487793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6945,7 +6947,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3343203609252945668}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3272747386998291324
 MonoBehaviour:
@@ -7010,7 +7012,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3343203609252945668}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4000317244015590800
 SpriteRenderer:
@@ -7224,7 +7226,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3343203609252945668}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2149159524255633975
 MonoBehaviour:
@@ -7357,6 +7359,71 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &6489434700287563508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5295531247036567861}
+  - component: {fileID: 2190596694931143000}
+  m_Layer: 0
+  m_Name: FatherGainsSilverShield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5295531247036567861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489434700287563508}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.4910903, y: 1.991149, z: 0.46804106}
+  m_LocalScale: {x: 0.697788, y: 0.697788, z: 0.697788}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3343203609252945668}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2190596694931143000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489434700287563508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d67a3db772a87243b14c200e00d16c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_events:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3343203609252945694}
+        m_TargetAssemblyTypeName: SpriteController_Father, Assembly-CSharp
+        m_MethodName: FatherGainsSilverShield
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_eventStartAfterRandomTime: 0
+  m_minRandomDelayTime: 0
+  m_maxRandomDelayTime: 0
+  m_delay: 0
+  m_eventsInvoked: 0
+  m_resetOnEachStartup: 0
 --- !u!1 &7053196690734869317
 GameObject:
   m_ObjectHideFlags: 0
@@ -7387,7 +7454,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3343203609252945668}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5324944578605426395
 MonoBehaviour:
@@ -7748,7 +7815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491027249968212417, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 6491027249968212417, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
       propertyPath: m_LocalPosition.x

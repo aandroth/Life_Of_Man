@@ -21,6 +21,10 @@ public class CameraController : MonoBehaviour
     public GameObject m_level2CompleteCard;
     public GameObject m_level3CompleteCard;
     public GameObject m_gameOverCard;
+
+    public Vector3 m_grandfatherPosOffset;
+    public Vector3 m_grandfatherRotOffset;
+
     private SpriteRenderer m_blankCardSpriteRenderer;
     private SpriteRenderer m_level1CompleteCardSpriteRenderer;
     private SpriteRenderer m_level2CompleteCardSpriteRenderer;
@@ -59,13 +63,25 @@ public class CameraController : MonoBehaviour
             pos.x = Mathf.Lerp(this.transform.position.x, m_cinematicTarget.transform.position.x, interp);
             pos.y = Mathf.Lerp(this.transform.position.y, m_cinematicTarget.transform.position.y, interp);
         }
-        else if(m_playerTarget != null)
+        else if (m_playerTarget != null)
         {
             transform.rotation = m_playerTarget.transform.rotation;
+            if (m_zoomDistancesIndex == 7) transform.Rotate(transform.forward, -18);
             Vector3 lookAheadVector = (((m_state == CAMERA_STATE.FOLLOW_TARGET_RIGHT) ? transform.right : -transform.right) * m_lookAhead);
             lookAheadVector += 0.35f * m_lookAhead * transform.up;
-            pos.x = Mathf.Lerp(this.transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
-            pos.y = Mathf.Lerp(this.transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);
+            if (m_zoomDistancesIndex < 7)
+            {
+                pos.x = Mathf.Lerp(this.transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
+                pos.y = Mathf.Lerp(this.transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);
+            }
+            else // Apply Grandfather offset
+            {
+                Vector3 tR = m_playerTarget.transform.rotation.eulerAngles;
+                float targetDist = Vector3.Distance(m_playerTarget.transform.position, Vector3.zero) + m_grandfatherPosOffset.y;
+                Vector3 targetPos = Quaternion.Euler(tR.x, tR.y, tR.z) * new Vector3(0, targetDist, 0);
+                pos.x = Mathf.Lerp(this.transform.position.x, targetPos.x, interp);
+                pos.y = Mathf.Lerp(this.transform.position.y, targetPos.y, interp);
+            }
         }
         this.transform.position = pos;
     }
@@ -148,11 +164,6 @@ public class CameraController : MonoBehaviour
         }
         c.a = 0;
         cardSpriteRenderer.color = c;
-    }
-
-    public void CancelFadeInGameOverCard()
-    {
-
     }
 
     public void SetLookAhead_Right(bool lookRight)

@@ -73,6 +73,14 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         {
 
         }
+        if (Input.GetKeyUp(KeyCode.E) && m_growthCount < 4)
+        {
+            GetOlder();
+        }
+        if (Input.GetKeyUp(KeyCode.K))
+        {
+            TakeDamage(m_sprite, 3);
+        }
     }
     public void PushForward()
     {

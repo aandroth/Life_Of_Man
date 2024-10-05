@@ -70,7 +70,7 @@ public class SpriteDriver_Father : SpriteDriver_Abstract
             m_treasurePointer.SetActive(true);
             m_treasurePointer.GetComponent<TreasurePointer>().SetTarget(collision.gameObject);
         }
-        else if(collision.gameObject.CompareTag("Enemy"))
+        else if(collision.gameObject.CompareTag("Enemy") && !collision.gameObject.GetComponent<Enemy>().m_isChasing)
         {
             if (m_avoidEnemies)
                 EnterLookDownState();
