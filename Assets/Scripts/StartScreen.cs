@@ -12,14 +12,46 @@ public class StartScreen : MonoBehaviour
 
     public List<GameObject> m_levelButtonsList;
 
-    public void Start()
-    {
-        DataManager.Load();
 
-        if (DataManager.m_gameData.m_level_2_Unlocked)
-            m_levelButtonsList[1].SetActive(true);
-        if (DataManager.m_gameData.m_level_3_Unlocked)
-            m_levelButtonsList[2].SetActive(true);
+    public void OnEnable()
+    {
+        DataManager dM = GameObject.FindObjectOfType<DataManager>();
+
+#if UNITY_EDITOR
+        Debug.Log($"Start Screen OnEnable()");
+#endif
+        if (dM != null)
+        {
+            if(dM.m_gameData == null)
+                dM.Load();
+
+            if (dM.LevelUnlockedCheck(2))
+            {
+                m_levelButtonsList[1].SetActive(true);
+#if UNITY_EDITOR
+                Debug.Log($"Level 2 showing");
+#endif
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.Log($"Level 2 hidden");
+#endif
+            }
+            if (dM.LevelUnlockedCheck(3))
+            {
+                m_levelButtonsList[2].SetActive(true);
+#if UNITY_EDITOR
+                Debug.Log($"Level 3 showing");
+#endif
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.Log($"Level 3 hidden");
+#endif
+            }
+        }
     }
 
     public void ChoseLevel_1()

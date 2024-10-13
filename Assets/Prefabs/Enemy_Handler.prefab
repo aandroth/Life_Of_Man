@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3636341724250641096}
   m_Layer: 0
   m_Name: TwinkleHandle
-  m_TagString: Enemy
+  m_TagString: EnemyTwinkle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,1 +1,5 @@
-{"m_playerName":"playerName","m_level_2_Unlocked":false,"m_level_3_Unlocked":false}
+{
+  "m_playerName": "playerName",
+  "m_level_2_Unlocked": false,
+  "m_level_3_Unlocked": false
+}

@@ -46,7 +46,7 @@ public class SpriteDriver_Teenager : SpriteDriver_Abstract
 
     public void ObjectDetected(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.GetComponent<Enemy>().m_isChasing)
+        if (collision != null && collision.gameObject.CompareTag("Enemy") && collision.gameObject.GetComponent<Enemy>().m_isChasing)
         {
             m_spriteController.Action();
         }

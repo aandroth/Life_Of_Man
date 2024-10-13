@@ -66,10 +66,9 @@ public class CameraController : MonoBehaviour
         else if (m_playerTarget != null)
         {
             transform.rotation = m_playerTarget.transform.rotation;
-            if (m_zoomDistancesIndex == 7) transform.Rotate(transform.forward, -18);
             Vector3 lookAheadVector = (((m_state == CAMERA_STATE.FOLLOW_TARGET_RIGHT) ? transform.right : -transform.right) * m_lookAhead);
             lookAheadVector += 0.35f * m_lookAhead * transform.up;
-            if (m_zoomDistancesIndex < 7)
+            if (m_zoomDistancesIndex < 9)
             {
                 pos.x = Mathf.Lerp(this.transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
                 pos.y = Mathf.Lerp(this.transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);

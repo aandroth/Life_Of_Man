@@ -87,15 +87,15 @@ public class CountdownTimer : MonoBehaviour
             }
         }
 
+        if (m_reportRanOutOfTime != null) m_reportRanOutOfTime.Invoke();
+
         m_seconds = 3;
-        StartCoroutine(FadeTimer(3));
+        StartCoroutine(FadeTimer(m_seconds));
 
         while (m_seconds > 0)
         {
             yield return new WaitForSeconds(1);
             --m_seconds;
         }
-
-        if(m_reportRanOutOfTime != null) m_reportRanOutOfTime.Invoke();
     }
 }

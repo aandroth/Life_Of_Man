@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     public GameObject m_enemySpawnerHandler;
     public GameObject m_growOldAreaTrigger, m_growOldAreaTriggerNextPosition;
     public GameObject m_grandfatherNpcDiesStone;
+    public GameObject m_ObjectBeyondStartArea;
 
     public GameObject m_childSpritePrefab;
     public GameObject m_teenagerSpritePrefab;
@@ -49,6 +50,7 @@ public class GameController : MonoBehaviour
     public CountdownTimer m_gameTimer;
     public CameraController m_camera;
     public GameObject m_world;
+    public GameObject m_debugButtons;
 
     // Milestones
     public bool[] m_nextLevelUnlocked = new bool[2];
@@ -87,16 +89,8 @@ public class GameController : MonoBehaviour
 
     public static GameController m_instance = null;
 
-    public void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-    }
-
     public void Start()
     {
-        if (m_instance != null)
-            Destroy(this); // Class dies here, and doesn't continue
-        m_instance = this;
         LoadLevel();
         m_gameTimer.GetComponent<CountdownTimer>().m_reportRanOutOfTime = TimerRanOut;
     }
@@ -105,6 +99,9 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.C))
             m_childController.TakeDamage(m_childController.gameObject, 0);
+
+        if (Input.GetKeyUp(KeyCode.P))
+            m_debugButtons.SetActive(!m_debugButtons.activeSelf);
     }
 
     public void LoadLevel()
@@ -139,18 +136,15 @@ public class GameController : MonoBehaviour
         m_grandfatherPresentFromStart = true;
         m_grandfatherHadSilverShield = true;
         InitChild(true);
-        ActivateGameTimerWithSeconds();
     }
     public void LoadLevel_2()
     {
         InitFather(false);
         InitChild(true);
-        ActivateGameTimerWithSeconds();
     }
     public void LoadLevel_3()
     {
         InitChild(true);
-        ActivateGameTimerWithSeconds();
     }
 
     public void InitChild(bool initAsPlayer = false, SpriteController_Father spriteController = null)
@@ -163,6 +157,7 @@ public class GameController : MonoBehaviour
         m_childController = m_childHandler.GetComponent<SpriteDriver_Child>().m_spriteController;
         m_sonAtFatherArea = true;
         m_sonDiedAsChild = false;
+        m_sonIsReadyToBeTeenager = false;
         if (initAsPlayer)
         {
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().m_leadingAmount = 5;
@@ -188,6 +183,8 @@ public class GameController : MonoBehaviour
         {
             m_childController.m_speed = m_speedThroughModifier;
         }
+        ActivateGameTimerWithSeconds();
+        SonHealthChangedAndIsNow(3);
     }
     public void InitTeenager(bool initAsPlayer = false, SpriteController_Child spriteController = null, float? placement = null)
     {
@@ -214,6 +211,7 @@ public class GameController : MonoBehaviour
             m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
 
+        m_sonIsReadyToBeFather = false;
         m_sonIsReadyToBeTeenager = false;
         m_sonIsTeenager = true;
         m_sonDiedAsTeenager = false;
@@ -231,6 +229,7 @@ public class GameController : MonoBehaviour
         {
             m_teenagerController.m_speed = m_speedThroughModifier;
         }
+        ActivateGameTimerWithSeconds();
         SonHealthChangedAndIsNow(3);
     }
 
@@ -346,9 +345,13 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            //if (m_levelState == LEVEL_STATE.LEVEL_2 && m_nextLevelUnlocked[1] != true)
-            //    m_nextLevelUnlocked[1] = true;
-            m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(true, 1, 10));
+            if (m_levelState == LEVEL_STATE.LEVEL_1 || m_levelState == LEVEL_STATE.LEVEL_3)
+            {
+                m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(false, 1, 10));
+                m_playerDiedOrSonDiedCoroutine = StartCoroutine(PlayerDiedOrSonDied());
+            }
+            else
+                m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(true, 1, 10));
             m_sonDiedAsChild = true;
         }
         if (m_gameTimer.enabled) m_gameTimer.StartFadeTimer();
@@ -365,8 +368,6 @@ public class GameController : MonoBehaviour
             SetAllTreasureIndicatorsToGray();
             if(m_teenagerHandler.GetComponent<PlayerController>().enabled) 
                 m_checkpointState = CHECKPOINT_STATE.PLAYER_AS_TEENAGER_REACHES_PYRAMID;
-            else if(!m_playerDiesAsGrandfather)
-                ActivateGameTimerWithSeconds();
         }
     }
 
@@ -442,12 +443,12 @@ public class GameController : MonoBehaviour
             }
         }
     }
-
+    
     public void TeenagerReportsReachesStartArea(bool b)
     {
         m_sonAtStartArea = b;
 
-        if (m_sonAtStartArea)
+        if (m_sonAtStartArea && m_sonIsReadyToBeFather)
         {
             // Teenager left grandfather to die
             if (m_grandfatherHandler != null)
@@ -457,8 +458,7 @@ public class GameController : MonoBehaviour
                 else
                     GrandfatherDies_AsNpc();
             }
-
-            if (m_sonIsReadyToBeFather)
+            if(m_sonIsReadyToBeFather && m_grandfatherHandler == null && !m_fatherAtStartArea)
             {
                 TeenagerBecomesAdult();
                 m_fatherAtStartArea = true;
@@ -476,15 +476,14 @@ public class GameController : MonoBehaviour
             if (m_sonMovingToFatherArea)
                 MoveTeenagerToGameObject(null);
 
-            if (m_teenagerController.m_growthCount == 3 && !m_sonIsReadyToBeFather)
-                m_sonIsReadyToBeFather = true;
+            m_sonIsReadyToBeFather = true;
 
             if (m_grandfatherReadyToBeCarried && m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled)
             {
-                if (m_sonIsReadyToBeFather && !m_teenagerHandler.GetComponent<PlayerController>().enabled)
+                if (m_teenagerController.m_growthCount == 3 && m_sonIsReadyToBeFather && !m_teenagerHandler.GetComponent<PlayerController>().enabled)
                     m_teenagerController.Action(); // Teenager picks up father
-                else
-                    MoveTeenagerToGameObject(m_treasuresA[0]); // Teenager leaves father to die
+                else if(!m_teenagerHandler.GetComponent<PlayerController>().enabled)
+                    MoveTeenagerToGameObject(m_ObjectBeyondStartArea); // Teenager leaves father to die
             }
         }
     }
@@ -510,18 +509,27 @@ public class GameController : MonoBehaviour
             m_gameTimer.PauseTimer();
             m_gameTimer.StartFadeTimer();
         }
-        m_camera.EnterCinematicEndingMode();
         if (m_teenagerHandler.GetComponent<PlayerController>().enabled)
         {
+            m_camera.EnterCinematicEndingMode();
             m_playerDiedOrSonDiedCoroutine = StartCoroutine(PlayerDiedOrSonDied());
         }
         else
         {
-            m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(true, 2, 10));
+            if (m_levelState == LEVEL_STATE.LEVEL_1 || m_levelState == LEVEL_STATE.LEVEL_3)
+            {
+                m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(false, 1, 10));
+                m_playerDiedOrSonDiedCoroutine = StartCoroutine(PlayerDiedOrSonDied());
+            }
+            else
+                m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(true, 1, 10));
             m_sonDiedAsTeenager = true;
         }
+        if (m_gameTimer.enabled) m_gameTimer.StartFadeTimer();
         m_teenagerController.DestroySelf();
     }
+
+
     public void SonGotTreasure(int treasureCount)
     {
         if (m_fatherHandler != null && m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled)
@@ -623,7 +631,6 @@ public class GameController : MonoBehaviour
         if (!m_fatherAtStartArea && m_childController == null && m_teenagerController == null && !m_fatherBecomingGrandfather)
         {
             InitChild(false, m_fatherController);
-            ActivateGameTimerWithSeconds();
             SetTreasureArray_ToActiveOrInactive(m_treasuresA, true);
             m_tricksPointer.SetActive(true);
         }
@@ -649,22 +656,6 @@ public class GameController : MonoBehaviour
                 if (m_teenagerHandler != null && m_sonAtFatherArea && m_sonIsReadyToBeFather)
                     m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemiesAndDeactivateSpawner();
             }
-            //else
-            //{
-
-            //    if (m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled && m_sonIsReadyToBeFather) // Player is the son
-            //    {
-            //        m_fatherHandler.GetComponent<PlayerController>().DisablePlayerControls();
-            //        MoveTeenagerToGameObject(m_fatherController.gameObject);
-            //    }
-            //    else // Player is the father
-            //    {
-            //        if (m_sonIsReadyToBeFather && !(m_sonDiedAsChild || m_sonDiedAsTeenager))
-            //        {
-            //            MoveTeenagerToGameObject(m_fatherController.gameObject);
-            //        }
-            //    }
-            //}
         }
     }
 
@@ -781,7 +772,11 @@ public class GameController : MonoBehaviour
         m_grandfatherReadyToBeCarried = true;
         //m_fatherController.gameObject.SetActive(false);
         FatherBecomesGrandfather();
-        if (!m_sonIsReadyToBeFather)
+        if(m_sonDiedAsChild || m_sonDiedAsTeenager)
+        {
+            GrandfatherDiesAlone_AsPlayer();
+        }
+        else if (!m_sonIsReadyToBeFather)
         {
             m_tricksPointer.SetActive(false);
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemiesAndDeactivateSpawner();
@@ -843,7 +838,10 @@ public class GameController : MonoBehaviour
     {
         // Have son target starting area
         if (m_teenagerHandler != null)
-            MoveTeenagerToGameObject(m_treasuresA[0]); // Make the son walk away
+        {
+            MoveTeenagerToGameObject(m_ObjectBeyondStartArea); // Make the son walk away
+            m_gameTimer.StartFadeTimer();
+        }
 
         // Play the Grandfather die animation and then the player dies
         m_playerDiesAsGrandfather = true;
@@ -885,20 +883,19 @@ public class GameController : MonoBehaviour
     public void UnlockNextLevel()
     {
         // load game data
-        DataManager.Load();
+        DataManager dM = GameObject.FindObjectOfType<DataManager>();
 
         // Save the data to unlock the next level
-        if (m_levelState == LEVEL_STATE.LEVEL_1 && !DataManager.m_gameData.m_level_2_Unlocked)
+        if (m_levelState == LEVEL_STATE.LEVEL_1 && !dM.LevelUnlockedCheck(2))
         {
-            DataManager.m_gameData.m_level_2_Unlocked = true;
-            DataManager.Save();
+            dM.LevelUnlock(2);
+
             return;
         }
         // Save the data to unlock the next level
-        if (m_levelState == LEVEL_STATE.LEVEL_2 && !DataManager.m_gameData.m_level_3_Unlocked)
+        if (m_levelState == LEVEL_STATE.LEVEL_2 && !dM.LevelUnlockedCheck(3))
         {
-            DataManager.m_gameData.m_level_3_Unlocked = true;
-            DataManager.Save();
+            dM.LevelUnlock(3);
             return;
         }
     }
@@ -973,7 +970,7 @@ public class GameController : MonoBehaviour
         m_camera.FadeInGameOverCard_Duration_Delay(5, 0);
         yield return new WaitForSeconds(7);
         // Call ReloadStartScreen
-        m_reloadLevelAfterDelayCoroutine = StartCoroutine(ReloadStartScreen());
+        ReloadStartScreenBeginCoroutine();
     }
 
     public IEnumerator LevelEnd()
@@ -1011,7 +1008,7 @@ public class GameController : MonoBehaviour
         }
         yield return new WaitForSeconds(duration + 2);
         // Call ReloadStartScreen
-        m_reloadLevelAfterDelayCoroutine = StartCoroutine(ReloadStartScreen());
+        ReloadStartScreenBeginCoroutine();
     }
 
     public IEnumerator ReloadLevel()
@@ -1020,6 +1017,11 @@ public class GameController : MonoBehaviour
         m_camera.FadeInBlankCard_Duration_Delay(3, 0);
         yield return new WaitForSeconds(5);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+    }
+
+    public void ReloadStartScreenBeginCoroutine()
+    {
+        m_reloadLevelAfterDelayCoroutine = StartCoroutine(ReloadStartScreen());
     }
 
     public IEnumerator ReloadStartScreen()
@@ -1172,22 +1174,27 @@ public class GameController : MonoBehaviour
             m_fatherCarryingGrandfather = true;
             m_fatherController.FatherGainsSilverShield();
             m_pyramid.m_powerState = Pyramid.POWER_STATE.GOLD;
+            m_PlayersFatherDiedAlone = false;
         }
         else if (m_levelState == LEVEL_STATE.LEVEL_2)
         {
             m_pyramid.m_blockCount = 3;
             m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
             InitFather(false, null);
+            m_PlayersFatherDiedAlone = false;
         }
         else if(m_levelState == LEVEL_STATE.LEVEL_3)
         {
             m_pyramid.m_blockCount = 3;
             m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
+            m_PlayersFatherDiedAlone = true;
         }
         InitChild(true, m_fatherController);
-        ActivateGameTimerWithSeconds();
         m_tricksPointer.SetActive(true);
         SetTreasureArray_ToActiveOrInactive(m_treasuresA, true);
+        m_sonDiedAsChild = false;
+        m_sonDiedAsTeenager = false;
+        m_sonIsReadyToBeFather = false;
     }
 
     public void LoadPlayerAsTeenagerReachesPyramidCheckpoint()
@@ -1219,7 +1226,6 @@ public class GameController : MonoBehaviour
             m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
         }
         InitTeenager(true, null, -200);
-        ActivateGameTimerWithSeconds();
         m_tricksPointer.SetActive(true);
         SetTreasureArray_ToActiveOrInactive(m_treasuresB, true);
     }
@@ -1262,7 +1268,6 @@ public class GameController : MonoBehaviour
             m_pyramid.m_blockCount = 3;
             m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
         }
-        ActivateGameTimerWithSeconds();
         m_tricksPointer.SetActive(true);
         SetTreasureArray_ToActiveOrInactive(m_treasuresA, true);
     }
@@ -1295,7 +1300,6 @@ public class GameController : MonoBehaviour
         }
         if (!m_sonDiedAsChild)
         {
-            ActivateGameTimerWithSeconds();
             InitTeenager(false, null, -200);
         }
         m_tricksPointer.SetActive(true);
@@ -1321,13 +1325,20 @@ public class GameController : MonoBehaviour
             }
             else
             {
-                m_pyramid.m_blockCount = 4;
+                m_pyramid.m_blockCount = 3;
                 m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
             }
         }
         else if (m_levelState == LEVEL_STATE.LEVEL_2)
         {
-            m_pyramid.m_blockCount = 4;
+            if (!m_PlayersFatherDiedAlone)
+            {
+                m_pyramid.m_blockCount = 4;
+            }
+            else
+            {
+                m_pyramid.m_blockCount = 3;
+            }
             m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
         }
         else if (m_levelState == LEVEL_STATE.LEVEL_3)
@@ -1335,13 +1346,13 @@ public class GameController : MonoBehaviour
             m_pyramid.m_blockCount = 3;
             m_pyramid.m_powerState = Pyramid.POWER_STATE.BRONZE;
         }
-        ActivateGameTimerWithSeconds();
         m_tricksPointer.SetActive(true);
         SetTreasureArray_ToActiveOrInactive(m_treasuresA, true);
     }
 
     public void TimerRanOut()
     {
+        Debug.Log("Time ran out");
         if (m_childController != null) ChildDies();
         if (m_teenagerController != null) TeenagerDies();
     }
