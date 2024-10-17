@@ -165,8 +165,7 @@ public class GameController : MonoBehaviour
             m_childHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_childController.gameObject;
             m_childHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
-            m_camera.m_zoomDistancesIndex = 0;
-            m_camera.ZoomOut();
+            m_camera.ZoomTo(0);
         }
         else
         {
@@ -203,8 +202,7 @@ public class GameController : MonoBehaviour
             m_teenagerHandler.GetComponent<PlayerController>().enabled = true;
             m_camera.m_playerTarget = m_teenagerController.gameObject;
             m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
-            m_camera.m_zoomDistancesIndex = 4;
-            m_camera.ZoomOut();
+            m_camera.ZoomTo(4);
         }
         else
         {
@@ -252,8 +250,7 @@ public class GameController : MonoBehaviour
             m_camera.m_playerTarget = m_fatherController.gameObject;
             m_camera.PlayerBecomesAdult();
             m_fatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
-            m_camera.m_zoomDistancesIndex = 7;
-            m_camera.ZoomOut();
+            m_camera.ZoomTo(8);
             m_camera.m_lookAhead = 7;
         }
         else
@@ -300,8 +297,7 @@ public class GameController : MonoBehaviour
             m_grandfatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
             if (m_fatherHandler != null)
                 m_fatherHandler.GetComponent<SpriteDriver_Father>().m_avoidEnemies = false;
-            m_camera.m_zoomDistancesIndex = 7;
-            m_camera.ZoomOut();
+            m_camera.ZoomTo(9);
             m_camera.m_lookAhead = 7;
         }
         m_grandfatherController.m_reportGrowOldMoveToTargetDone = GrandfatherMovesToAdultSonDone;    
@@ -487,7 +483,7 @@ public class GameController : MonoBehaviour
             }
         }
     }
-    public IEnumerator TeenagerExecutesActionAfterDelay()
+    private IEnumerator TeenagerExecutesActionAfterDelay()
     {
         float delay = 0.5f;
         while (delay > 0)
@@ -927,7 +923,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public IEnumerator PlayerDiedOrSonDied()
+    private IEnumerator PlayerDiedOrSonDied()
     {
         //yield return new WaitForSeconds(sequenceDelay);
         float duration = 10;
@@ -963,7 +959,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public IEnumerator GameOver()
+    private IEnumerator GameOver()
     {
         Debug.Log("Recall");
         // Fade in Game Over card
@@ -973,7 +969,7 @@ public class GameController : MonoBehaviour
         ReloadStartScreenBeginCoroutine();
     }
 
-    public IEnumerator LevelEnd()
+    private IEnumerator LevelEnd()
     {
         float duration = 14;
         float delay = 0;
@@ -1011,20 +1007,12 @@ public class GameController : MonoBehaviour
         ReloadStartScreenBeginCoroutine();
     }
 
-    public IEnumerator ReloadLevel()
-    {
-        // Fade to black, and then reload the level
-        m_camera.FadeInBlankCard_Duration_Delay(3, 0);
-        yield return new WaitForSeconds(5);
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
-    }
-
     public void ReloadStartScreenBeginCoroutine()
     {
         m_reloadLevelAfterDelayCoroutine = StartCoroutine(ReloadStartScreen());
     }
 
-    public IEnumerator ReloadStartScreen()
+    private IEnumerator ReloadStartScreen()
     {
         // Fade to black, and then reload the StartScreen
         m_camera.FadeInBlankCard_Duration_Delay(3, 0);
@@ -1032,7 +1020,7 @@ public class GameController : MonoBehaviour
         SceneManager.LoadSceneAsync("StartScreen");
     }
 
-    public IEnumerator ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(bool showContinueButton = false, float delay = 2, float secondsToShowButtons = 10)
+    private IEnumerator ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(bool showContinueButton = false, float delay = 2, float secondsToShowButtons = 10)
     {
         yield return new WaitForSeconds(delay);
 
@@ -1069,7 +1057,7 @@ public class GameController : MonoBehaviour
         StartCoroutine(LoadSpecificCheckpointCoroutine(i));
     }
 
-    public IEnumerator LoadLastCheckpointCoroutine()
+    private IEnumerator LoadLastCheckpointCoroutine()
     {
         m_camera.m_state = CameraController.CAMERA_STATE.FOLLOW_TARGET_RIGHT;
         m_camera.FadeInBlankCard_Duration_Delay(2, 0);
@@ -1105,7 +1093,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(2);
     }
 
-    public IEnumerator LoadSpecificCheckpointCoroutine(int i)
+    private IEnumerator LoadSpecificCheckpointCoroutine(int i)
     {
         m_camera.m_state = CameraController.CAMERA_STATE.FOLLOW_TARGET_RIGHT;
         m_camera.FadeInBlankCard_Duration_Delay(2, 0);

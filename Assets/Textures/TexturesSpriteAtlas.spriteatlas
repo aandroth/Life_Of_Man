@@ -49,6 +49,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6b6dea64442b638418e31594b108f654, type: 3}
   - {fileID: 21300000, guid: 04b2e5f4887bec1439e09ca245b9e096, type: 3}
   - {fileID: 21300000, guid: 069a1215abfc7d7478febd81158293aa, type: 3}
+  - {fileID: 21300000, guid: d92a4f35aea19214487cd597d16ae1d9, type: 3}
   - {fileID: 21300000, guid: c1926cf5e93279f4e9217fe78c2fa392, type: 3}
   - {fileID: 21300000, guid: fa5a4f56f9f714f4ab89a6fea72445b0, type: 3}
   - {fileID: 21300000, guid: 4b04b7a6d9e5d2b4fb0166d65655a824, type: 3}
@@ -96,6 +97,7 @@ SpriteAtlas:
   - Spotlight
   - ButtonTimerOutline
   - Treasure
+  - Key_esc
   - Father_LegR
   - spacebar-icon-25 copy
   - Grandfather

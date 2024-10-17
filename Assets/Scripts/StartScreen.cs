@@ -69,6 +69,10 @@ public class StartScreen : MonoBehaviour
         IEnumerator c = LoadLevel_Async("Level3_Scene");
         StartCoroutine(c);
     }
+    public void Exit()
+    {
+        Application.Quit();
+    }
 
     public IEnumerator LoadLevel_Async(string _levelName)
     {

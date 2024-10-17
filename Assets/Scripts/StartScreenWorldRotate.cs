@@ -5,9 +5,13 @@ using UnityEngine;
 public class StartScreenWorldRotate : MonoBehaviour
 {
     public float m_rotateSpeed = 1f;
-    // Update is called once per frame
+    public float slowdown = 0.001f;
+
+
     void Update()
     {
-        transform.Rotate(0, 0, m_rotateSpeed * Time.deltaTime);
+        Vector3 rot = transform.rotation.eulerAngles;
+        rot.z = Mathf.LerpAngle(transform.rotation.eulerAngles.z, transform.rotation.eulerAngles.z+5f, Time.deltaTime*m_rotateSpeed*slowdown);
+        transform.eulerAngles = rot;
     }
 }

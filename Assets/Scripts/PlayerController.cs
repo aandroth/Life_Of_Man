@@ -34,26 +34,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_inputControlsAreOn)
+        if (!PauseInstance.m_isPaused)
         {
-            if (Input.GetKey(KeyCode.D))
+            if (m_inputControlsAreOn)
             {
-                m_spriteController.PushForward();
+                if (Input.GetKey(KeyCode.D))
+                {
+                    m_spriteController.PushForward();
+                }
+                else if (Input.GetKey(KeyCode.A))
+                {
+                    m_spriteController.PushBackward();
+                }
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    m_spriteController.Action();
+                }
             }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                m_spriteController.PushBackward();
-            }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                m_spriteController.Action();
-            }
-
-            //if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-            //{
-            //    if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-            //        m_spriteController.Idle();
-            //}
         }
     }
 

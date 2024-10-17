@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
     public CAMERA_STATE m_state = CAMERA_STATE.FOLLOW_TARGET_RIGHT;
     public float m_speed = 1f, m_cinematicSpeed = 0.25f, m_cinematicRotationSpeed = 0.25f;
     public bool m_playerIsAdult = false;
+    public bool m_pauseMenuIsUp = false;
     public float m_cinematicZoomDistance = 5, m_cinematicZoomDistanceEnding = 20;
     public int m_zoomDistancesIndex;
     public float[] m_zoomDistances;
@@ -21,6 +22,7 @@ public class CameraController : MonoBehaviour
     public GameObject m_level2CompleteCard;
     public GameObject m_level3CompleteCard;
     public GameObject m_gameOverCard;
+    private Color m_blankCardColorSaved;
 
     public Vector3 m_grandfatherPosOffset;
     public Vector3 m_grandfatherRotOffset;
@@ -44,14 +46,16 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!m_playerIsAdult)
+        if(!m_playerIsAdult && !PauseInstance.m_isPaused)
         {
             if (Input.GetKeyDown(KeyCode.A) && m_state == CAMERA_STATE.FOLLOW_TARGET_RIGHT) m_state = CAMERA_STATE.FOLLOW_TARGET_LEFT;
             if (Input.GetKeyDown(KeyCode.D) && m_state == CAMERA_STATE.FOLLOW_TARGET_LEFT) m_state = CAMERA_STATE.FOLLOW_TARGET_RIGHT;
         }
+        if (Input.GetKeyDown(KeyCode.Escape)) PauseMenuActivate();
+
 
         float interp = (m_state != CAMERA_STATE.CINEMATIC ? m_speed : m_cinematicSpeed) * Time.deltaTime;
-        Vector3 pos = this.transform.position;
+        Vector3 pos = transform.position;
         if (m_state == CAMERA_STATE.ENDING)
         {
             //transform.rotation = Quaternion.Lerp(transform.rotation, m_cinematicTarget.transform.rotation, m_cinematicRotationSpeed);
@@ -60,8 +64,8 @@ public class CameraController : MonoBehaviour
         else if (m_state == CAMERA_STATE.CINEMATIC)
         {
             transform.rotation = m_cinematicTarget.transform.rotation;
-            pos.x = Mathf.Lerp(this.transform.position.x, m_cinematicTarget.transform.position.x, interp);
-            pos.y = Mathf.Lerp(this.transform.position.y, m_cinematicTarget.transform.position.y, interp);
+            pos.x = Mathf.Lerp(transform.position.x, m_cinematicTarget.transform.position.x, interp);
+            pos.y = Mathf.Lerp(transform.position.y, m_cinematicTarget.transform.position.y, interp);
         }
         else if (m_playerTarget != null)
         {
@@ -70,33 +74,56 @@ public class CameraController : MonoBehaviour
             lookAheadVector += 0.35f * m_lookAhead * transform.up;
             if (m_zoomDistancesIndex < 9)
             {
-                pos.x = Mathf.Lerp(this.transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
-                pos.y = Mathf.Lerp(this.transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);
+                pos.x = Mathf.Lerp(transform.position.x, m_playerTarget.transform.position.x + lookAheadVector.x, interp);
+                pos.y = Mathf.Lerp(transform.position.y, m_playerTarget.transform.position.y + lookAheadVector.y, interp);
             }
             else // Apply Grandfather offset
             {
                 Vector3 tR = m_playerTarget.transform.rotation.eulerAngles;
                 float targetDist = Vector3.Distance(m_playerTarget.transform.position, Vector3.zero) + m_grandfatherPosOffset.y;
                 Vector3 targetPos = Quaternion.Euler(tR.x, tR.y, tR.z) * new Vector3(0, targetDist, 0);
-                pos.x = Mathf.Lerp(this.transform.position.x, targetPos.x, interp);
-                pos.y = Mathf.Lerp(this.transform.position.y, targetPos.y, interp);
+                pos.x = Mathf.Lerp(transform.position.x, targetPos.x, interp);
+                pos.y = Mathf.Lerp(transform.position.y, targetPos.y, interp);
             }
         }
-        this.transform.position = pos;
+        transform.position = pos;
+    }
+
+    public void PauseMenuActivate()
+    {
+        m_pauseMenuIsUp = !m_pauseMenuIsUp;
+        if (m_pauseMenuIsUp)
+        {
+            m_blankCard.SetActive(true);
+            m_blankCardColorSaved = m_blankCardSpriteRenderer.color;
+            m_blankCardSpriteRenderer.color = new Color(0, 0, 0, 0.5f);
+        }
+        else
+        {
+            m_blankCardSpriteRenderer.color = m_blankCardColorSaved;
+            m_blankCard.SetActive(false);
+        }
     }
 
     public void ZoomOut(float amount = 0)
     {
-        IEnumerator coroutine = ZoomOutCoroutine(m_state != CAMERA_STATE.ENDING ? amount : m_cinematicZoomDistance);
+        IEnumerator coroutine = ZoomOutCoroutine(m_state != CAMERA_STATE.ENDING ? amount : m_cinematicZoomDistance, true);
         StartCoroutine(coroutine);
     }
 
-    public IEnumerator ZoomOutCoroutine(float amount = 0)
+    public void ZoomTo(float amount = 0)
+    {
+        m_cinematicZoomDistance = amount;
+        IEnumerator coroutine = ZoomOutCoroutine(m_state != CAMERA_STATE.ENDING ? amount : m_cinematicZoomDistance, false);
+        StartCoroutine(coroutine);
+    }
+
+    public IEnumerator ZoomOutCoroutine(float amount = 0, bool shouldIncrement = true)
     {
         float prevAmount = this.GetComponent<Camera>().orthographicSize;
         if (m_state != CAMERA_STATE.ENDING && amount == 0 && m_zoomDistancesIndex < m_zoomDistances.Length - 1)
         {
-            ++m_zoomDistancesIndex;
+            if(shouldIncrement) ++m_zoomDistancesIndex;
             amount = m_zoomDistances[m_zoomDistancesIndex];
         }
         else
@@ -177,7 +204,7 @@ public class CameraController : MonoBehaviour
             m_cinematicTarget = cinematicTarget;
         else
             m_cinematicTarget = gameObject;
-        ZoomOut(m_cinematicZoomDistance);
+        ZoomTo(m_cinematicZoomDistance);
     }
 
     public void EnterCinematicEndingMode(GameObject g = null)
@@ -187,7 +214,7 @@ public class CameraController : MonoBehaviour
         else
             m_cinematicTarget = gameObject;
         m_state = CAMERA_STATE.ENDING;
-        ZoomOut(m_cinematicZoomDistance);
+        ZoomTo(m_cinematicZoomDistance);
 
     }
 
