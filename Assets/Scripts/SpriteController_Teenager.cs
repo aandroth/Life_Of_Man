@@ -8,7 +8,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public GameObject m_spriteHandler;
     public float m_walkSpeed = 1f;
     public GameObject m_innerHandler;
-    private Rigidbody2D m_innerHandler_rb;
+    //private Rigidbody2D m_innerHandler_rb;
     private Animator m_spriteAnimator;
 
     public Animator m_animator;
@@ -46,12 +46,12 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public int m_knockbackDirection = 1;
     public Shield m_shield;
 
-    public GameObject m_nextForm;
+    public AudioSource m_audioSource;
+    public List<AudioClip> m_audioClips;
 
     void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
-        m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
         Physics2D.SyncTransforms();
     }
 
@@ -155,7 +155,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
                 StartCoroutine(CountDownTreasureCooldown());
                 GetOlder();
                 m_reportGotTreasure.Invoke(m_growthCount);
-                collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
+                collision.gameObject.GetComponent<Treasure>().DeactivateHandler_AndPlayAudio(true);
             }
         }
         else if (collision.CompareTag("Pyramid"))
@@ -268,7 +268,6 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         yield return new WaitForSeconds(1);
         while (m_animator.GetCurrentAnimatorStateInfo(0).IsName(m_attackAnimName))
         {
-            //Debug.Log($"Teen attack continues");
             yield return null;
         }
         //Debug.Log($"Teen attacking finished");

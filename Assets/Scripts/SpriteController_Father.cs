@@ -39,13 +39,15 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public delegate void ReportGrowOldAnimDone();
     public ReportGrowOldAnimDone m_reportGrowOldAnimDone;
 
+    public AudioSource m_audioSource;
+    public List<AudioClip> m_audioClips;
+
     private static readonly int m_walkStateNameHash = Animator.StringToHash("Walk");
 
     // Start is called before the first frame update
     void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
-        m_innerHandler_rb = m_innerHandler.GetComponent<Rigidbody2D>();
         m_currSpeed = m_walkSpeed;
     }
 

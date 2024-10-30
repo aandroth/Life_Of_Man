@@ -47,10 +47,11 @@ public class GameController : MonoBehaviour
     public SpriteController_Father m_fatherController;
     public SpriteController_Grandfather m_grandfatherController;
 
+    public GameObject m_debugButtons;
     public CountdownTimer m_gameTimer;
     public CameraController m_camera;
     public GameObject m_world;
-    public GameObject m_debugButtons;
+    public AmbientMusicController m_ambientMusicController;
 
     // Milestones
     public bool[] m_nextLevelUnlocked = new bool[2];
@@ -166,6 +167,7 @@ public class GameController : MonoBehaviour
             m_camera.m_playerTarget = m_childController.gameObject;
             m_childHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
             m_camera.ZoomTo(0);
+            m_ambientMusicController.StartAmbientMusic(0);
         }
         else
         {
@@ -203,6 +205,7 @@ public class GameController : MonoBehaviour
             m_camera.m_playerTarget = m_teenagerController.gameObject;
             m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
             m_camera.ZoomTo(4);
+            m_ambientMusicController.StartAmbientMusic(1);
         }
         else
         {
@@ -252,6 +255,7 @@ public class GameController : MonoBehaviour
             m_fatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
             m_camera.ZoomTo(8);
             m_camera.m_lookAhead = 7;
+            m_ambientMusicController.StartAmbientMusic(2);
         }
         else
         {
@@ -299,6 +303,7 @@ public class GameController : MonoBehaviour
                 m_fatherHandler.GetComponent<SpriteDriver_Father>().m_avoidEnemies = false;
             m_camera.ZoomTo(9);
             m_camera.m_lookAhead = 7;
+            m_ambientMusicController.StartAmbientMusic(3);
         }
         m_grandfatherController.m_reportGrowOldMoveToTargetDone = GrandfatherMovesToAdultSonDone;    
         m_grandfatherController.m_reportRevealPyramid = GrandfatherReportsRevealPyramidAnim;
@@ -842,6 +847,7 @@ public class GameController : MonoBehaviour
         // Play the Grandfather die animation and then the player dies
         m_playerDiesAsGrandfather = true;
         m_grandfatherController.PlayGrandfatherDiesAloneAnim();
+        m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(false);
     }
 
     public void GrandfatherDiesAlone_AsPlayerDone()
@@ -947,6 +953,7 @@ public class GameController : MonoBehaviour
             {
                 // Show level ending card and reload StartScreen
                 StartCoroutine(LevelEnd());
+                m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(false);
             }
         }
         else // Player is a child/teenager OR is father with son

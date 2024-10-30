@@ -1223,6 +1223,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &54737608
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2700,6 +2701,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &183089855
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11309,6 +11311,9 @@ MonoBehaviour:
   m_knockbackForce: 10
   m_worldHandler: {fileID: 0}
   m_targetVertOffset: 20
+  m_sfx: {fileID: 0}
+  m_deathSfx: {fileID: 0}
+  m_laughSfx: {fileID: 0}
 --- !u!61 &364072061
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19950,8 +19955,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563081329}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 82.69, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0, y: 84.1647, z: 0}
+  m_LocalScale: {x: -1, y: 1.5248, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 285922735}
@@ -25513,6 +25518,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &879362976
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -26380,6 +26386,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &941424498
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -30589,6 +30596,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &1185946445
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -33138,8 +33146,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1345923006}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 80.86, z: 0}
-  m_LocalScale: {x: 2.3868525, y: 2.3868525, z: 2.3868525}
+  m_LocalPosition: {x: -0.9001, y: 80.86, z: 0}
+  m_LocalScale: {x: 1.4032305, y: 2.3868525, z: 2.3868525}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 527300586}
@@ -33642,6 +33650,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &1360756455
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -34268,6 +34277,8 @@ GameObject:
   - component: {fileID: 1407455633}
   - component: {fileID: 1407455632}
   - component: {fileID: 1407455634}
+  - component: {fileID: 1407455635}
+  - component: {fileID: 1407455636}
   m_Layer: 0
   m_Name: TheWorld
   m_TagString: Untagged
@@ -34373,6 +34384,128 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 80.13
+--- !u!114 &1407455635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407455631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1e8aa1bebca784899ab794cc961891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ambientMusicStart:
+  - {fileID: 8300000, guid: c0b3672b1d76ff14190d5ef4ab653709, type: 3}
+  - {fileID: 8300000, guid: f8d59794cb4f67742ad1351e079d7be9, type: 3}
+  - {fileID: 8300000, guid: c8376af948c8d4f458acd19edc0bba94, type: 3}
+  - {fileID: 8300000, guid: 9eb9d93b507a9bf4a9b8373fb8b8e90a, type: 3}
+  m_ambientMusicLoop:
+  - {fileID: 8300000, guid: 244c4bb41d81f134e99557bdc89408b4, type: 3}
+  - {fileID: 8300000, guid: 5989f1a260de96042a895e5c1fcfa569, type: 3}
+  - {fileID: 8300000, guid: 37a8a0bed7ed610449e3b9e328b05f55, type: 3}
+  - {fileID: 8300000, guid: 9bbdbc08bb01aec4bb4d7a690ab707dc, type: 3}
+  m_ambientMusicEnd:
+  - {fileID: 8300000, guid: 5d84aa8433f9b5640b415859d97c06d2, type: 3}
+  - {fileID: 8300000, guid: c6621a7090115c54dbbd9b48b6f242ad, type: 3}
+  m_ambientAudioSource: {fileID: 1407455636}
+--- !u!82 &1407455636
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407455631}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.256
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1415656250
 GameObject:
   m_ObjectHideFlags: 0
@@ -36441,7 +36574,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5e7da55d939e1459fb7c7b826d21fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pauseScreen: {fileID: 725945974}
 --- !u!4 &1629633140
 Transform:
   m_ObjectHideFlags: 0
@@ -41354,10 +41486,11 @@ MonoBehaviour:
   m_teenagerController: {fileID: 0}
   m_fatherController: {fileID: 0}
   m_grandfatherController: {fileID: 0}
+  m_debugButtons: {fileID: 1240327821}
   m_gameTimer: {fileID: 395560636}
   m_camera: {fileID: 257225835}
   m_world: {fileID: 1407455631}
-  m_debugButtons: {fileID: 1240327821}
+  m_ambientMusicController: {fileID: 1407455635}
   m_nextLevelUnlocked: 0000
   m_playerBecomesFather: 0
   m_playerBecomesGrandfather: 0
@@ -47878,6 +48011,7 @@ MonoBehaviour:
   m_isActive: 1
   m_twinkleHandler: {fileID: 0}
   m_respawnTime: 10
+  m_treasureAcquiredSfx: {fileID: 0}
 --- !u!61 &2069394735
 BoxCollider2D:
   m_ObjectHideFlags: 0

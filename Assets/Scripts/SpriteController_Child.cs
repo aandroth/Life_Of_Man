@@ -51,6 +51,8 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     private static readonly int m_walkStateNameHash = Animator.StringToHash("Walk");
     private static readonly int m_idleStateNameHash = Animator.StringToHash("Idle");
     public float m_startingY = -1.634216f;
+    public AudioSource m_audioSource;
+    public List<AudioClip> m_audioClips;
 
     private SpriteRenderer m_spriteRenderer;
 
@@ -237,7 +239,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             //Debug.Log("Treasure");
             GetOlder();
             m_reportGotTreasure.Invoke(m_growthCount);
-            collision.gameObject.GetComponent<Treasure>().DeactivateHandler();
+            collision.gameObject.GetComponent<Treasure>().DeactivateHandler_AndPlayAudio(true);
         }
         if(collision.gameObject.CompareTag("Pyramid"))
         {

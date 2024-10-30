@@ -7,15 +7,18 @@ public class Treasure : MonoBehaviour
     public bool m_isActive = true;
     public GameObject m_twinkleHandler;
     public float m_respawnTime = 10;
+    public AudioSource m_treasureAcquiredSfx;
 
     public void OnEnable()
     {
         Respawn();
+        m_treasureAcquiredSfx = GetComponent<AudioSource>();
     }
 
-    public void DeactivateHandler()
+    public void DeactivateHandler_AndPlayAudio(bool playAudio = false)
     {
         transform.parent.gameObject.SetActive(false);
+        m_treasureAcquiredSfx?.Play();
     }
 
     public void OnTriggerEnter2D(Collider2D collision)

@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     public float m_knockbackForce = 10;
     public GameObject m_worldHandler;
     public float m_targetVertOffset = 20;
+    public AudioSource m_sfx;
+    public AudioClip m_deathSfx, m_laughSfx;
 
 
     public void OnEnable()
@@ -103,7 +105,9 @@ public class Enemy : MonoBehaviour
         //Debug.Log("Collision detected");
         if (collision.gameObject.CompareTag("Son") && m_isActive)
         {
-            if(m_twinkle != null) m_twinkle.SetActive(false);
+            m_sfx.clip = m_laughSfx;
+            m_sfx.Play();
+            if (m_twinkle != null) m_twinkle.SetActive(false);
             GetComponent<SpriteRenderer>().maskInteraction = 0;
             SetToChasing();
             collision.gameObject.GetComponent<I_SpriteController>().TakeDamage(gameObject, m_knockbackForce);
@@ -112,6 +116,8 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        m_sfx.clip = m_deathSfx;
+        m_sfx.Play();
         if (m_handler != null)
             m_handler.SetActive(false);
         else
