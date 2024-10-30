@@ -44,7 +44,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8531a02704f409246b3bab35eed22a4e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -731,6 +731,7 @@ GameObject:
   - component: {fileID: 1083308612125477698}
   - component: {fileID: 8411858925255715689}
   - component: {fileID: 7763749102172485780}
+  - component: {fileID: 1490545644564793422}
   m_Layer: 0
   m_Name: Teenager
   m_TagString: Son
@@ -1057,6 +1058,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1490545644564793422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8544902838629052276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647bc4a29eae31f42a7645439001c800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioSource: {fileID: 7763749102172485780}
+  m_audioClips:
+  - {fileID: 8300000, guid: 57600cfe0f22d3344b5bc194791db024, type: 3}
+  - {fileID: 8300000, guid: 7b33151228dc2474685579b78c001450, type: 3}
+  - {fileID: 8300000, guid: e9964c34af4008d4faf7b596b0a71e23, type: 3}
 --- !u!1 &8544902838843733676
 GameObject:
   m_ObjectHideFlags: 0

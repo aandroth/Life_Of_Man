@@ -46,8 +46,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public int m_knockbackDirection = 1;
     public Shield m_shield;
 
-    public AudioSource m_audioSource;
-    public List<AudioClip> m_audioClips;
+    public SfxList m_sfxList;
 
     void Awake()
     {
@@ -215,6 +214,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
             ++m_growthCount;
 
             m_reportGotOlder.Invoke(GetComponent<SpriteController_Teenager>());
+            m_sfxList?.PlayIdxFromList_WillLoop(0, false);
         }
     }
 
@@ -258,7 +258,10 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         if (GetComponent<I_Hurtable>().m_health <= 0)
         {
             m_reportDies.Invoke();
+            m_sfxList?.PlayIdxFromList_WillLoop(2, false);
         }
+        else
+            m_sfxList?.PlayIdxFromList_WillLoop(1, false);
     }
 
     public IEnumerator Attacking()

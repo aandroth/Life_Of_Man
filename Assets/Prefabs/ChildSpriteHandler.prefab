@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 6622582459128597348}
   - component: {fileID: 4035543085787164132}
   - component: {fileID: 5307679511215602564}
+  - component: {fileID: 3577076009510050159}
   m_Layer: 0
   m_Name: SonSprite
   m_TagString: Son
@@ -400,6 +401,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3577076009510050159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3455952931664485557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647bc4a29eae31f42a7645439001c800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_audioSource: {fileID: 5307679511215602564}
+  m_audioClips:
+  - {fileID: 8300000, guid: e9eda0a6ef020ad4d8a06c22bc861458, type: 3}
+  - {fileID: 8300000, guid: c840229563d50c340adbecdf3e162278, type: 3}
+  - {fileID: 8300000, guid: 4ba30e851d271264cb2a8b849fb0c1d1, type: 3}
+  - {fileID: 8300000, guid: b09891ff82ad8ee43b698fc33e5e6a6f, type: 3}
+  - {fileID: 8300000, guid: e89c7d51920953847b0f88be106507a7, type: 3}
 --- !u!1 &4203722756637227444
 GameObject:
   m_ObjectHideFlags: 0

@@ -766,6 +766,7 @@ public class GameController : MonoBehaviour
         m_fatherBecomingGrandfather = true;
         //Debug.Log("Called PlayFatherGrowsOldSequence");
         m_fatherController.GetComponent<Animator>().Play("FatherGrowOld");
+        m_ambientMusicController.StartAmbientMusicMisc(0);
     }
 
     public void FatherGrowOldAnimDone()

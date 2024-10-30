@@ -15,7 +15,7 @@ public class Treasure : MonoBehaviour
         m_treasureAcquiredSfx = GetComponent<AudioSource>();
     }
 
-    public void DeactivateHandler_AndPlayAudio(bool playAudio = false)
+    public void DeactivateHandler_AndPlayAudio(bool playAudio = true)
     {
         transform.parent.gameObject.SetActive(false);
         m_treasureAcquiredSfx?.Play();

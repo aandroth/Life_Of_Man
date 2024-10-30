@@ -7,6 +7,7 @@ public class AmbientMusicController : MonoBehaviour
     public List<AudioClip> m_ambientMusicStart;
     public List<AudioClip> m_ambientMusicLoop;
     public List<AudioClip> m_ambientMusicEnd;
+    public List<AudioClip> m_ambientMusicMisc;
     public AudioSource m_ambientAudioSource;
 
     public void Start()
@@ -37,6 +38,13 @@ public class AmbientMusicController : MonoBehaviour
     public void StartAmbientMusicEnd_EndIsHappy(bool endIsHappy)
     {
         m_ambientAudioSource.clip = m_ambientMusicEnd[endIsHappy ? 0 : 1];
+        m_ambientAudioSource.loop = false;
+        m_ambientAudioSource.Play();
+    }
+
+    public void StartAmbientMusicMisc(int idx = 0)
+    {
+        m_ambientAudioSource.clip = m_ambientMusicMisc[idx];
         m_ambientAudioSource.loop = false;
         m_ambientAudioSource.Play();
     }

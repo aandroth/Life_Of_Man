@@ -51,17 +51,16 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     private static readonly int m_walkStateNameHash = Animator.StringToHash("Walk");
     private static readonly int m_idleStateNameHash = Animator.StringToHash("Idle");
     public float m_startingY = -1.634216f;
-    public AudioSource m_audioSource;
-    public List<AudioClip> m_audioClips;
+    public SfxList m_sfxList;
 
     private SpriteRenderer m_spriteRenderer;
 
     void Awake()
     {
+        m_sfxList.PlayIdxFromList_WillLoop(0);
         m_rb = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
-        //m_startingY = transform.position.y;
     }
 
     // Update is called once per frame
@@ -156,10 +155,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         {
             m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, m_groundCollisionRadius, m_groundLayer);
         }
-        //if (transform.localPosition.y < m_startingY)
-        //{
-        //    transform.localPosition = new Vector3(transform.localPosition.x, m_startingY, transform.localPosition.z);
-        //}
 
 
     }
@@ -209,6 +204,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_canJump)
         {
+            m_sfxList.PlayIdxFromList_WillLoop(2);
             m_rb.AddForce(new Vector2(transform.parent.transform.up.x, transform.parent.transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
@@ -265,8 +261,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
     public void GetOlder()
     {
-        if(m_growthCount < 3)
+        if (m_growthCount < 3)
         {
+            m_sfxList.PlayIdxFromList_WillLoop(2);
             float newScale = transform.localScale.y + m_growthRate;
             transform.localScale = new Vector3(newScale*Mathf.Sign(transform.localScale.x), newScale, newScale);
             transform.position += 2 * newScale * m_spriteHandler.transform.up;
@@ -291,8 +288,11 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             if(GetComponent<I_Hurtable>().m_health <= 0)
             {
                 m_reportDies.Invoke();
+                m_sfxList.PlayIdxFromList_WillLoop(4);
                 return;
             }
+            else
+                m_sfxList.PlayIdxFromList_WillLoop(3);
 
             float enemyDirection = transform.up.x * gO.transform.position.y - transform.up.y * gO.transform.position.x;
             m_speedCurr = (m_sprite.transform.localScale.x > 0 ? m_speedMax : -m_speedMax);
