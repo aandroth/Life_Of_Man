@@ -10,7 +10,7 @@ public interface I_SpriteController
     public void Idle();
     public virtual Transform ReturnSpecialTransform() { return null; }
 
-    public void DestroySelf();
+    public void DestroySelf(bool noDelay) { }
     public void GetOlder() { }
     public void TakeDamage(GameObject g, float knockbackForce) { }
 }

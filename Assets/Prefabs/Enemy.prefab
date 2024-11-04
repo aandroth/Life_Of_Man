@@ -44,7 +44,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2111e9b4cb93a8f45b2d990557a27eed, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.135
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -292,6 +292,7 @@ MonoBehaviour:
   m_knockbackForce: 10
   m_worldHandler: {fileID: 0}
   m_targetVertOffset: 20
+  m_deathDelay: 3
   m_sfx: {fileID: 1337075909542487806}
   m_deathSfx: {fileID: 8300000, guid: 5e9c6352c4c4be448bdc39582d403518, type: 3}
   m_laughSfx: {fileID: 8300000, guid: 5170f4d89b5772640b0d83812453f930, type: 3}

@@ -24,7 +24,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public float m_attackRecoveryTime = 1.5f;
     public GameObject m_upperEnemyDestroyerCollider, m_lowerEnemyDestroyerCollider;
 
-    public bool m_treasureCooldown;
+    public bool m_treasureCooldown = false;
     public bool m_isAtGrandfather = false;
     public delegate void ReportAtPyramid(bool b);
     public ReportAtPyramid m_reportAtPyramid;
@@ -46,12 +46,16 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
     public int m_knockbackDirection = 1;
     public Shield m_shield;
 
+    public float m_deathDelay = 3f;
     public SfxList m_sfxList;
 
     void Awake()
     {
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
         Physics2D.SyncTransforms();
+#if UNITY_EDITOR
+        Debug.Log("Teenager created");
+#endif
     }
 
     void Update()
@@ -147,15 +151,13 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Treasure"))
+        if (collision.gameObject.CompareTag("Treasure") && !m_treasureCooldown && collision.GetComponent<Treasure>().m_isActive)
         {
-            if (collision.GetComponent<Treasure>().m_isActive)
-            {
-                StartCoroutine(CountDownTreasureCooldown());
-                GetOlder();
-                m_reportGotTreasure.Invoke(m_growthCount);
-                collision.gameObject.GetComponent<Treasure>().DeactivateHandler_AndPlayAudio(true);
-            }
+            GetComponent<I_Hurtable>().Heal();
+            m_reportGotTreasure.Invoke(m_growthCount);
+            GetOlder();
+            StartCoroutine(CountDownTreasureCooldown());
+            collision.gameObject.GetComponent<Treasure>().DeactivateHandler(true);
         }
         else if (collision.CompareTag("Pyramid"))
         {
@@ -189,7 +191,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         }
     }
 
-    public IEnumerator CountDownTreasureCooldown(float duration = 3.0f)
+    public IEnumerator CountDownTreasureCooldown(float duration = 1.0f)
     {
         m_treasureCooldown = true;
         while (duration > 0)
@@ -202,7 +204,7 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
 
     public void GetOlder()
     {
-        if (m_growthCount < 3)
+        if (m_growthCount < 3 && !m_treasureCooldown)
         {
             float newScale = m_innerHandler.transform.localScale.y + m_growthRate;
             float newPos = m_innerHandler.transform.localPosition.y + m_growthRate;
@@ -280,8 +282,36 @@ public class SpriteController_Teenager : MonoBehaviour, I_SpriteController
         m_state = TEENAGER_STATE.IDLE;
     }
 
-    public void DestroySelf()
+
+    public void DestroySelf(bool noDelay = false)
     {
+        if (noDelay)
+        {
+            Destroy(m_spriteHandler);
+#if UNITY_EDITOR
+            Debug.Log("Teenager destroyed");
+#endif
+        }
+        else
+            StartCoroutine(DestroySelfCoroutine());
+    }
+    private IEnumerator DestroySelfCoroutine()
+    {
+        m_sfxList.PlayIdxFromList_WillLoop(2);
+        m_sfxList.m_audioSource.volume = 1f;
+        GetComponent<SpriteRenderer>().enabled = false;
+        foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>())
+            sr.enabled = false;
+        GetComponent<I_Hurtable>().enabled = false;
+        float timePassed = 0;
+        while (timePassed < m_deathDelay)
+        {
+            timePassed += Time.deltaTime;
+            yield return null;
+        }
+#if UNITY_EDITOR
+        Debug.Log("Teenager destroyed");
+#endif
         Destroy(m_spriteHandler);
     }
 }

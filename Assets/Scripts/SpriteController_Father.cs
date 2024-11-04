@@ -38,9 +38,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     public ReportPyramidAnimDone m_reportPyramidAnimDone;
     public delegate void ReportGrowOldAnimDone();
     public ReportGrowOldAnimDone m_reportGrowOldAnimDone;
-
-    public AudioSource m_audioSource;
-    public List<AudioClip> m_audioClips;
+    public SfxList m_sfxList;
 
     private static readonly int m_walkStateNameHash = Animator.StringToHash("Walk");
 
@@ -177,11 +175,13 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
     {
         m_hasHeart = true;
         m_heart.SetActive(true);
+        m_sfxList.PlayIdxFromList_WillLoop(2);
     }
 
     public void FatherGainsMind()
     {
         m_mind.SetActive(true);
+        m_sfxList.PlayIdxFromList_WillLoop(3);
     }
 
     public void FatherGainsSilverShield()
@@ -190,6 +190,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
         {
             m_shield.gameObject.SetActive(true);
             m_shield.UpgradeToSilver();
+            m_sfxList.PlayIdxFromList_WillLoop(3);
         }
         else
             Debug.LogError($"Tried to upgrade shield on empty shield!");
@@ -206,7 +207,7 @@ public class SpriteController_Father : MonoBehaviour, I_SpriteController
             Debug.LogError($"Tried to upgrade heart on empty heart!");
     }
 
-    public void DestroySelf()
+    public void DestroySelf(bool noDelay = false)
     {
         Destroy(m_spriteHandler);
     }

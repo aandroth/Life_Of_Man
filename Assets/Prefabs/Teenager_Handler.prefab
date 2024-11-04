@@ -922,12 +922,8 @@ MonoBehaviour:
   m_knockbackTimerMax: 0.25
   m_knockbackDirection: 1
   m_shield: {fileID: 8194287519406110375}
-  m_audioSource: {fileID: 7763749102172485780}
-  m_audioClips:
-  - {fileID: 8300000, guid: 8531a02704f409246b3bab35eed22a4e, type: 3}
-  - {fileID: 8300000, guid: 57600cfe0f22d3344b5bc194791db024, type: 3}
-  - {fileID: 8300000, guid: 7b33151228dc2474685579b78c001450, type: 3}
-  - {fileID: 8300000, guid: e9964c34af4008d4faf7b596b0a71e23, type: 3}
+  m_deathDelay: 3
+  m_sfxList: {fileID: 1490545644564793422}
 --- !u!50 &1083308612125477698
 Rigidbody2D:
   serializedVersion: 4
@@ -974,7 +970,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1356,6 +1352,10 @@ PrefabInstance:
     - target: {fileID: 2646124517499531376, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2646124517499531376, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
+      propertyPath: m_TagString
+      value: Son_Shield
       objectReference: {fileID: 0}
     - target: {fileID: 6204378767965888578, guid: cef4b8a7f63f5fa4da8e3338f3f7b09a, type: 3}
       propertyPath: m_Color.a

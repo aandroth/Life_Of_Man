@@ -2508,6 +2508,58 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1651633930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651633924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1e8aa1bebca784899ab794cc961891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ambientMusicStart:
+  - {fileID: 8300000, guid: c8376af948c8d4f458acd19edc0bba94, type: 3}
+  m_ambientMusicLoop:
+  - {fileID: 8300000, guid: 37a8a0bed7ed610449e3b9e328b05f55, type: 3}
+  m_ambientMusicEnd: []
+  m_ambientMusicMisc: []
+  m_ambientAudioSource: {fileID: 1651633929}
+--- !u!114 &1651633931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651633924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d67a3db772a87243b14c200e00d16c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_events:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1651633930}
+        m_TargetAssemblyTypeName: AmbientMusicController, Assembly-CSharp
+        m_MethodName: StartAmbientMusic
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_eventStartAfterRandomTime: 0
+  m_minRandomDelayTime: 0
+  m_maxRandomDelayTime: 0
+  m_delay: 0
+  m_eventsInvoked: 0
+  m_resetOnEachStartup: 0
 --- !u!1 &1658741800
 GameObject:
   m_ObjectHideFlags: 0

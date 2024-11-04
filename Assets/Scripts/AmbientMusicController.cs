@@ -48,4 +48,9 @@ public class AmbientMusicController : MonoBehaviour
         m_ambientAudioSource.loop = false;
         m_ambientAudioSource.Play();
     }
+
+    public void StopAmbientMusic()
+    {
+        m_ambientAudioSource.Stop();
+    }
 }

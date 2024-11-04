@@ -75,7 +75,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
         //transform.rotation = Quaternion.identity;
         m_targetIndicator.transform.SetParent(m_moveTarget.transform);
         m_targetIndicator.transform.localPosition = m_carriedByFatherOffset; //(m_carriedByFatherOffset + m_moveTarget.transform.position);
-        GameObject tempGameObject = new();
+        GameObject tempGameObject = new GameObject();
         tempGameObject.transform.position = transform.position;
         while (true)
         {
@@ -85,16 +85,17 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
             {
                 transform.localPosition = m_carriedByFatherOffset;
                 m_reportGrowOldMoveToTargetDone.Invoke();
-                Destroy(tempGameObject);
-                StopCoroutine(coroutine);
+                break;
             }
             
-            tempGameObject.transform.Translate(0.1f * m_moveSpeed * Vector3.Normalize(vectorToTarget));
+            tempGameObject?.transform.Translate(0.1f * m_moveSpeed * Vector3.Normalize(vectorToTarget));
             transform.position = tempGameObject.transform.position;
             Debug.DrawLine(transform.position, m_targetIndicator.transform.position);
             Debug.DrawRay(transform.position, vectorToTarget, Color.red);
             yield return null;
         }
+        StopCoroutine(coroutine);
+        Destroy(tempGameObject);
     }
 
     public void ReportSpriteEnterCollision(string tag)
@@ -148,7 +149,7 @@ public class SpriteController_Grandfather : MonoBehaviour, I_SpriteController
         m_reportGrandfatherDiesAloneDone.Invoke();
     }
 
-    public void DestroySelf()
+    public void DestroySelf(bool noDelay = false)
     {
         Destroy(m_spriteHandler);
         Destroy(gameObject);

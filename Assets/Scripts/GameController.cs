@@ -164,13 +164,17 @@ public class GameController : MonoBehaviour
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().m_leadingAmount = 5;
             m_childHandler.GetComponent<SpriteDriver_Child>().enabled = false;
             m_childHandler.GetComponent<PlayerController>().enabled = true;
-            m_camera.m_playerTarget = m_childController.gameObject;
             m_childHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
-            m_camera.ZoomTo(0);
+            m_camera.ZoomToIdx(0);
+            m_camera.m_playerTarget = m_childController.gameObject;
+            m_camera.m_lookAhead = 0;
+            m_ambientMusicController.m_ambientAudioSource.volume = 0.5f;
             m_ambientMusicController.StartAmbientMusic(0);
         }
         else
         {
+            m_childController.m_footstepsAudioSource.volume = 0.05f;
+            m_childController.GetComponent<AudioSource>().volume = 0.004f;
             m_childHandler.GetComponent<SpriteDriver_Child>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
 
@@ -202,13 +206,17 @@ public class GameController : MonoBehaviour
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().m_leadingAmount = 20;
             m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().enabled = false;
             m_teenagerHandler.GetComponent<PlayerController>().enabled = true;
-            m_camera.m_playerTarget = m_teenagerController.gameObject;
             m_teenagerHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
-            m_camera.ZoomTo(4);
+            m_camera.ZoomToIdx(4);
+            m_camera.m_playerTarget = m_teenagerController.gameObject;
+            m_camera.m_lookAhead = 4;
+            m_teenagerController.GetComponent<AudioSource>().volume = 0.8f;
+            m_ambientMusicController.m_ambientAudioSource.volume = 0.5f;
             m_ambientMusicController.StartAmbientMusic(1);
         }
         else
         {
+            m_teenagerController.GetComponent<AudioSource>().volume = 0.15f;
             m_teenagerHandler.GetComponent<SpriteDriver_Teenager>().m_target = m_fatherController.GetComponent<SpriteController_Father>().m_visionToWorldHitPoint;
         }
 
@@ -250,11 +258,12 @@ public class GameController : MonoBehaviour
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().SetSpawnFrequency(5, 10);
             m_fatherHandler.GetComponent<SpriteDriver_Father>().enabled = false;
             m_fatherHandler.GetComponent<PlayerController>().enabled = true;
-            m_camera.m_playerTarget = m_fatherController.gameObject;
             m_camera.PlayerBecomesAdult();
             m_fatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
-            m_camera.ZoomTo(8);
+            m_camera.ZoomToIdx(8);
             m_camera.m_lookAhead = 7;
+            m_camera.m_playerTarget = m_fatherController.gameObject;
+            m_ambientMusicController.m_ambientAudioSource.volume = 0.5f;
             m_ambientMusicController.StartAmbientMusic(2);
         }
         else
@@ -297,13 +306,14 @@ public class GameController : MonoBehaviour
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().SetSpawnFrequency(5, 10);
             m_grandfatherHandler.GetComponent<SpriteDriver_Grandfather>().enabled = false;
             m_grandfatherHandler.GetComponent<PlayerController>().enabled = true;
-            m_camera.m_playerTarget = m_grandfatherController.gameObject;
             m_grandfatherHandler.GetComponent<PlayerController>().m_cameraController = m_camera;
             if (m_fatherHandler != null)
                 m_fatherHandler.GetComponent<SpriteDriver_Father>().m_avoidEnemies = false;
-            m_camera.ZoomTo(9);
+            m_camera.ZoomToIdx(9);
             m_camera.m_lookAhead = 7;
+            m_camera.m_playerTarget = m_grandfatherController.gameObject;
             m_ambientMusicController.StartAmbientMusic(3);
+            m_ambientMusicController.m_ambientAudioSource.volume = 1f;
         }
         m_grandfatherController.m_reportGrowOldMoveToTargetDone = GrandfatherMovesToAdultSonDone;    
         m_grandfatherController.m_reportRevealPyramid = GrandfatherReportsRevealPyramidAnim;
@@ -365,7 +375,7 @@ public class GameController : MonoBehaviour
         {
             m_enemySpawnerHandler.GetComponent<EnemySpawnerHandler>().DespawnAllEnemiesAndDeactivateSpawner();
             InitTeenager(m_childHandler.GetComponent<PlayerController>().enabled, m_childController);
-            m_childController.DestroySelf();
+            m_childController.DestroySelf(true);
             SetAllTreasureIndicatorsToGray();
             if(m_teenagerHandler.GetComponent<PlayerController>().enabled) 
                 m_checkpointState = CHECKPOINT_STATE.PLAYER_AS_TEENAGER_REACHES_PYRAMID;
@@ -378,7 +388,7 @@ public class GameController : MonoBehaviour
         m_tricksPointer.SetActive(false);
         InitFather(m_teenagerController.m_spriteHandler.GetComponent<PlayerController>().enabled, m_teenagerController);
         m_fatherAtStartArea = true;
-        m_teenagerController.DestroySelf();
+        m_teenagerController.DestroySelf(true);
         SetAllTreasureIndicatorsToGray();
     }
 
@@ -537,7 +547,7 @@ public class GameController : MonoBehaviour
         {
             m_fatherHandler.GetComponent<SpriteDriver_Father>().EnterLookDownState();
         }
-        SetTreasureIndicatorToYellow(treasureCount - 1);
+        SetTreasureIndicatorToYellow(treasureCount);
     }
     public void SonHealthChangedAndIsNow(int health)
     {
@@ -676,6 +686,8 @@ public class GameController : MonoBehaviour
             {
                 if (m_grandfatherHandler.GetComponent<PlayerController>().enabled)
                 {
+                    m_ambientMusicController.m_ambientAudioSource.volume = 1f;
+                    m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(true);
                     m_playerDiesAsGrandfather = true;
                     m_camera.EnterCinematicMode(m_pyramid.GetNextBlock());
                     m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfatherHeartAndMind");
@@ -691,6 +703,8 @@ public class GameController : MonoBehaviour
                 {
                     if (m_grandfatherHandler.GetComponent<PlayerController>().enabled)
                     {
+                        m_ambientMusicController.m_ambientAudioSource.volume = 1f;
+                        m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(true);
                         m_playerDiesAsGrandfather = true;
                         m_camera.EnterCinematicMode(m_pyramid.GetNextBlock());
                     }
@@ -699,6 +713,8 @@ public class GameController : MonoBehaviour
                 }
                 else if(m_pyramid.m_blockCount == 4)
                 {
+                    m_ambientMusicController.m_ambientAudioSource.volume = 1f;
+                    m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(true);
                     m_playerDiesAsGrandfather = true;
                     m_camera.EnterCinematicMode(m_pyramid.GetNextBlock());
                     m_fatherController.GetComponent<Animator>().Play("FatherPlacesDeadGrandfatherSilver");
@@ -766,7 +782,6 @@ public class GameController : MonoBehaviour
         m_fatherBecomingGrandfather = true;
         //Debug.Log("Called PlayFatherGrowsOldSequence");
         m_fatherController.GetComponent<Animator>().Play("FatherGrowOld");
-        m_ambientMusicController.StartAmbientMusicMisc(0);
     }
 
     public void FatherGrowOldAnimDone()
@@ -848,6 +863,7 @@ public class GameController : MonoBehaviour
         // Play the Grandfather die animation and then the player dies
         m_playerDiesAsGrandfather = true;
         m_grandfatherController.PlayGrandfatherDiesAloneAnim();
+        m_ambientMusicController.m_ambientAudioSource.volume = 1f;
         m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(false);
     }
 
@@ -910,7 +926,7 @@ public class GameController : MonoBehaviour
 
     public void SetTreasureIndicatorToYellow(int i)
     {
-        if (i < 3)
+        if (i < 3 && i >= 0)
         {
             m_treasures[i].GetComponent<SpriteRenderer>().color = Color.yellow;
         }
@@ -954,11 +970,11 @@ public class GameController : MonoBehaviour
             {
                 // Show level ending card and reload StartScreen
                 StartCoroutine(LevelEnd());
-                m_ambientMusicController.StartAmbientMusicEnd_EndIsHappy(false);
             }
         }
         else // Player is a child/teenager OR is father with son
         {
+            m_ambientMusicController.StopAmbientMusic();
             // Give reload options
             m_showResetOptionButtonsCoroutine = StartCoroutine(ShowResetButtons_AndContinueButton_AfterDelaySeconds_ForSeconds(false, delay, duration));
             // If no choice made -> Call Game Over
@@ -1140,9 +1156,9 @@ public class GameController : MonoBehaviour
     public void DestroyActiveCharactersAndMarkers()
     {
         if (m_childHandler != null)
-            m_childController.DestroySelf();
+            m_childController.DestroySelf(true);
         if (m_teenagerHandler != null)
-            m_teenagerController.DestroySelf();
+            m_teenagerController.DestroySelf(true);
         if (m_fatherHandler != null)
         {
             m_fatherController.DestroySelf();

@@ -52,12 +52,17 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     private static readonly int m_idleStateNameHash = Animator.StringToHash("Idle");
     public float m_startingY = -1.634216f;
     public SfxList m_sfxList;
+    public float m_deathDelay = 3f;
+    public AudioSource m_footstepsAudioSource;
 
     private SpriteRenderer m_spriteRenderer;
 
     void Awake()
     {
-        m_sfxList.PlayIdxFromList_WillLoop(0);
+#if UNITY_EDITOR
+        Debug.Log("Child created");
+#endif
+        m_sfxList?.PlayIdxFromList_WillLoop(0);
         m_rb = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteAnimator = m_sprite.GetComponent<Animator>();
@@ -155,8 +160,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
         {
             m_canJump = Physics2D.OverlapCircle(m_groundDetector.transform.position, m_groundCollisionRadius, m_groundLayer);
         }
-
-
     }
 
     public void PushForward()
@@ -204,7 +207,7 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     {
         if (m_canJump)
         {
-            m_sfxList.PlayIdxFromList_WillLoop(2);
+            m_sfxList.PlayIdxFromList_WillLoop(1);
             m_rb.AddForce(new Vector2(transform.parent.transform.up.x, transform.parent.transform.up.y) * m_jumpForce);
             m_canJump = false;
             m_jumpDelayCountdown = m_jumpDelayCountdownMax;
@@ -228,14 +231,13 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Treasure") && !m_treasureCooldown)
+        if (collision.gameObject.CompareTag("Treasure") && !m_treasureCooldown && collision.GetComponent<Treasure>().m_isActive)
         {
             GetComponent<I_Hurtable>().Heal();
-            StartCoroutine(CountDownTreasureCooldown());
-            //Debug.Log("Treasure");
-            GetOlder();
             m_reportGotTreasure.Invoke(m_growthCount);
-            collision.gameObject.GetComponent<Treasure>().DeactivateHandler_AndPlayAudio(true);
+            GetOlder();
+            StartCoroutine(CountDownTreasureCooldown());
+            collision.gameObject.GetComponent<Treasure>().DeactivateHandler(true);
         }
         if(collision.gameObject.CompareTag("Pyramid"))
         {
@@ -257,8 +259,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
             GroundCollision(collision);
         }
     }
-
-
     public void GetOlder()
     {
         if (m_growthCount < 3)
@@ -287,8 +287,9 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
             if(GetComponent<I_Hurtable>().m_health <= 0)
             {
-                m_reportDies.Invoke();
                 m_sfxList.PlayIdxFromList_WillLoop(4);
+                m_reportDies.Invoke();
+                //m_sprite.SetActive(false);
                 return;
             }
             else
@@ -299,7 +300,6 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
 
             StartCoroutine(CountDownDamageImmunityAndControlFreeze());
 
-            Debug.Log($"Control is lost");
             if (m_spriteHandler.GetComponent<PlayerController>().enabled)
                 m_spriteHandler.GetComponent<PlayerController>().DisablePlayerControls();
             else
@@ -308,8 +308,33 @@ public class SpriteController_Child : MonoBehaviour, I_SpriteController
     }
 
 
-    public void DestroySelf()
+    public void DestroySelf(bool noDelay = false)
     {
+        if (noDelay)
+        {
+#if UNITY_EDITOR
+            Debug.Log("Child destroyed");
+#endif
+            Destroy(m_spriteHandler);
+        }
+        else
+            StartCoroutine(DestroySelfCoroutine());
+    }
+    private IEnumerator DestroySelfCoroutine()
+    {
+        GetComponent<AudioSource>().volume = 1f;
+        m_sfxList.PlayIdxFromList_WillLoop(4);
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<I_Hurtable>().enabled = false;
+        float timePassed = 0;
+        while (timePassed < m_deathDelay)
+        {
+            timePassed += Time.deltaTime;
+            yield return null;
+        }
+#if UNITY_EDITOR
+        Debug.Log("Child destroyed");
+#endif
         Destroy(m_spriteHandler);
     }
 }

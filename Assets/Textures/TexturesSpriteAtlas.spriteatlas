@@ -71,6 +71,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e53df68b7d37dbe4bbf72932a82a8731, type: 3}
   - {fileID: 21300000, guid: 544c40bb054c0eb4fb949294b802f538, type: 3}
   - {fileID: 21300000, guid: 7b29971ca431ba94ab5c8c469ef7a354, type: 3}
+  - {fileID: 21300000, guid: 625a813cd7cf631479d32bd6dc2accc1, type: 3}
   - {fileID: 21300000, guid: 469aa73cfd2c7d647ab6becbf32e0ce7, type: 3}
   - {fileID: 21300000, guid: 540b984c8aeb654428f506d7714fa424, type: 3}
   - {fileID: 21300000, guid: f854412de9a91474fa51df2da6514162, type: 3}
@@ -85,6 +86,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: c1da0f7f7d593ba41bae9cffe51d8026, type: 3}
   - {fileID: 21300000, guid: 2f12a5afd0a07234981c4e74c0cac8e1, type: 3}
   - {fileID: 21300000, guid: c1c64ecf9b0e6b842ae8f33d80524dd6, type: 3}
+  - {fileID: 21300000, guid: 9219adef9f921d243aa2153892dc9b69, type: 3}
   m_PackedSpriteNamesToIndex:
   - Bush
   - PointerArrow
@@ -119,6 +121,7 @@ SpriteAtlas:
   - Grass
   - DiamondBlue
   - PanelSprite
+  - DiamondSilver
   - Diamond
   - GameOverCard
   - Son_0_0
@@ -133,6 +136,7 @@ SpriteAtlas:
   - EndingCompleteCard1
   - Brain
   - Father_Head
+  - DiamondBronze
   m_RenderDataMap: {}
   m_Tag: TexturesSpriteAtlas
   m_IsVariant: 0

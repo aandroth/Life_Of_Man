@@ -111,17 +111,23 @@ public class CameraController : MonoBehaviour
         StartCoroutine(coroutine);
     }
 
-    public void ZoomTo(float amount = 0)
+    public void ZoomToValue(float zoomValue = 0)
     {
-        m_cinematicZoomDistance = amount;
-        IEnumerator coroutine = ZoomOutCoroutine(m_state != CAMERA_STATE.ENDING ? amount : m_cinematicZoomDistance, false);
+        IEnumerator coroutine = ZoomOutCoroutine(m_state != CAMERA_STATE.ENDING ? zoomValue : m_cinematicZoomDistance, false);
+        StartCoroutine(coroutine);
+    }
+
+    public void ZoomToIdx(int zoomIdx = 0)
+    {
+        m_zoomDistancesIndex = zoomIdx;
+        IEnumerator coroutine = ZoomOutCoroutine(m_zoomDistances[m_zoomDistancesIndex], false);
         StartCoroutine(coroutine);
     }
 
     public IEnumerator ZoomOutCoroutine(float amount = 0, bool shouldIncrement = true)
     {
         float prevAmount = this.GetComponent<Camera>().orthographicSize;
-        if (m_state != CAMERA_STATE.ENDING && amount == 0 && m_zoomDistancesIndex < m_zoomDistances.Length - 1)
+        if (m_state != CAMERA_STATE.ENDING && m_zoomDistancesIndex < m_zoomDistances.Length - 1)
         {
             if(shouldIncrement) ++m_zoomDistancesIndex;
             amount = m_zoomDistances[m_zoomDistancesIndex];
@@ -204,7 +210,7 @@ public class CameraController : MonoBehaviour
             m_cinematicTarget = cinematicTarget;
         else
             m_cinematicTarget = gameObject;
-        ZoomTo(m_cinematicZoomDistance);
+        ZoomToValue(m_cinematicZoomDistance);
     }
 
     public void EnterCinematicEndingMode(GameObject g = null)
@@ -214,7 +220,7 @@ public class CameraController : MonoBehaviour
         else
             m_cinematicTarget = gameObject;
         m_state = CAMERA_STATE.ENDING;
-        ZoomTo(m_cinematicZoomDistance);
+        ZoomToValue(m_cinematicZoomDistance);
 
     }
 

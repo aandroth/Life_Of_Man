@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     public float m_knockbackForce = 10;
     public GameObject m_worldHandler;
     public float m_targetVertOffset = 20;
+    public float m_deathDelay = 3f;
     public AudioSource m_sfx;
     public AudioClip m_deathSfx, m_laughSfx;
 
@@ -54,7 +55,7 @@ public class Enemy : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Shield"))
+        if (collision.CompareTag("Shield") || collision.CompareTag("Son_Shield"))
         {
             if (m_isChasing || m_twinkle == null)
                Die();
@@ -116,8 +117,23 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        if(gameObject.activeSelf && transform.parent.gameObject.activeSelf)
+            StartCoroutine(DieCoroutine());
+    }
+    private IEnumerator DieCoroutine()
+    {
         m_sfx.clip = m_deathSfx;
         m_sfx.Play();
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
+        float timePassed = 0;
+        while (timePassed < m_deathDelay)
+        {
+            timePassed += Time.deltaTime;
+            yield return null;
+        }
+        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<BoxCollider2D>().enabled = true;
         if (m_handler != null)
             m_handler.SetActive(false);
         else
