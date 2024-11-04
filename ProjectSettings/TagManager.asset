@@ -16,6 +16,7 @@ TagManager:
   - GrowOldArea
   - Marker
   - EnemyTwinkle
+  - Son_Shield
   layers:
   - Default
   - TransparentFX
