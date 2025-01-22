@@ -1,21 +1,15 @@
-Major:
-
-
-Put the levels behind locks for completing them, or for creating those scenarios 
- - Level 1: Leave behind father
- - Level 2: Let son die
-
-Make checkpoints
-
-
 Disable the grow button (E)
 
+Set up itch.io page
 
+Run through entire experience at least once
+
+Test generating files and installing on a different computer
+	Also downloading from itch.io and installing that way
 
 //////////////////////////////////////////////////////////////////////////////////
 
 Minor:
-
 
 Father burying grandfather not visible b/c too zoomed in as child --> Make this a cinematic
 
